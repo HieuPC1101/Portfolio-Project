@@ -5,3 +5,5 @@ numpy
 vnstock
 pypfopt
 scipy
+pandas-ta
+statsmodels

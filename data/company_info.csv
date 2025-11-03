@@ -1,766 +1,1580 @@
 symbol,organ_name,icb_name,exchange
-ACB,Ngân hàng Thương mại Cổ phần Á Châu,Ngân hàng,HOSE
-ACB,Ngân hàng Thương mại Cổ phần Á Châu,Ngân hàng,VN30
-BNA,Công ty Cổ phần Tập đoàn Đầu tư Bảo Ngọc,Hàng Tiêu dùng,HNX
-BTS,Công ty Cổ phần Xi măng VICEM Bút Sơn,Công nghiệp,HNX
-CKV,Công ty Cổ phần CokyVina,Công nghệ Thông tin,HNX
-DHG,Công ty Cổ phần Dược Hậu Giang,Dược phẩm và Y tế,HOSE
-BDB,Công ty Cổ phần Sách và Thiết bị Bình Định,Dịch vụ Tiêu dùng,HNX
-CIA,Công ty Cổ Phần Dịch Vụ Sân Bay Quốc Tế Cam Ranh,Công nghiệp,HNX
-CSC,Công ty Cổ phần Tập đoàn COTANA,Công nghiệp,HNX
-DPM,Tổng Công ty Phân bón và Hóa chất Dầu khí - Công ty Cổ phần,Nguyên vật liệu,HOSE
-DSN,Công ty Cổ phần Công viên nước Đầm Sen,Dịch vụ Tiêu dùng,HOSE
-DXV,Công ty Cổ phần VICEM Vật liệu Xây dựng Đà Nẵng,Công nghiệp,HOSE
-CAG,Công ty Cổ phần Cảng An Giang,Công nghiệp,HNX
-AGR,Công ty Cổ phần Chứng khoán AGRIBANK,Tài chính,HOSE
-CTF,Công ty Cổ phần City Auto,Hàng Tiêu dùng,HOSE
-AAA,Công ty Cổ phần Nhựa An Phát Xanh,Nguyên vật liệu,HOSE
-CDC,Công ty Cổ phần Chương Dương,Công nghiệp,HOSE
-ABR,Công ty Cổ phần Đầu tư Nhãn Hiệu Việt,Công nghiệp,HOSE
-DLG,Công ty Cổ phần Tập đoàn Đức Long Gia Lai,Nguyên vật liệu,HOSE
-AGG,Công ty Cổ phần Đầu tư và Phát triển Bất động sản An Gia,Tài chính,HOSE
-EID,Công ty Cổ phần Đầu tư và Phát triển Giáo dục Hà Nội,Dịch vụ Tiêu dùng,HNX
-EVG,Công ty Cổ phần Tập đoàn Everland,Công nghiệp,HOSE
-ELC,Công ty Cổ phần Công nghệ - Viễn thông ELCOM,Công nghệ Thông tin,HOSE
-DC4,Công ty Cổ phần Xây dựng DIC Holdings,Công nghiệp,HOSE
-ACL,Công ty Cổ phần Xuất nhập khẩu Thủy sản Cửu Long An Giang,Hàng Tiêu dùng,HOSE
-BRC,Công ty Cổ phần Cao su Bến Thành,Nguyên vật liệu,HOSE
-LEC,Công ty Cổ phần Bất động sản Điện lực Miền Trung,Tài chính,HOSE
-DGC,Công ty Cổ phần Tập đoàn Hóa chất Đức Giang,Nguyên vật liệu,HOSE
-BST,Công ty Cổ phần Sách và Thiết bị Bình Thuận,Dịch vụ Tiêu dùng,HNX
-FCN,Công ty Cổ phần FECON,Công nghiệp,HOSE
-FDC,Công ty Cổ phần Ngoại thương và Phát triển Đầu tư Thành phố Hồ Chí Minh,Tài chính,HOSE
-NO1,Công ty Cổ phần Tâp đoàn 911,Công nghiệp,HOSE
-BWE,Công ty Cổ phần - Tổng công ty Nước - Môi trường Bình Dương,Tiện ích Cộng đồng,HOSE
-FIT,Công ty Cổ phần Tập đoàn F.I.T,Dược phẩm và Y tế,HOSE
-BID,Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam,Ngân hàng,HOSE
-BID,Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam,Ngân hàng,VN30
-CX8,Công ty Cổ phần Đầu tư và Xây lắp Constrexim số 8,Công nghiệp,HNX
-ATS,Công ty Cổ phần Tập đoàn Đầu tư ATS,Dịch vụ Tiêu dùng,HNX
-DAD,Công ty Cổ phần Đầu tư và Phát triển Giáo dục Đà Nẵng,Dịch vụ Tiêu dùng,HNX
-DP3,Công ty Cổ Phần Dược Phẩm Trung Ương 3,Dược phẩm và Y tế,HNX
-AMV,Công ty Cổ phần Sản xuất Kinh doanh Dược và Trang thiết bị Y tế Việt Mỹ,Dược phẩm và Y tế,HNX
-ADC,Công ty Cổ phần Mĩ thuật và Truyền thông,Dịch vụ Tiêu dùng,HNX
-FMC,Công ty Cổ phần Thực phẩm Sao Ta,Hàng Tiêu dùng,HOSE
-FPT,Công ty Cổ phần FPT,Công nghệ Thông tin,HOSE
-FPT,Công ty Cổ phần FPT,Công nghệ Thông tin,VN30
-DAH,Công ty Cổ phần Tập đoàn Khách sạn Đông Á,Dịch vụ Tiêu dùng,HOSE
-EBS,Công ty Cổ phần Sách Giáo dục tại Thành phố Hà Nội,Dịch vụ Tiêu dùng,HNX
-DSC,Công ty Cổ phần Chứng khoán DSC,Tài chính,HOSE
-ANV,Công ty Cổ phần Nam Việt,Hàng Tiêu dùng,HOSE
-EVE,Công ty Cổ phần Everpia,Hàng Tiêu dùng,HOSE
-CSV,Công ty Cổ phần Hóa chất Cơ bản miền Nam,Nguyên vật liệu,HOSE
-APG,Công ty Cổ phần Chứng khoán APG,Tài chính,HOSE
-DSE,Công ty Cổ phần Chứng khoán DNSE,Tài chính,HOSE
-BAF,Công ty Cổ phần Nông nghiệp BAF Việt Nam,Hàng Tiêu dùng,HOSE
-ADP,Công ty Cổ phần Sơn Á Đông,Công nghiệp,HOSE
-APH,Công ty Cổ phần Tập đoàn An Phát Holdings,Công nghiệp,HOSE
-GDT,Công ty Cổ phần Chế biến Gỗ Đức Thành,Hàng Tiêu dùng,HOSE
-ICT,Công ty Cổ phần Viễn thông - Tin học Bưu điện,Công nghệ Thông tin,HOSE
-API,Công ty Cổ phần Đầu tư Châu Á - Thái Bình Dương,Tài chính,HNX
-CLL,Công ty Cổ phần Cảng Cát Lái,Công nghiệp,HOSE
-BBS,Công ty Cổ phần VICEM Bao bì Bút Sơn,Công nghiệp,HNX
-CSM,Công ty Cổ phần Công nghiệp Cao su Miền Nam,Hàng Tiêu dùng,HOSE
-GTA,Công ty Cổ phần Chế biến Gỗ Thuận An,Nguyên vật liệu,HOSE
-DHA,Công ty Cổ phần Hóa An,Công nghiệp,HOSE
-DCM,Công ty Cổ phần Phân bón Dầu Khí Cà Mau,Nguyên vật liệu,HOSE
-HAH,Công ty Cổ phần Vận tải và Xếp dỡ Hải An,Công nghiệp,HOSE
-GDW,Công ty Cổ phần Cấp nước Gia Định,Tiện ích Cộng đồng,HNX
-C32,Công ty Cổ phần CIC39,Công nghiệp,HOSE
-D11,Công ty Cổ phần Địa ốc 11,Tài chính,HNX
-C47,Công ty Cổ phần Xây dựng 47,Công nghiệp,HOSE
-GMA,Công ty Cổ phần G-Automobile,Hàng Tiêu dùng,HNX
-CTC,Công ty Cổ phần Tập đoàn Hoàng Kim Tây Nguyên,Dịch vụ Tiêu dùng,HNX
-VTZ,Công ty Cổ phần Sản xuất và Thương mại Nhựa Việt Thành,Nguyên vật liệu,HNX
-BSI,Công ty Cổ phần Chứng khoán BIDV,Tài chính,HOSE
-HHV,Công ty Cổ phần Đầu tư Hạ tầng Giao thông Đèo Cả,Công nghiệp,HOSE
-DAE,Công ty Cổ phần Sách Giáo dục tại Thành phố Đà Nẵng,Dịch vụ Tiêu dùng,HNX
-BMI,Tổng Công ty Cổ phần Bảo Minh,Tài chính,HOSE
-DVP,Công ty Cổ phần Đầu tư và Phát triển Cảng Đình Vũ,Công nghiệp,HOSE
-CTP,Công ty Cổ phần Hoà Bình Takara,Hàng Tiêu dùng,HNX
-CLC,Công ty Cổ phần Cát Lợi,Hàng Tiêu dùng,HOSE
-BCC,Công ty Cổ phần Xi măng Bỉm Sơn,Công nghiệp,HNX
-CTS,Công ty Cổ phần Chứng khoán Ngân hàng Công thương Việt Nam,Tài chính,HOSE
-BTT,Công ty Cổ phần Thương mại - Dịch vụ Bến Thành,Dịch vụ Tiêu dùng,HOSE
-CTT,Công ty Cổ phần Chế tạo máy Vinacomin,Công nghiệp,HNX
-BMP,Công ty Cổ phần Nhựa Bình Minh,Công nghiệp,HOSE
-HAR,Công ty Cổ phần Đầu tư Thương mại Bất động sản An Dương Thảo Điền,Tài chính,HOSE
-HII,Công ty Cổ phần An Tiến Industries,Nguyên vật liệu,HOSE
-CVT,Công ty Cổ phần CMC,Công nghiệp,HOSE
-BCE,Công ty Cổ phần Xây dựng và Giao thông Bình Dương,Công nghiệp,HOSE
-BCG,Công ty Cổ phần Tập đoàn Bamboo Capital,Tài chính,HOSE
-GMH,Công ty Cổ phần Minh Hưng Quảng Trị,Công nghiệp,HOSE
-ARM,Công ty Cổ phần Xuất nhập khẩu Hàng không,Công nghiệp,HNX
-HAT,Công ty Cổ phần Thương mại Bia Hà Nội,Hàng Tiêu dùng,HNX
-TTE,Công ty Cổ phần Đầu tư Năng lượng Trường Thịnh,Tiện ích Cộng đồng,HOSE
-GMC,Công ty Cổ phần Garmex Sài Gòn,Hàng Tiêu dùng,HOSE
-HCC,Công ty Cổ phần Bê tông Hòa Cầm - Intimex,Công nghiệp,HNX
-HCD,Công ty Cổ phần Đầu tư Sản xuất và Thương mại HCD,Nguyên vật liệu,HOSE
-DPR,Công ty Cổ phần Cao su Đồng Phú,Nguyên vật liệu,HOSE
-BXH,Công ty Cổ phần VICEM Bao bì Hải Phòng,Công nghiệp,HNX
-CNG,Công ty Cổ phần CNG Việt Nam,Tiện ích Cộng đồng,HOSE
-DRL,Công ty Cổ phần Thủy điện - Điện lực 3,Tiện ích Cộng đồng,HOSE
-BPC,Công ty Cổ phần Vicem Bao bì Bỉm Sơn,Công nghiệp,HNX
-DBT,Công ty Cổ phần Dược phẩm Bến Tre,Dược phẩm và Y tế,HOSE
-C69,Công ty Cổ phần Xây dựng 1369,Công nghiệp,HNX
-D2D,Công ty Cổ phần Phát triển Đô thị Công nghiệp số 2,Tài chính,HOSE
-DC2,Công ty Cổ phần Đầu tư Phát triển - Xây dựng (DIC) số 2,Công nghiệp,HNX
-DNC,Công ty Cổ phần Điện nước Lắp máy Hải Phòng,Tiện ích Cộng đồng,HNX
-AGM,Công ty Cổ phần Xuất nhập khẩu An Giang,Hàng Tiêu dùng,HOSE
-BFC,Công ty Cổ phần Phân bón Bình Điền,Nguyên vật liệu,HOSE
-CIG,Công ty Cổ phần COMA 18,Công nghiệp,HOSE
-CII,Công ty Cổ phần Đầu tư Hạ tầng Kỹ thuật Thành phố Hồ Chí Minh,Công nghiệp,HOSE
-AAM,Công ty Cổ Phần Thủy Sản MeKong,Hàng Tiêu dùng,HOSE
-BED,Công ty Cổ phần Sách và Thiết bị trường học Đà Nẵng,Dịch vụ Tiêu dùng,HNX
-ASG,Công ty Cổ phần Tập đoàn ASG,Công nghiệp,HOSE
-LM8,Công ty Cổ phần Lilama 18,Công nghiệp,HOSE
-LSS,Công ty Cổ phần Mía đường Lam Sơn,Hàng Tiêu dùng,HOSE
-HAX,Công ty Cổ phần Dịch vụ Ô tô Hàng Xanh,Hàng Tiêu dùng,HOSE
-AAT,Công ty Cổ phần Tập đoàn Tiên Sơn Thanh Hóa,Hàng Tiêu dùng,HOSE
-BTP,Công ty Cổ phần Nhiệt điện Bà Rịa,Tiện ích Cộng đồng,HOSE
-CTB,Công ty Cổ phần Chế tạo Bơm Hải Dương,Công nghiệp,HNX
-HJS,Công ty Cổ phần Thủy điện Nậm Mu,Tiện ích Cộng đồng,HNX
-AAV,Công ty Cổ phần AAV Group,Tài chính,HNX
-HLC,Công ty Cổ phần Than Hà Lầm - Vinacomin,Nguyên vật liệu,HNX
-DRC,Công ty Cổ phần Cao su Đà Nẵng,Hàng Tiêu dùng,HOSE
-HMR,Công ty cổ phần Đá Hoàng Mai,Công nghiệp,HNX
-CAN,Công ty Cổ phần Đồ hộp Hạ Long,Hàng Tiêu dùng,HNX
-HAS,Công ty Cổ phần Hacisco,Công nghiệp,HOSE
-ADG,Công ty Cổ phần Clever Group,Dịch vụ Tiêu dùng,HOSE
-CAP,Công ty Cổ phần Lâm Nông sản Thực phẩm Yên Bái,Nguyên vật liệu,HNX
-CAP,Công ty Cổ phần Lâm Nông sản Thực phẩm Yên Bái,Nguyên vật liệu,HNX30
-PCH,Công ty Cổ phần Nhựa Picomat,Nguyên vật liệu,HNX
-ASM,Công ty Cổ phần Tập đoàn Sao Mai,Hàng Tiêu dùng,HOSE
-MDG,Công ty Cổ phần Miền Đông,Công nghiệp,HOSE
-ASP,Công ty Cổ phần Tập đoàn Dầu khí An Pha,Tiện ích Cộng đồng,HOSE
-HMC,Công ty Cổ phần Kim khí Thành phố Hồ Chí Minh - VNSTEEL,Nguyên vật liệu,HOSE
-DMC,Công ty Cổ phần Xuất nhập khẩu Y tế DOMESCO,Dược phẩm và Y tế,HOSE
-HBS,Công ty Cổ phần Chứng khoán Hòa Bình,Tài chính,HNX
-DTT,Công ty Cổ phần Kỹ nghệ Đô Thành,Nguyên vật liệu,HOSE
-CTG,Ngân hàng Thương mại Cổ phần Công thương Việt Nam,Ngân hàng,HOSE
-CTG,Ngân hàng Thương mại Cổ phần Công thương Việt Nam,Ngân hàng,VN30
-HMH,Công ty Cổ phần Hải Minh,Công nghiệp,HNX
-CLW,Công ty Cổ phần Cấp nước Chợ Lớn,Tiện ích Cộng đồng,HOSE
-CMC,Công ty Cổ phần Đầu tư CMC,Hàng Tiêu dùng,HNX
-HNA,Công ty Cổ phần Thủy điện Hủa Na,Tiện ích Cộng đồng,HOSE
-BHN,Tổng Công ty Cổ phần Bia - Rượu - Nước giải khát Hà Nội,Hàng Tiêu dùng,HOSE
-CMG,Công ty Cổ phần Tập đoàn Công nghệ CMC,Công nghệ Thông tin,HOSE
-BTW,Công ty Cổ phần Cấp nước Bến Thành,Tiện ích Cộng đồng,HNX
+F88,Công ty Cổ phần Đầu tư F88,Tài chính,UPCOM
+DVT,Trung tâm Đào tạo nghiệp vụ Giao thông vận tải Bình Định,Công nghiệp,UPCOM
 ABS,Công ty Cổ phần Dịch vụ Nông nghiệp Bình Thuận,Nguyên vật liệu,HOSE
-ADS,Công ty Cổ phần DAMSAN,Hàng Tiêu dùng,HOSE
-DQC,Công ty Cổ phần Tập đoàn Điện Quang,Hàng Tiêu dùng,HOSE
-CMS,Công ty Cổ phần Tập đoàn CMH Việt Nam,Công nghiệp,HNX
-CTI,Công ty Cổ phần Đầu tư Phát triển Cường Thuận IDICO,Công nghiệp,HOSE
-DRH,Công ty Cổ phần DRH Holdings,Tài chính,HOSE
-ABT,Công ty Cổ phần Xuất nhập khẩu Thủy sản Bến Tre,Hàng Tiêu dùng,HOSE
-CCI,Công ty Cổ phần Đầu tư Phát triển Công nghiệp Thương mại Củ Chi,Tiện ích Cộng đồng,HOSE
-FIR,Công ty Cổ phần Địa ốc First Real,Tài chính,HOSE
-EVF,Công ty Tài chính Cổ phần Điện Lực,Tài chính,HOSE
-PPT,Công ty cổ phần Petro Times,Tiện ích Cộng đồng,HNX
-BIC,Tổng Công ty Cổ phần Bảo hiểm Ngân hàng Đầu tư và Phát triển Việt Nam,Tài chính,HOSE
-BCM,Tổng Công ty Đầu tư và Phát triển Công nghiệp - CTCP,Tài chính,HOSE
-BCM,Tổng Công ty Đầu tư và Phát triển Công nghiệp - CTCP,Tài chính,VN30
-DNP,Công ty Cổ phần DNP Holding,Công nghiệp,HNX
-DBD,Công ty Cổ phần Dược - Trang thiết bị y tế Bình Định (BIDIPHAR),Dược phẩm và Y tế,HOSE
-HPG,Công ty Cổ phần Tập đoàn Hòa Phát,Nguyên vật liệu,HOSE
-HPG,Công ty Cổ phần Tập đoàn Hòa Phát,Nguyên vật liệu,VN30
-CDN,Công ty Cổ phần Cảng Đà Nẵng,Công nghiệp,HNX
-GEX,Công ty Cổ phần Tập đoàn Gelex,Công nghiệp,HOSE
-HCT,Công ty Cổ phần Thương mại - Dịch vụ - Vận tải Xi măng Hải Phòng,Công nghiệp,HNX
-CCL,Công ty Cổ phần Đầu tư và Phát triển Đô thị Dầu khí Cửu Long,Tài chính,HOSE
-HRC,Công ty Cổ phần Cao su Hòa Bình,Nguyên vật liệu,HOSE
-HQC,Công ty Cổ phần Tư vấn - Thương mại - Dịch vụ Địa ốc Hoàng Quân,Tài chính,HOSE
-CMV,Công ty Cổ phần Thương nghiệp Cà Mau,Dịch vụ Tiêu dùng,HOSE
-CMX,Công ty Cổ phần CAMIMEX Group,Hàng Tiêu dùng,HOSE
-DXG,Công ty Cổ phần Tập đoàn Đất Xanh,Tài chính,HOSE
-HHP,Công ty Cổ phần HHP Global,Nguyên vật liệu,HOSE
-PIT,Công ty Cổ phần Xuất nhập khẩu Petrolimex,Dịch vụ Tiêu dùng,HOSE
-TCH,Công ty Cổ phần Đầu tư Dịch vụ Tài chính Hoàng Huy,Tài chính,HOSE
-CCR,Công ty Cổ phần Cảng Cam Ranh,Công nghiệp,HNX
+HII,Công ty Cổ phần An Tiến Industries,Nguyên vật liệu,HOSE
+AFX,Công ty Cổ phần Xuất Nhập khẩu Nông sản Thực phẩm An Giang,Dịch vụ Tiêu dùng,UPCOM
+AGR,Công ty Cổ phần Chứng khoán AGRIBANK,Tài chính,HOSE
 ALT,Công ty Cổ phần Văn hóa Tân Bình,Dịch vụ Tiêu dùng,HNX
-HT1,Công ty Cổ phần Xi măng VICEM Hà Tiên,Công nghiệp,HOSE
-CTR,Tổng Công ty Cổ phần Công trình Viettel,Công nghiệp,HOSE
-BVH,Tập đoàn Bảo Việt,Tài chính,HOSE
-BVH,Tập đoàn Bảo Việt,Tài chính,VN30
-CAR,Công ty cổ phần Tập đoàn Giáo dục Trí Việt,Công nghiệp,HNX
-PTB,Công ty Cổ phần Phú Tài,Nguyên vật liệu,HOSE
-DTC,Công ty Cổ phần Viglacera Đông Triều,Công nghiệp,HNX
-DXS,Công ty Cổ phần Dịch vụ Bất động sản Đất Xanh,Tài chính,HOSE
-HTC,Công ty Cổ phần Thương mại Hóc Môn,Tiện ích Cộng đồng,HNX
-HTN,Công ty Cổ phần Hưng Thịnh Incons,Tài chính,HOSE
-DIG,Tổng Công ty Cổ phần Đầu tư Phát triển Xây dựng,Tài chính,HOSE
-PHN,Công ty Cổ phần Pin Hà Nội,Công nghiệp,HNX
-HKT,Công ty Cổ phần Đầu tư Ego Việt Nam,Hàng Tiêu dùng,HNX
-HSL,Công ty Cổ phần Đầu tư Phát triển Thực phẩm Hồng Hà,Hàng Tiêu dùng,HOSE
-DIH,Công ty Cổ phần Đầu tư Phát triển Xây dựng - Hội An,Công nghiệp,HNX
-TNH,Công ty Cổ phần Tập đoàn Bệnh viện TNH,Dược phẩm và Y tế,HOSE
-BVS,Công ty Cổ phần Chứng khoán Bảo Việt,Tài chính,HNX
-DPG,Công ty Cổ phần Tập đoàn Đạt Phương,Công nghiệp,HOSE
-SBG,Công ty Cổ Phần Tập Đoàn Cơ Khí Công Nghệ Cao Siba,Công nghiệp,HOSE
-HU1,Công ty Cổ phần Đầu tư và Xây dựng HUD1,Công nghiệp,HOSE
-HTL,Công ty Cổ phần Kỹ thuật và Ô tô Trường Long,Hàng Tiêu dùng,HOSE
-RCL,Công ty Cổ phần Địa ốc Chợ Lớn,Tài chính,HNX
-COM,Công ty Cổ phần Vật tư Xăng dầu,Dịch vụ Tiêu dùng,HOSE
-AMC,Công ty Cổ phần Khoáng sản Á Châu,Nguyên vật liệu,HNX
-BKC,Công ty Cổ phần Khoáng sản Bắc Kạn,Nguyên vật liệu,HNX
-BKG,Công ty Cổ phần Đầu tư BKG Việt Nam,Hàng Tiêu dùng,HOSE
-AME,Công ty cổ phần Alphanam E&C,Công nghiệp,HNX
-STK,Công ty Cổ phần Sợi Thế Kỷ,Hàng Tiêu dùng,HOSE
-DBC,Công ty Cổ phần Tập đoàn Dabaco Việt Nam,Hàng Tiêu dùng,HOSE
-GLT,Công ty Cổ phần Kỹ thuật điện Toàn Cầu,Hàng Tiêu dùng,HNX
-CEO,Công ty Cổ phần Tập đoàn C.E.O,Tài chính,HNX
-CEO,Công ty Cổ phần Tập đoàn C.E.O,Tài chính,HNX30
-DL1,Công ty Cổ phần Tập đoàn Alpha Seven,Công nghiệp,HNX
-ACC,Công ty Cổ phần Đầu tư và Xây dựng Bình Dương ACC,Công nghiệp,HOSE
-HHS,Công ty Cổ phần Đầu tư Dịch vụ Hoàng Huy,Hàng Tiêu dùng,HOSE
-EIB,Ngân hàng Thương mại Cổ phần Xuất nhập khẩu Việt Nam,Ngân hàng,HOSE
-GMX,Công ty Cổ phần Gạch ngói Gốm xây dựng Mỹ Xuân,Công nghiệp,HNX
-ACG,Công ty Cổ phần Gỗ An Cường,Nguyên vật liệu,HOSE
-HCM,Công ty Cổ phần Chứng khoán Thành phố Hồ Chí Minh,Tài chính,HOSE
-BMC,Công ty Cổ phần Khoáng sản Bình Định,Nguyên vật liệu,HOSE
-CHP,Công ty Cổ phần Thủy điện Miền Trung,Tiện ích Cộng đồng,HOSE
-HDC,Công ty Cổ phần Phát triển Nhà Bà Rịa Vũng Tàu,Tài chính,HOSE
-HUT,Công ty Cổ phần Tasco,Hàng Tiêu dùng,HNX
-HUT,Công ty Cổ phần Tasco,Hàng Tiêu dùng,HNX30
-HDG,Công ty Cổ phần Tập đoàn Hà Đô,Tài chính,HOSE
-HTI,Công ty Cổ phần Đầu tư Phát triển Hạ tầng IDICO,Công nghiệp,HOSE
-BBC,Công ty Cổ phần Bibica,Hàng Tiêu dùng,HOSE
-IDI,Công ty Cổ phần Đầu tư và Phát triển Đa Quốc Gia I.D.I,Hàng Tiêu dùng,HOSE
-IDJ,Công ty Cổ phần Đầu tư IDJ Việt Nam,Tài chính,HNX
-CVN,Công ty Cổ phần Vinam,Dược phẩm và Y tế,HNX
-HTV,Công ty Cổ phần Logistics Vicem,Công nghiệp,HOSE
-IJC,Công ty Cổ phần Phát triển Hạ tầng Kỹ thuật,Tài chính,HOSE
-APS,Công ty Cổ phần Chứng khoán Châu Á - Thái Bình Dương,Tài chính,HNX
-GAS,Tổng Công ty Khí Việt Nam - Công ty Cổ phần,Tiện ích Cộng đồng,HOSE
-GAS,Tổng Công ty Khí Việt Nam - Công ty Cổ phần,Tiện ích Cộng đồng,VN30
-INC,Công ty Cổ phần Tư vấn Đầu tư IDICO,Công nghiệp,HNX
-DDG,Công ty Cổ phần Đầu tư Công nghiệp Xuất nhập khẩu Đông Dương,Tiện ích Cộng đồng,HNX
-INN,Công ty Cổ phần Bao bì và In Nông nghiệp,Công nghiệp,HNX
-CRE,Công ty Cổ phần Bất động sản Thế Kỷ,Tài chính,HOSE
-GEG,Công ty Cổ phần Điện Gia Lai,Tiện ích Cộng đồng,HOSE
-GMD,Công ty Cổ phần Gemadept,Công nghiệp,HOSE
-ICG,Công ty Cổ phần Xây dựng Sông Hồng,Công nghiệp,HNX
-IPA,Công ty Cổ phần Tập đoàn Đầu tư I.P.A,Công nghiệp,HNX
-ITD,Công ty Cổ phần Công nghệ Tiên Phong,Công nghệ Thông tin,HOSE
-HVH,Công ty Cổ phần Đầu tư và Công nghệ HVC,Công nghiệp,HOSE
-ITQ,Công ty Cổ phần Tập đoàn Thiên Quang,Nguyên vật liệu,HNX
-IVS,Công ty Cổ phần Chứng khoán Guotai Junan (Việt Nam),Tài chính,HNX
-JVC,Công ty Cổ phần Đầu tư và Phát triển Y tế Việt Nhật,Dược phẩm và Y tế,HOSE
-HVT,Công ty Cổ phần Hóa chất Việt Trì,Nguyên vật liệu,HNX
-KDC,Công ty Cổ phần Tập đoàn KIDO,Hàng Tiêu dùng,HOSE
-PGV,Tổng Công ty Phát điện 3 - Công ty Cổ phần,Tiện ích Cộng đồng,HOSE
-KDH,Công ty Cổ phần Đầu tư và Kinh doanh nhà Khang Điền,Tài chính,HOSE
-KDM,Công ty Cổ phần Tập đoàn GCL,Công nghiệp,HNX
-KHG,Công ty Cổ phần Tập đoàn Khải Hoàn Land,Tài chính,HOSE
-HAP,Công ty Cổ phần Tập Đoàn Hapaco,Nguyên vật liệu,HOSE
-CPC,Công ty Cổ phần Thuốc sát trùng Cần Thơ,Nguyên vật liệu,HNX
-KHP,Công ty Cổ phần Điện lực Khánh Hòa,Tiện ích Cộng đồng,HOSE
-ECI,Công ty Cổ phần Tập đoàn ECI,Dịch vụ Tiêu dùng,HNX
+APC,Công ty Cổ phần Chiếu xạ An Phú,Dược phẩm và Y tế,UPCOM
+APH,Công ty Cổ phần Tập đoàn An Phát Holdings,Công nghiệp,HOSE
+APP,Công ty Cổ phần Phát triển Phụ gia và Sản phẩm dầu mỏ,Nguyên vật liệu,UPCOM
+ASG,Công ty Cổ phần Tập đoàn ASG,Công nghiệp,HOSE
+ARM,Công ty Cổ phần Xuất nhập khẩu Hàng không,Công nghiệp,HNX
+ATS,Công ty Cổ phần Tập đoàn Đầu tư ATS,Dịch vụ Tiêu dùng,HNX
+AVF,Công ty Cổ phần Việt An,Hàng Tiêu dùng,UPCOM
+BCR,Công ty Cổ phần BCG Land,Công nghiệp,UPCOM
+ASM,Công ty Cổ phần Tập đoàn Sao Mai,Hàng Tiêu dùng,HOSE
+BED,Công ty Cổ phần Sách và Thiết bị trường học Đà Nẵng,Dịch vụ Tiêu dùng,HNX
+BHN,Tổng Công ty Cổ phần Bia - Rượu - Nước giải khát Hà Nội,Hàng Tiêu dùng,HOSE
+BHP,Công ty Cổ phần Bia Hà Nội - Hải Phòng,Hàng Tiêu dùng,UPCOM
+BID,Ngân hàng Thương mại Cổ phần Đầu tư và Phát triển Việt Nam,Ngân hàng,HOSE
+BHG,Công ty Cổ phần Chè Biển Hồ,Hàng Tiêu dùng,UPCOM
+BTV,Công ty Cổ phần Dịch vụ Du lịch Bến Thành,Dịch vụ Tiêu dùng,UPCOM
+BAF,Công ty Cổ phần Nông nghiệp BAF Việt Nam,Hàng Tiêu dùng,HOSE
+CPA,Công ty Cổ phần Cà phê Phước An,Hàng Tiêu dùng,UPCOM
+BMG,Công ty Cổ phần May Bình Minh,Hàng Tiêu dùng,UPCOM
+C22,Công ty Cổ phần 22,Hàng Tiêu dùng,UPCOM
+ASA,Công ty Cổ phần ASA,Hàng Tiêu dùng,UPCOM
+TS3,Công ty Cổ phần Trường Sơn 532,Công nghiệp,UPCOM
+BBH,Công ty Cổ phần Bao bì Hoàng Thạch,Công nghiệp,UPCOM
+CAP,Công ty Cổ phần Lâm Nông sản Thực phẩm Yên Bái,Nguyên vật liệu,HNX
+BSP,Công ty Cổ phần Bia Sài Gòn - Phú Thọ,Hàng Tiêu dùng,UPCOM
+A32,Công ty Cổ phần 32,Hàng Tiêu dùng,UPCOM
+CEN,Công ty Cổ phần CENCON Việt Nam,Dịch vụ Tiêu dùng,UPCOM
+CDO,Công ty Cổ phần Tư vấn Thiết kế và Phát triển Đô thị,Công nghiệp,UPCOM
+AG1,Công ty Cổ phần 28.1,Hàng Tiêu dùng,UPCOM
+BVN,Công ty Cổ phần Bông Việt Nam,Hàng Tiêu dùng,UPCOM
+BCC,Công ty Cổ phần Xi măng Bỉm Sơn,Công nghiệp,HNX
+BTD,Công ty Cổ phần Bê tông ly tâm Thủ Đức,Công nghiệp,UPCOM
+CMW,Công ty Cổ phần Cấp nước Cà Mau,Tiện ích Cộng đồng,UPCOM
+BDG,Công ty Cổ phần May mặc Bình Dương,Hàng Tiêu dùng,UPCOM
+TVH,Công ty Cổ phần Tư vấn Xây dựng công trình Hàng hải,Công nghiệp,UPCOM
+CID,Công ty Cổ phần Xây dựng và Phát triển Cơ sở Hạ tầng,Công nghiệp,UPCOM
+CNC,Công ty Cổ phần Công nghệ cao Traphaco,Dược phẩm và Y tế,UPCOM
+CMC,Công ty Cổ phần Đầu tư CMC,Công nghiệp,HNX
+BHK,Công ty Cổ phần Bia Hà Nội - Kim Bài,Hàng Tiêu dùng,UPCOM
+CNN,"Công ty Cổ phần Tư vấn Công nghệ, Thiết bị và Kiểm định Xây dựng - CONINCO",Công nghiệp,UPCOM
+CBS,Công ty Cổ phần Mía đường Cao Bằng,Hàng Tiêu dùng,UPCOM
+GTS,Công ty Cổ phần Công trình Giao thông Sài Gòn,Công nghiệp,UPCOM
+CC1,Tổng Công ty Xây dựng số 1 - CTCP,Công nghiệp,UPCOM
+BLN,Công ty Cổ phần Vận tải và Dịch vụ Liên Ninh,Dịch vụ Tiêu dùng,UPCOM
+CPI,Công ty Cổ phần Đầu tư Cảng Cái Lân,Công nghiệp,UPCOM
+ASP,Công ty Cổ phần Tập đoàn Dầu khí An Pha,Tiện ích Cộng đồng,HOSE
+CIA,Công ty Cổ Phần Dịch Vụ Sân Bay Quốc Tế Cam Ranh,Công nghiệp,HNX
+SGP,Công ty Cổ phần Cảng Sài Gòn,Công nghiệp,UPCOM
+CTW,Công ty Cổ phần Cấp thoát nước Cần Thơ,Tiện ích Cộng đồng,UPCOM
+CT6,Công ty Cổ phần Công trình 6,Công nghiệp,UPCOM
+CTN,Công ty Cổ phần Xây dựng Công trình ngầm,Công nghiệp,UPCOM
+CTP,Công ty Cổ phần Hoà Bình Takara,Hàng Tiêu dùng,HNX
+CVN,Công ty Cổ phần Vinam,Dược phẩm và Y tế,UPCOM
+DAN,Công ty Cổ phần Dược Danapha,Dược phẩm và Y tế,UPCOM
+DNE,Công ty Cổ phần Môi trường Đô thị Đà Nẵng,Công nghiệp,UPCOM
+DGC,Công ty Cổ phần Tập đoàn Hóa chất Đức Giang,Nguyên vật liệu,HOSE
+DBM,Công ty Cổ phần Dược - Vật tư Y tế Đắk Lắk,Dược phẩm và Y tế,UPCOM
+DGT,Công ty Cổ phần Công trình Giao thông Đồng Nai,Công nghiệp,UPCOM
+DCL,Công ty Cổ phần Dược phẩm Cửu Long,Dược phẩm và Y tế,HOSE
+DDV,Công ty Cổ phần DAP - Vinachem,Nguyên vật liệu,UPCOM
+HNB,Công ty Cổ phần Bến xe Hà Nội,Công nghiệp,UPCOM
+DHG,Công ty Cổ phần Dược Hậu Giang,Dược phẩm và Y tế,HOSE
 DHC,Công ty Cổ phần Đông Hải Bến Tre,Nguyên vật liệu,HOSE
-BSC,Công ty Cổ phần Dịch vụ Bến Thành,Dịch vụ Tiêu dùng,HNX
-KMT,Công ty Cổ phần Kim khí Miền Trung,Nguyên vật liệu,HNX
-KSB,Công ty Cổ phần Khoáng sản và Xây dựng Bình Dương,Nguyên vật liệu,HOSE
-KSD,Công ty Cổ phần Đầu tư DNA,Hàng Tiêu dùng,HNX
-KSQ,Công ty Cổ phần CNC Capital Việt Nam,Công nghiệp,HNX
-KST,Công ty Cổ phần KASATI,Công nghệ Thông tin,HNX
-HHC,Công ty Cổ phần Bánh kẹo Hải Hà,Hàng Tiêu dùng,HNX
-KTS,Công ty Cổ phần Đường Kon Tum,Hàng Tiêu dùng,HNX
-L18,Công ty Cổ phần Đầu tư và Xây dựng số 18,Công nghiệp,HNX
-L18,Công ty Cổ phần Đầu tư và Xây dựng số 18,Công nghiệp,HNX30
-IMP,Công ty Cổ phần Dược phẩm IMEXPHARM,Dược phẩm và Y tế,HOSE
-LAF,Công ty Cổ phần Chế biến Hàng Xuất khẩu Long An,Hàng Tiêu dùng,HOSE
-CJC,Công ty Cổ phần Cơ điện Miền Trung,Công nghiệp,HNX
-HTG,Tổng Công ty Cổ phần Dệt may Hòa Thọ,Hàng Tiêu dùng,HOSE
-KOS,Công ty Cổ phần KOSY,Tài chính,HOSE
-LAS,Công ty Cổ phần Supe Phốt phát và Hóa chất Lâm Thao,Nguyên vật liệu,HNX
-LAS,Công ty Cổ phần Supe Phốt phát và Hóa chất Lâm Thao,Nguyên vật liệu,HNX30
-DHM,Công ty Cổ phần Thương mại & Khai thác Khoáng sản Dương Hiếu,Nguyên vật liệu,HOSE
-DHT,Công ty Cổ phần Dược phẩm Hà Tây,Dịch vụ Tiêu dùng,HNX
-DHT,Công ty Cổ phần Dược phẩm Hà Tây,Dịch vụ Tiêu dùng,HNX30
-LBE,Công ty Cổ phần Đầu tư và Thương mại LABECO,Dịch vụ Tiêu dùng,HNX
+DLG,Công ty Cổ phần Tập đoàn Đức Long Gia Lai,Công nghiệp,HOSE
+BCM,Tập đoàn Đầu tư và Phát triển Công nghiệp Becamex - CTCP,Tài chính,HOSE
+AIG,Công ty Cổ phần Nguyên liệu Á Châu AIG,Hàng Tiêu dùng,UPCOM
+AVG,Công ty Cổ phần Phân Bón Quốc Tế Âu Việt,Nguyên vật liệu,UPCOM
+ATA,Công ty Cổ phần NTACO,Hàng Tiêu dùng,UPCOM
+ATG,Công ty Cổ phần An Trường An,Nguyên vật liệu,UPCOM
+DIC,Công ty Cổ phần Đầu tư và Thương mại DIC,Công nghiệp,UPCOM
+CX8,Công ty Cổ phần Đầu tư và Xây lắp Constrexim số 8,Công nghiệp,HNX
+DAS,Công ty Cổ phần Máy - Thiết bị Dầu khí Đà Nẵng,Hàng Tiêu dùng,UPCOM
+DOP,Công ty Cổ phần Vận tải Xăng dầu Đồng Tháp,Công nghiệp,UPCOM
+TT6,Công ty Cổ Phần Tập Đoàn Tiến Thịnh,Hàng Tiêu dùng,UPCOM
+DAH,Công ty Cổ phần Tập đoàn Khách sạn Đông Á,Dịch vụ Tiêu dùng,HOSE
+DLD,Công ty Cổ phần Du lịch Đắk Lắk,Dịch vụ Tiêu dùng,UPCOM
+LPT,Công ty Cổ phần Thương mại và Sản xuất Lập Phương Thành,Công nghiệp,UPCOM
+BMC,Công ty Cổ phần Khoáng sản Bình Định,Nguyên vật liệu,HOSE
+DNC,Công ty Cổ phần Điện nước Lắp máy Hải Phòng,Tiện ích Cộng đồng,HNX
+DWC,Công ty Cổ phần Cấp nước Đắk Lắk,Tiện ích Cộng đồng,UPCOM
+AAA,Công ty Cổ phần Nhựa An Phát Xanh,Nguyên vật liệu,HOSE
+BMD,Công ty Cổ phần Môi trường và Dịch vụ Đô thị Bình Thuận,Công nghiệp,UPCOM
+AAM,Công ty Cổ Phần Thủy Sản MeKong,Hàng Tiêu dùng,HOSE
+DTE,Công ty Cổ phần Đầu tư Năng lượng Đại Trường Thành Holdings,Tiện ích Cộng đồng,UPCOM
+ATB,Công ty Cổ phần An Thịnh,Công nghiệp,UPCOM
+MTV,Công ty Cổ phần Dịch vụ Môi trường và Công trình Đô thị Vũng Tàu,Công nghiệp,UPCOM
+CAD,Công ty Cổ phần Chế biến và Xuất khẩu Thủy sản Cadovimex,Hàng Tiêu dùng,UPCOM
+DPM,Tổng Công ty Phân bón và Hóa chất Dầu khí - Công ty Cổ phần,Nguyên vật liệu,HOSE
+TTS,Công ty Cổ phần Cán thép Thái Trung,Nguyên vật liệu,UPCOM
+DVG,Công ty Cổ phần Đại Việt Group DVG,Công nghiệp,UPCOM
 DTL,Công ty Cổ phần Đại Thiên Lộc,Nguyên vật liệu,HOSE
-LCD,Công ty Cổ phần Lắp máy - Thí nghiệm cơ điện,Công nghiệp,HNX
-LCG,Công ty Cổ phần Lizen,Công nghiệp,HOSE
-ITC,Công ty Cổ phần Đầu tư - Kinh doanh nhà,Tài chính,HOSE
-CRC,Công ty Cổ phần Create Capital Việt Nam,Công nghiệp,HOSE
-KBC,Tổng Công ty Phát triển Đô thị Kinh Bắc,Tài chính,HOSE
-GSP,Công ty Cổ phần Vận tải Sản phẩm Khí Quốc tế,Công nghiệp,HOSE
-LHG,Công ty Cổ phần Long Hậu,Tài chính,HOSE
-LIG,Công ty Cổ phần Licogi 13,Công nghiệp,HNX
-LIX,Công ty Cổ phần Bột Giặt LiX,Hàng Tiêu dùng,HOSE
+BSD,"Công ty Cổ phần Bia, Rượu Sài Gòn - Đồng Xuân",Hàng Tiêu dùng,UPCOM
+AAT,Công ty Cổ phần Tập đoàn Tiên Sơn Thanh Hóa,Hàng Tiêu dùng,HOSE
+DXS,Công ty Cổ phần Dịch vụ Bất động sản Đất Xanh,Tài chính,HOSE
+MGG,Tổng Công ty Đức Giang - Công ty Cổ phần,Hàng Tiêu dùng,UPCOM
+DXV,Công ty Cổ phần VICEM Vật liệu Xây dựng Đà Nẵng,Công nghiệp,HOSE
+CPH,Công ty Cổ phần Phục vụ Mai táng Hải Phòng,Dịch vụ Tiêu dùng,UPCOM
+EBS,Công ty Cổ phần Sách Giáo dục tại Thành phố Hà Nội,Dịch vụ Tiêu dùng,HNX
+BMJ,Công ty Cổ phần Khoáng sản Miền Đông AHP,Nguyên vật liệu,UPCOM
+EMS,Tổng Công ty Chuyển phát nhanh Bưu điện - Công ty Cổ phần,Công nghiệp,UPCOM
+DRC,Công ty Cổ phần Cao su Đà Nẵng,Hàng Tiêu dùng,HOSE
+VDG,Công ty Cổ phần Vạn Đạt Group,Hàng Tiêu dùng,UPCOM
+RGG,Công ty Cổ phần Regal Group,Tài chính,UPCOM
+TDB,Công ty Cổ phần Thủy điện Định Bình,Tiện ích Cộng đồng,UPCOM
+DAG,Công ty Cổ phần Tập đoàn Nhựa Đông Á,Nguyên vật liệu,UPCOM
+CII,Công ty Cổ phần Đầu tư Hạ tầng Kỹ thuật Thành phố Hồ Chí Minh,Công nghiệp,HOSE
+CK8,Công ty Cổ phần Cơ khí 120,Tài chính,UPCOM
+BDT,Công ty Cổ phần Xây lắp và Vật liệu xây dựng Đồng Tháp,Công nghiệp,UPCOM
+CMI,Công ty Cổ phần CMISTONE Việt Nam,Công nghiệp,UPCOM
+E29,Công ty cổ phần Đầu tư Xây dựng và Kỹ thuật 29,Công nghiệp,UPCOM
+DVP,Công ty Cổ phần Đầu tư và Phát triển Cảng Đình Vũ,Công nghiệp,HOSE
+CMV,Công ty Cổ phần Thương nghiệp Cà Mau,Dịch vụ Tiêu dùng,HOSE
+DDM,Công ty Cổ phần Hàng hải Đông Đô,Công nghiệp,UPCOM
+CTI,Công ty Cổ phần Đầu tư Phát triển Cường Thuận IDICO,Công nghiệp,HOSE
+ELC,Công ty Cổ phần Công nghệ - Viễn thông ELCOM,Công nghệ Thông tin,HOSE
+CCR,Công ty Cổ phần Cảng Cam Ranh,Công nghiệp,HNX
+CDH,Công ty Cổ phần Công trình Công cộng và Dịch vụ Du lịch Hải Phòng,Công nghiệp,UPCOM
+CKG,Công ty Cổ phần Tập đoàn CIC,Tài chính,HOSE
+CFV,Công ty Cổ phần Cà phê Thắng Lợi,Hàng Tiêu dùng,UPCOM
+EVF,Công ty Tài chính Tổng hợp Cổ phần Điện Lực,Tài chính,HOSE
+AAV,Công ty Cổ phần AAV Group,Tài chính,HNX
+CTR,Tổng Công ty Cổ phần Công trình Viettel,Công nghiệp,HOSE
+LEC,Công ty Cổ phần Bất động sản Điện lực Miền Trung,Tài chính,UPCOM
+BMP,Công ty Cổ phần Nhựa Bình Minh,Công nghiệp,HOSE
+CTT,Công ty Cổ phần Chế tạo máy - Vinacomin,Công nghiệp,HNX
+CAN,Công ty Cổ phần Đồ hộp Hạ Long,Hàng Tiêu dùng,HNX
+DMN,Công ty Cổ phần Domenal,Hàng Tiêu dùng,UPCOM
+ABB,Ngân hàng Thương mại Cổ phần An Bình,Ngân hàng,UPCOM
+BMS,Công ty Cổ phần Chứng khoán Bảo Minh,Tài chính,UPCOM
+CCT,Công ty Cổ phần Cảng Cần Thơ,Công nghiệp,UPCOM
+MBN,Công ty Cổ phần Môi trường và Công trình đô thị Bắc Ninh,Công nghiệp,UPCOM
+BOT,Công ty Cổ phần BOT Cầu Thái Hà,Công nghiệp,UPCOM
+BPC,Công ty Cổ phần Vicem Bao bì Bỉm Sơn,Công nghiệp,HNX
+CCA,Công ty Cổ phần Xuất nhập khẩu Thủy sản Cần Thơ,Hàng Tiêu dùng,UPCOM
+ABI,Công ty Cổ phần Bảo hiểm Ngân hàng Nông Nghiệp,Tài chính,UPCOM
+BRC,Công ty Cổ phần Cao su Bến Thành,Nguyên vật liệu,HOSE
+HFB,Công ty Cổ phần Công trình Cầu phà Thành phố Hồ Chí Minh,Công nghiệp,UPCOM
+CEO,Công ty Cổ phần Tập đoàn C.E.O,Tài chính,HNX
+BRS,Công ty Cổ phần Dịch vụ Đô thị Bà Rịa,Công nghiệp,UPCOM
+DMS,Công ty Cổ phần Hóa phẩm dầu khí DMC - Miền Nam,Tiện ích Cộng đồng,UPCOM
+DPC,Công ty Cổ phần Nhựa Đà Nẵng,Công nghiệp,UPCOM
+DNW,Công ty Cổ phần Cấp nước Đồng Nai,Tiện ích Cộng đồng,UPCOM
+AMC,Công ty Cổ phần Khoáng sản Á Châu,Nguyên vật liệu,HNX
+AVC,Công ty Cổ phần Thủy điện A Vương,Tiện ích Cộng đồng,UPCOM
+CFM,Công ty Cổ phần Đầu tư CFM,Công nghiệp,UPCOM
+AMD,Công ty Cổ phần Đầu tư và Khoáng sản FLC Stone,Tài chính,UPCOM
+KCB,Công ty Cổ phần Khoáng Sản và Luyện Kim Cao Bằng,Nguyên vật liệu,UPCOM
+DSN,Công ty Cổ phần Công viên nước Đầm Sen,Dịch vụ Tiêu dùng,HOSE
+BSC,Công ty Cổ phần Dịch vụ Bến Thành,Tài chính,HNX
+AME,Công ty cổ phần Alphanam E&C,Công nghiệp,HNX
+TIN,Công ty Tài chính tổng hợp cổ phần Tín Việt,Tài chính,UPCOM
+BAL,Công ty Cổ phần Bao bì Bia - Rượu - Nước giải khát,Công nghiệp,UPCOM
+AMV,Công ty Cổ phần Sản xuất Kinh doanh Dược và Trang thiết bị Y tế Việt Mỹ,Dược phẩm và Y tế,HNX
+FBA,Công ty Cổ phần Tập đoàn Quốc tế FBA,Hàng Tiêu dùng,UPCOM
+DTC,Công ty Cổ phần Viglacera Đông Triều,Công nghiệp,UPCOM
+FCN,Công ty Cổ phần FECON,Công nghiệp,HOSE
+DID,Công ty Cổ phần DIC - Đồng Tiến,Công nghiệp,UPCOM
+BHI,Tổng Công ty Cổ phần Bảo hiểm Sài Gòn - Hà Nội,Tài chính,UPCOM
+CCL,Công ty Cổ phần Đầu tư và Phát triển Đô thị Dầu khí Cửu Long,Tài chính,HOSE
+ACG,Công ty Cổ phần Gỗ An Cường,Nguyên vật liệu,HOSE
+BSI,Công ty Cổ phần Chứng khoán BIDV,Tài chính,HOSE
+BSR,Công ty Cổ phần Lọc Hóa dầu Bình Sơn,Dầu khí,HOSE
 VSM,Công ty Cổ phần Container Miền Trung,Công nghiệp,HNX
-GIC,Công ty Cổ phần Đầu tư Dịch vụ và Phát triển Xanh,Công nghiệp,HNX
-DGW,Công ty Cổ phần Thế Giới Số,Dịch vụ Tiêu dùng,HOSE
-MAC,Công ty Cổ phần Cung ứng và Dịch vụ Kỹ thuật Hàng Hải,Công nghiệp,HNX
-MAS,Công ty cổ phần Dịch vụ Hàng Không Sân Bay Đà Nẵng,Dịch vụ Tiêu dùng,HNX
-L40,Công ty Cổ phần Đầu tư và Xây dựng 40,Công nghiệp,HNX
-MBB,Ngân hàng Thương mại Cổ phần Quân đội,Ngân hàng,HOSE
-MBB,Ngân hàng Thương mại Cổ phần Quân đội,Ngân hàng,VN30
-LPB,Ngân hàng Thương mại Cổ phần Lộc Phát Việt Nam,Ngân hàng,HOSE
-MCC,Công ty Cổ phần Gạch ngói cao cấp,Công nghiệp,HNX
-MCM,Công ty Cổ phần Giống bò sữa Mộc Châu,Hàng Tiêu dùng,HOSE
-MCO,Công ty Cổ phần Đầu tư và Xây dựng BDC Việt Nam,Công nghiệp,HNX
+CMP,Công ty Cổ phần Cảng Chân Mây,Công nghiệp,UPCOM
+FIR,Công ty Cổ phần Địa ốc First Real,Tài chính,HOSE
+BCV,Công ty Cổ phần Du lịch và Thương mại Bằng Giang Cao Bằng - Vimico,Dịch vụ Tiêu dùng,UPCOM
+ART,Công ty Cổ phần Chứng khoán ARTEX,Tài chính,UPCOM
+FSO,Công ty Cổ phần Cơ khí đóng tàu thủy sản Việt Nam,Công nghiệp,UPCOM
+DCR,Công ty Cổ phần Gạch men COSEVCO,Công nghiệp,UPCOM
+FBC,Công ty Cổ phần Cơ khí Phổ Yên,Công nghiệp,UPCOM
+FCS,Công ty Cổ phần Lương thực Thành phố Hồ Chí Minh,Hàng Tiêu dùng,UPCOM
+BNA,Công ty Cổ phần Tập đoàn Đầu tư Bảo Ngọc,Hàng Tiêu dùng,HNX
+BRR,Công ty Cổ phần Cao su Bà Rịa,Nguyên vật liệu,UPCOM
+DP3,Công ty Cổ Phần Dược Phẩm Trung Ương 3,Dược phẩm và Y tế,HNX
+FCM,Công ty Cổ phần Bê tông Phan Vũ Hà Nam,Công nghiệp,HOSE
+DC4,Công ty Cổ phần Dicera Holdings,Công nghiệp,HOSE
+FPT,Công ty Cổ phần FPT,Công nghệ Thông tin,HOSE
+FRT,Công ty Cổ phần Bán lẻ Kỹ thuật số FPT,Dịch vụ Tiêu dùng,HOSE
+NCG,Công ty Cổ phần Tập đoàn Nova Consumer,Hàng Tiêu dùng,UPCOM
+TSA,Công ty Cổ Phần Đầu Tư Và Xây Lắp Trường Sơn,Công nghiệp,UPCOM
+FT1,Công ty Cổ phần Phụ tùng máy số 1,Công nghiệp,UPCOM
+THM,Công ty Cổ phần Tứ Hải Hà Nam,Hàng Tiêu dùng,UPCOM
+CMS,Công ty Cổ phần Tập đoàn CMH Việt Nam,Công nghiệp,HNX
+DAD,Công ty Cổ phần Đầu tư và Phát triển Giáo dục Đà Nẵng,Dịch vụ Tiêu dùng,HNX
+ABW,Công ty Cổ phần Chứng khoán An Bình,Tài chính,UPCOM
+GAB,Công ty Cổ phần Đầu tư Khai khoáng & Quản lý Tài sản FLC,Công nghiệp,UPCOM
+GAS,Tổng Công ty Khí Việt Nam - Công ty Cổ phần,Tiện ích Cộng đồng,HOSE
+CSC,Công ty Cổ phần Tập đoàn COTANA,Công nghiệp,HNX
+ANT,Công ty Cổ phần Rau quả Thực phẩm An Giang,Hàng Tiêu dùng,UPCOM
+BBS,Công ty Cổ phần VICEM Bao bì Bút Sơn,Công nghiệp,HNX
+DCM,Công ty Cổ phần Phân bón Dầu Khí Cà Mau,Nguyên vật liệu,HOSE
+DVW,Công ty Cổ phần Dịch vụ và Xây dựng cấp nước Đồng Nai,Công nghiệp,UPCOM
+BTH,Công ty Cổ phần Chế tạo Biến thế và Vật liệu Điện Hà Nội,Công nghiệp,UPCOM
+DL1,Công ty Cổ phần Tập đoàn Alpha Seven,Công nghiệp,HNX
+BTN,Công ty Cổ phần Đầu tư Bitco Bình Định,Công nghiệp,UPCOM
+PGV,Tổng Công ty Phát điện 3 - Công ty Cổ phần,Tiện ích Cộng đồng,HOSE
+ANV,Công ty Cổ phần Nam Việt,Hàng Tiêu dùng,HOSE
+BCB,Công ty Cổ phần 397,Nguyên vật liệu,UPCOM
+CCM,Công ty Cổ phần Khoáng sản và Xi măng Cần Thơ,Công nghiệp,UPCOM
+GHC,Công ty Cổ phần Thủy điện Gia Lai,Tiện ích Cộng đồng,UPCOM
+DCS,Công ty Cổ phần Tập đoàn EDX,Hàng Tiêu dùng,UPCOM
+DXG,Công ty Cổ phần Tập đoàn Đất Xanh,Tài chính,HOSE
+FGL,Công ty Cổ phần Cà phê Gia Lai,Hàng Tiêu dùng,UPCOM
 GIL,Công ty Cổ phần Sản xuất Kinh doanh Xuất nhập khẩu Bình Thạnh,Hàng Tiêu dùng,HOSE
-MDC,Công ty Cổ phần Than Mông Dương - Vinacomin,Nguyên vật liệu,HNX
-LBM,Công ty Cổ phần Khoáng sản và Vật liệu xây dựng Lâm Đồng,Công nghiệp,HOSE
-KKC,Công ty Cổ phần Tập đoàn Thành Thái,Nguyên vật liệu,HNX
-MED,Công ty Cổ phần Dược Trung ương Mediplantex,Dược phẩm và Y tế,HNX
-ILB,Công ty Cổ phần ICD Tân Cảng - Long Bình,Công nghiệp,HOSE
+GLC,Công ty Cổ phần Vàng Lào Cai,Nguyên vật liệu,UPCOM
+DNM,Tổng Công ty Cổ phần Y tế Danameco,Dược phẩm và Y tế,UPCOM
+CNG,Công ty Cổ phần CNG Việt Nam,Tiện ích Cộng đồng,HOSE
+GMX,Công ty Cổ phần Gạch ngói Gốm xây dựng Mỹ Xuân,Công nghiệp,HNX
+ABT,Công ty Cổ phần Xuất nhập khẩu Thủy sản Bến Tre,Hàng Tiêu dùng,HOSE
+CSM,Công ty Cổ phần Công nghiệp Cao su Miền Nam,Hàng Tiêu dùng,HOSE
+BCE,Công ty Cổ phần Xây dựng và Giao thông Bình Dương,Công nghiệp,HOSE
+ACC,Công ty Cổ phần Đầu tư và Xây dựng Bình Dương ACC,Công nghiệp,HOSE
+DNP,Công ty Cổ phần DNP Holding,Công nghiệp,HNX
+BCG,Công ty Cổ phần Tập đoàn Bamboo Capital,Tài chính,HOSE
+BTP,Công ty Cổ phần Nhiệt điện Bà Rịa,Tiện ích Cộng đồng,HOSE
+BTS,Công ty Cổ phần Xi măng VICEM Bút Sơn,Công nghiệp,HNX
+BTT,Công ty Cổ phần Thương mại - Dịch vụ Bến Thành,Dịch vụ Tiêu dùng,HOSE
+DUS,Công ty Cổ phần Dịch vụ Đô thị Đà Lạt,Công nghiệp,UPCOM
+AAH,Công ty Cổ phần Hợp Nhất,Nguyên vật liệu,UPCOM
+DDB,Công ty Cổ Phần Thương Mại Và Xây Dựng Đông Dương,Công nghiệp,UPCOM
+DP2,Công ty Cổ phần Dược phẩm Trung ương 2,Dược phẩm và Y tế,UPCOM
+BGE,Công ty Cổ phần BCG Energy,Tiện ích Cộng đồng,UPCOM
+DFF,Công ty Cổ phần Tập đoàn Đua Fat,Công nghiệp,UPCOM
+GSM,Công ty Cổ phần Thủy điện Hương Sơn,Tiện ích Cộng đồng,UPCOM
+COM,Công ty Cổ phần Vật tư Xăng dầu,Dịch vụ Tiêu dùng,HOSE
 DST,Công ty Cổ phần Đầu tư Sao Thăng Long,Dịch vụ Tiêu dùng,HNX
-HAD,Công ty Cổ phần Bia Hà Nội - Hải Dương,Hàng Tiêu dùng,HNX
-ITA,Công ty Cổ phần Đầu tư và Công nghiệp Tân Tạo,Tài chính,HOSE
+APF,Công ty Cổ phần Nông sản Thực phẩm Quảng Ngãi,Hàng Tiêu dùng,UPCOM
+CDC,Công ty Cổ phần Chương Dương,Công nghiệp,HOSE
+UDL,Công ty Cổ phần Đô thị và Môi trường Đắk Lắk,Công nghiệp,UPCOM
+TCK,Tổng Công ty Cơ khí Xây dựng - CTCP,Công nghiệp,UPCOM
+BTW,Công ty Cổ phần Cấp nước Bến Thành,Tiện ích Cộng đồng,HNX
+BCP,Công ty Cổ phần Dược Enlie,Dược phẩm và Y tế,UPCOM
+CTA,Công ty Cổ phần Vinavico,Công nghiệp,UPCOM
+DSE,Công ty Cổ phần Chứng khoán DNSE,Tài chính,HOSE
+DHB,Công ty Cổ phần Phân đạm và Hóa chất Hà Bắc,Nguyên vật liệu,UPCOM
+DZM,Công ty Cổ phần Cơ điện Dzĩ An,Công nghiệp,UPCOM
+ADS,Công ty Cổ phần DAMSAN,Hàng Tiêu dùng,HOSE
+GTA,Công ty Cổ phần Chế biến Gỗ Thuận An,Nguyên vật liệu,HOSE
+APG,Công ty Cổ phần Chứng khoán APG,Tài chính,HOSE
+ACE,Công ty Cổ phần Bê tông ly tâm An Giang,Công nghiệp,UPCOM
+CMN,Công ty Cổ phần Lương thực Thực phẩm Colusa - Miliket,Hàng Tiêu dùng,UPCOM
+MVC,Công ty Cổ phần Vật liệu và Xây dựng Bình Dương,Công nghiệp,UPCOM
+ACL,Công ty Cổ phần Xuất nhập khẩu Thủy sản Cửu Long An Giang,Hàng Tiêu dùng,HOSE
+ICN,Công ty Cổ phần Đầu tư Xây dựng Dầu khí IDICO,Công nghiệp,UPCOM
+CIP,Công ty Cổ phần Xây lắp và Sản xuất Công nghiệp,Công nghiệp,UPCOM
+HHV,Công ty Cổ phần Đầu tư Hạ tầng Giao thông Đèo Cả,Công nghiệp,HOSE
+CBI,Công ty Cổ phần Gang thép Cao Bằng,Nguyên vật liệu,UPCOM
+GER,Công ty Cổ phần Thể thao Ngôi sao Geru,Nguyên vật liệu,UPCOM
+NSS,Công ty Cổ phần Nông súc sản Đồng Nai,Hàng Tiêu dùng,UPCOM
+HAH,Công ty Cổ phần Vận tải và Xếp dỡ Hải An,Công nghiệp,HOSE
+BVG,Công ty Cổ phần Group Bắc Việt,Nguyên vật liệu,UPCOM
+HAI,Công ty Cổ phần Nông dược HAI,Nguyên vật liệu,UPCOM
+DOC,Công ty Cổ phần Vật tư nông nghiệp Đồng Nai,Nguyên vật liệu,UPCOM
+BVH,Tập đoàn Bảo Việt,Tài chính,HOSE
+HID,Công ty Cổ phần Halcom Vietnam,Công nghiệp,HOSE
+KSQ,Công ty Cổ phần CNC Capital Việt Nam,Công nghiệp,UPCOM
+FIT,Công ty Cổ phần Tập đoàn F.I.T,Dược phẩm và Y tế,HOSE
+CRE,Công ty Cổ phần Bất động sản Thế Kỷ,Tài chính,HOSE
+AAS,Công ty Cổ phần Chứng khoán SmartInvest,Tài chính,UPCOM
+HNP,Công ty Cổ phần Hanel Xốp Nhựa,Nguyên vật liệu,UPCOM
+HAT,Công ty Cổ phần Thương mại Bia Hà Nội,Hàng Tiêu dùng,HNX
+STK,Công ty Cổ phần Sợi Thế Kỷ,Hàng Tiêu dùng,HOSE
+GH3,Công ty Cổ phần Công trình giao thông Hà Nội,Công nghiệp,UPCOM
+CKD,Công ty Cổ phần Cơ khí Đông Anh Licogi,Công nghiệp,UPCOM
+TOS,Công ty Cổ phần Dịch vụ biển Tân Cảng,Dầu khí,UPCOM
+GGG,Công ty Cổ phần Ô tô Giải Phóng,Hàng Tiêu dùng,UPCOM
+BFC,Công ty Cổ phần Phân bón Bình Điền,Nguyên vật liệu,HOSE
+HAV,Công ty Cổ phần Rượu Hapro,Hàng Tiêu dùng,UPCOM
+TNH,Công ty Cổ phần Tập đoàn Bệnh viện TNH,Dược phẩm và Y tế,HOSE
+ICT,Công ty Cổ phần Viễn thông - Tin học Bưu điện,Công nghệ Thông tin,HOSE
+PHN,Công ty Cổ phần Pin Hà Nội,Công nghiệp,HNX
+BSA,Công ty Cổ phần Thủy điện Buôn Đôn,Tiện ích Cộng đồng,UPCOM
+BWA,Công ty Cổ phần Cấp thoát nước và Xây dựng Bảo Lộc,Tiện ích Cộng đồng,UPCOM
+DNH,Công ty Cổ phần Thủy điện Đa Nhim - Hàm Thuận - Đa Mi,Tiện ích Cộng đồng,UPCOM
+HC3,Công ty Cổ phần Xây dựng số 3 Hải Phòng,Công nghiệp,UPCOM
+TW3,Công ty Cổ phần Dược Trung Ương 3,Dược phẩm và Y tế,UPCOM
+VTZ,Công ty Cổ phần Sản xuất và Thương mại Nhựa Việt Thành,Nguyên vật liệu,HNX
+HCC,Công ty Cổ phần Bê tông Hòa Cầm - Intimex,Công nghiệp,HNX
+CMK,Công ty Cổ phần Cơ khí Mạo Khê - Vinacomin,Công nghiệp,UPCOM
+HDB,Ngân hàng Thương mại Cổ phần Phát Triển Thành phố Hồ Chí Minh,Ngân hàng,HOSE
+PRT,Tổng Công ty Sản xuất - Xuất nhập khẩu Bình Dương - Công ty cổ phần,Tài chính,UPCOM
+BXH,Công ty Cổ phần VICEM Bao bì Hải Phòng,Công nghiệp,HNX
+ACM,Công ty Cổ phần Tập đoàn Khoáng sản Á Cường,Nguyên vật liệu,UPCOM
+HDC,Công ty Cổ phần Phát triển Nhà Bà Rịa Vũng Tàu,Tài chính,HOSE
+HDM,Công ty Cổ phần Dệt May Huế,Hàng Tiêu dùng,UPCOM
+SSH,Công ty Cổ phần Phát triển Sunshine Homes,Tài chính,UPCOM
+ECI,Công ty Cổ phần Tập đoàn ECI,Dịch vụ Tiêu dùng,HNX
+BDW,Công ty Cổ phần Cấp thoát nước Bình Định,Tiện ích Cộng đồng,UPCOM
+GLT,Công ty Cổ phần Kỹ thuật điện Toàn Cầu,Hàng Tiêu dùng,HNX
+FRC,Công ty Cổ phần Lâm đặc sản xuất khẩu Quảng Nam,Nguyên vật liệu,UPCOM
+HNR,Công ty Cổ phần Rượu và Nước Giải Khát Hà Nội,Hàng Tiêu dùng,UPCOM
+BEL,Công ty Cổ phần Điện tử Biên Hòa,Hàng Tiêu dùng,UPCOM
+TCH,Công ty Cổ phần Đầu tư Dịch vụ Tài chính Hoàng Huy,Tài chính,HOSE
+NBT,Công ty Cổ phần Cấp thoát nước Bến Tre,Tiện ích Cộng đồng,UPCOM
+HKT,Công ty Cổ phần Đầu tư QP Xanh,Hàng Tiêu dùng,HNX
+HLA,Công ty Cổ phần Hữu Liên Á Châu,Nguyên vật liệu,UPCOM
+HLS,Công ty Cổ phần Sứ kỹ thuật Hoàng Liên Sơn,Công nghiệp,UPCOM
+HMG,Công ty Cổ phần Kim Khí Hà Nội - VNSTEEL,Nguyên vật liệu,UPCOM
+HMH,Công ty Cổ phần Hải Minh,Công nghiệp,HNX
+GMH,Công ty Cổ phần Minh Hưng Quảng Trị,Công nghiệp,HOSE
+DP1,Công ty Cổ phần Dược phẩm Trung ương CPC1,Dược phẩm và Y tế,UPCOM
+GMA,Công ty Cổ phần G-Automobile,Hàng Tiêu dùng,HNX
+TSJ,Công ty Cổ phần Du lịch Dịch vụ Hà Nội,Dịch vụ Tiêu dùng,UPCOM
+ACS,Công ty Cổ phần Xây lắp Thương mại 2,Công nghiệp,UPCOM
+LLM,Tổng Công ty lắp máy Việt Nam - Công ty Cổ phần,Công nghiệp,UPCOM
+BIG,Công ty Cổ phần Đầu tư BIG Group Holdings,Hàng Tiêu dùng,UPCOM
+HPB,Công ty Cổ phần Bao bì PP,Công nghiệp,UPCOM
+HPH,Công ty Cổ phần Hóa Chất Hưng Phát Hà Bắc,Nguyên vật liệu,UPCOM
+GMD,Công ty Cổ phần Gemadept,Công nghiệp,HOSE
+HPM,Công ty Cổ phần Xây dựng Thương mại và Khoáng sản Hoàng Phúc,Nguyên vật liệu,UPCOM
+LDW,Công ty Cổ phần Cấp thoát nước Lâm Đồng,Tiện ích Cộng đồng,UPCOM
+FHS,Công ty Cổ phần Phát hành sách Thành phố Hồ Chí Minh - FAHASA,Dịch vụ Tiêu dùng,UPCOM
+VVS,Công ty Cổ phần Đầu tư Phát triển Máy Việt Nam,Hàng Tiêu dùng,UPCOM
+DHM,Công ty Cổ phần Thương mại & Khai thác Khoáng sản Dương Hiếu,Nguyên vật liệu,HOSE
+DPH,Công ty Cổ phần Dược phẩm Hải Phòng,Dược phẩm và Y tế,UPCOM
+ACV,Tổng Công ty Cảng Hàng không Việt Nam - CTCP,Công nghiệp,UPCOM
+ADC,Công ty Cổ phần Mĩ thuật và Truyền thông,Dịch vụ Tiêu dùng,HNX
+EID,Công ty Cổ phần Đầu tư và Phát triển Giáo dục Hà Nội,Dịch vụ Tiêu dùng,HNX
+HDG,Công ty Cổ phần Tập đoàn Hà Đô,Tài chính,HOSE
+CMM,Công ty Cổ phần Camimex,Hàng Tiêu dùng,UPCOM
+HAS,Công ty Cổ phần Hacisco,Công nghiệp,HOSE
+HRB,Công ty Cổ phần Harec Đầu tư và Thương Mại,Tài chính,UPCOM
+HSP,Công ty Cổ phần Sơn Tổng hợp Hà Nội,Công nghiệp,UPCOM
+CKV,Công ty Cổ phần CokyVina,Công nghệ Thông tin,HNX
+ADP,Công ty Cổ phần Sơn Á Đông,Công nghiệp,HOSE
+HT1,Công ty Cổ phần Xi măng VICEM Hà Tiên,Công nghiệp,HOSE
+HTC,Công ty Cổ phần Thương mại Hóc Môn,Tiện ích Cộng đồng,HNX
+DND,Công ty Cổ phần Đầu tư Xây dựng và Vật liệu Đồng Nai,Công nghiệp,UPCOM
+DTP,Công ty Cổ phần Dược phẩm CPC1 Hà Nội,Dược phẩm và Y tế,UPCOM
+CCC,Công ty Cổ Phần Xây Dựng CDC,Công nghiệp,HOSE
+HTN,Công ty Cổ phần Hưng Thịnh Incons,Tài chính,HOSE
+CLC,Công ty Cổ phần Cát Lợi,Hàng Tiêu dùng,HOSE
+DHP,Công ty Cổ phần Điện cơ Hải Phòng,Công nghiệp,HNX
+HU1,Công ty Cổ phần Đầu tư và Xây dựng HUD1,Công nghiệp,HOSE
+CLG,Công ty Cổ phần Đầu tư và Phát triển Nhà đất Cotec,Tài chính,UPCOM
+HU6,Công ty Cổ phần Đầu tư Phát triển Nhà và Đô thị HUD6,Tài chính,UPCOM
+HUT,Công ty Cổ phần Tasco,Hàng Tiêu dùng,HNX
+HVA,Công ty Cổ phần Đầu tư HVA,Tài chính,UPCOM
+IDC,Tổng Công ty IDICO - CTCP,Tài chính,HNX
+CMF,Công ty Cổ phần Thực phẩm Cholimex,Hàng Tiêu dùng,UPCOM
+HVH,Công ty Cổ phần Đầu tư và Công nghệ HVC,Công nghiệp,HOSE
+IBC,Công ty Cổ phần Đầu tư APAX Holdings,Tài chính,UPCOM
+ICF,Công ty Cổ phần Đầu tư - Thương mại - Thuỷ sản,Hàng Tiêu dùng,UPCOM
+ICG,Công ty Cổ phần Xây dựng Sông Hồng,Công nghiệp,HNX
+LIG,Công ty Cổ phần Licogi 13,Công nghiệp,HNX
+HAX,Công ty Cổ phần Dịch vụ Ô tô Hàng Xanh,Hàng Tiêu dùng,HOSE
+ICI,Công ty Cổ phần Đầu tư và Xây dựng Công nghiệp,Công nghiệp,UPCOM
 FTS,Công ty Cổ phần Chứng khoán FPT,Tài chính,HOSE
-HEV,Công ty Cổ phần Sách Đại học - Dạy nghề,Dịch vụ Tiêu dùng,HNX
-L14,Công ty Cổ phần Licogi 14,Công nghiệp,HNX
-L14,Công ty Cổ phần Licogi 14,Công nghiệp,HNX30
-DTA,Công ty Cổ phần Đệ Tam,Tài chính,HOSE
-CKG,Công ty Cổ phần Tập đoàn Tư vấn Đầu tư Xây dựng Kiên Giang,Tài chính,HOSE
+IDI,Công ty Cổ phần Đầu tư và Phát triển Đa Quốc Gia I.D.I,Hàng Tiêu dùng,HOSE
+BGW,Công ty Cổ phần Nước sạch Bắc Giang,Tiện ích Cộng đồng,UPCOM
+CH5,Công ty Cổ phần Xây dựng số 5 Hà Nội,Công nghiệp,UPCOM
+BHA,Công ty Cổ phần Thủy điện Bắc Hà,Tiện ích Cộng đồng,UPCOM
+IDV,Công ty Cổ phần Phát triển Hạ tầng Vĩnh Phúc,Tài chính,HNX
+ILA,Công ty Cổ phần ILA,Công nghiệp,UPCOM
+IME,Công ty Cổ phần Cơ khí và Xây lắp Công nghiệp,Công nghiệp,UPCOM
+HCT,Công ty Cổ phần Thương mại - Dịch vụ - Vận tải Xi măng Hải Phòng,Công nghiệp,HNX
+DSD,Công ty cổ phần DHC Suối Đôi,Dịch vụ Tiêu dùng,UPCOM
+DKG,Công ty Cổ Phần Tập đoàn DamiK,Công nghiệp,UPCOM
+ECO,Công ty Cổ Phần Nhựa Sinh Thái Việt Nam,Nguyên vật liệu,UPCOM
+DVC,Công ty Cổ phần Thương mại dịch vụ Tổng Hợp Cảng Hải Phòng,Tiện ích Cộng đồng,UPCOM
+XDH,Công ty Cổ phần Đầu tư Xây dựng Dân dụng Hà Nội,Tài chính,UPCOM
+INN,Công ty Cổ phần Bao bì và In Nông nghiệp,Công nghiệp,HNX
+ING,Công ty Cổ phần Đầu Tư Và Phát Triển Xây Dựng,Công nghiệp,UPCOM
+IPA,Công ty Cổ phần Tập đoàn Đầu tư I.P.A,Công nghiệp,HNX
 HPX,Công ty Cổ phần Đầu tư Hải Phát,Tài chính,HOSE
-MSN,Công ty Cổ phần Tập đoàn Masan,Hàng Tiêu dùng,HOSE
-MSN,Công ty Cổ phần Tập đoàn Masan,Hàng Tiêu dùng,VN30
+ISG,Công ty Cổ phần Vận tải biển và Hợp tác lao động Quốc Tế,Công nghiệp,UPCOM
+DNN,Công ty Cổ phần Cấp nước Đà Nẵng,Tiện ích Cộng đồng,UPCOM
+TAB,Công ty Cổ phần Freco Việt Nam,Công nghiệp,UPCOM
+ITQ,Công ty Cổ phần Tập đoàn Thiên Quang,Nguyên vật liệu,HNX
+KBC,Tổng Công ty Phát triển Đô thị Kinh Bắc,Tài chính,HOSE
+KDC,Công ty Cổ phần Tập đoàn KIDO,Hàng Tiêu dùng,HOSE
+DHD,Công ty Cổ phần Dược Vật Tư Y Tế Hải Dương,Dược phẩm và Y tế,UPCOM
+KHG,Công ty Cổ phần Tập đoàn Khải Hoàn Land,Tài chính,HOSE
+MCG,Công ty Cổ phần Năng lượng và Bất động sản MCG,Công nghiệp,UPCOM
+BHH,Công ty Cổ Phần Thương Mại Bia Hà Nội - Hưng Yên 89,Hàng Tiêu dùng,UPCOM
+KHL,Công ty Cổ phần Khoáng sản và Vật liệu Xây dựng Hưng Long,Công nghiệp,UPCOM
+KHP,Công ty Cổ phần Điện lực Khánh Hòa,Tiện ích Cộng đồng,HOSE
+HEC,Công ty Cổ phần Tư vấn xây dựng Thủy Lợi II,Công nghiệp,UPCOM
+HEJ,Tổng Công ty Tư vấn Xây dựng Thủy Lợi Việt Nam - CTCP,Công nghiệp,UPCOM
+CLW,Công ty Cổ phần Cấp nước Chợ Lớn,Tiện ích Cộng đồng,HOSE
+KGM,Công ty Cổ phần Xuất nhập khẩu Kiên Giang,Dịch vụ Tiêu dùng,UPCOM
+API,Công ty Cổ phần Đầu tư Châu Á - Thái Bình Dương,Tài chính,HNX
+NO1,Công ty Cổ phần Tâp đoàn 911,Công nghiệp,HOSE
+KKC,Công ty Cổ phần Tập đoàn Thành Thái,Nguyên vật liệu,HNX
+KLF,Công ty Cổ phần Đầu tư Thương mại và Xuất nhập khẩu CFS,Dịch vụ Tiêu dùng,UPCOM
+HEP,Công ty Cổ phần Môi trường và Công trình đô thị Huế,Công nghiệp,UPCOM
+KMR,Công ty Cổ phần Mirae,Hàng Tiêu dùng,HOSE
+HFX,Công ty Cổ phần Sản xuất - Xuất nhập khẩu Thanh Hà,Dịch vụ Tiêu dùng,UPCOM
+CHC,Công ty Cổ phần Cẩm Hà,Công nghiệp,UPCOM
+KMT,Công ty Cổ phần Kim khí Miền Trung,Nguyên vật liệu,HNX
+APL,Công ty Cổ phần Cơ khí và Thiết bị áp lực - VVMI,Công nghiệp,UPCOM
+HLT,Công ty Cổ phần Dệt may Hoàng Thị Loan,Hàng Tiêu dùng,UPCOM
+KOS,Công ty Cổ phần KOSY,Tài chính,HOSE
+CKA,Công ty Cổ phần Cơ khí An Giang,Công nghiệp,UPCOM
+AGP,Công ty Cổ phần Dược phẩm AGIMEXPHARM,Dược phẩm và Y tế,UPCOM
+KSB,Công ty Cổ phần Khoáng sản và Xây dựng Bình Dương,Nguyên vật liệu,HOSE
+AGM,Công ty Cổ phần Xuất nhập khẩu An Giang,Hàng Tiêu dùng,UPCOM
+DBC,Công ty Cổ phần Tập đoàn Dabaco Việt Nam,Hàng Tiêu dùng,HOSE
+DPR,Công ty Cổ phần Cao su Đồng Phú,Nguyên vật liệu,HOSE
+BMK,Công ty Cổ Phần Kỹ thuật Nhiệt Mèo Đen,Công nghiệp,UPCOM
+DSG,Công ty Cổ phần Kính Đáp Cầu,Công nghiệp,UPCOM
+KSH,Công ty Cổ phần Damac GLS,Hàng Tiêu dùng,UPCOM
+KHD,"Công ty Cổ phần Khai thác, Chế biến Khoáng sản Hải Dương",Nguyên vật liệu,UPCOM
+HCD,Công ty Cổ phần Đầu tư Sản xuất và Thương mại HCD,Nguyên vật liệu,HOSE
+KSV,Tổng Công ty Khoáng sản TKV - Công ty Cổ phần,Nguyên vật liệu,HNX
+APS,Công ty Cổ phần Chứng khoán Châu Á - Thái Bình Dương,Tài chính,HNX
+FDC,Công ty Cổ phần Ngoại thương và Phát triển Đầu tư Thành phố Hồ Chí Minh,Tài chính,HOSE
+HSV,Công ty Cổ phần Tập đoàn HSV Việt Nam,Nguyên vật liệu,UPCOM
+KTL,Công ty Cổ phần Kim khí Thăng Long,Nguyên vật liệu,UPCOM
+KTS,Công ty Cổ phần Đường Kon Tum,Hàng Tiêu dùng,HNX
+KTT,Công ty Cổ phần Tập đoàn Đầu tư KTT,Công nghiệp,UPCOM
+C69,Công ty Cổ phần Xây dựng 1369,Công nghiệp,HNX
+G20,Công ty Cổ phần Đầu tư Dệt may Vĩnh Phúc,Hàng Tiêu dùng,UPCOM
+L14,Công ty Cổ phần Licogi 14,Công nghiệp,HNX
+DPS,Công ty Cổ phần Đầu tư Phát triển Sóc Sơn,Nguyên vật liệu,UPCOM
+MGR,Công ty cổ phần Tập đoàn MGROUP,Tài chính,UPCOM
+C21,Công ty Cổ phần Thế kỷ 21,Tài chính,UPCOM
+L18,Công ty Cổ phần Đầu tư và Xây dựng số 18,Công nghiệp,HNX
+HHC,Công ty Cổ phần Bánh kẹo Hải Hà,Hàng Tiêu dùng,HNX
+L43,Công ty Cổ phần Lilama 45.3,Công nghiệp,UPCOM
+CDN,Công ty Cổ phần Cảng Đà Nẵng,Công nghiệp,HNX
+L44,Công ty Cổ phần Lilama 45.4,Công nghiệp,UPCOM
+DKW,Công ty Cổ phần Cấp nước sinh hoạt Châu Thành,Tiện ích Cộng đồng,UPCOM
+BLT,Công ty Cổ phần Lương thực Bình Định,Hàng Tiêu dùng,UPCOM
+L62,Công ty Cổ phần Lilama 69 - 2,Công nghiệp,UPCOM
+DQC,Công ty Cổ phần Tập đoàn Điện Quang,Hàng Tiêu dùng,HOSE
+DBD,Công ty Cổ phần Dược - Trang thiết bị y tế Bình Định (BIDIPHAR),Dược phẩm và Y tế,HOSE
+LAF,Công ty Cổ phần Chế biến Hàng Xuất khẩu Long An,Hàng Tiêu dùng,HOSE
+VMK,Công ty Cổ phần Vimarko,Công nghiệp,UPCOM
+LMI,Công ty Cổ phần Đầu tư Xây dựng Lắp máy IDICO,Công nghiệp,UPCOM
+LSG,Công ty Cổ phần Bất động sản Sài Gòn Vi na,Tài chính,UPCOM
+LAS,Công ty Cổ phần Supe Phốt phát và Hóa chất Lâm Thao,Nguyên vật liệu,HNX
+CAG,Công ty Cổ phần Cảng An Giang,Công nghiệp,HNX
+FOX,Công ty Cổ phần Viễn thông FPT,Viễn thông,UPCOM
+HPI,Công ty Cổ phần Khu công nghiệp Hiệp Phước,Tài chính,UPCOM
+PPT,Công ty cổ phần Petro Times,Tiện ích Cộng đồng,HNX
+DRH,Công ty Cổ phần DRH Holdings,Tài chính,HOSE
+HLC,Công ty Cổ phần Than Hà Lầm - Vinacomin,Nguyên vật liệu,HNX
+LCC,Công ty Cổ phần Xi măng Hồng Phong,Công nghiệp,UPCOM
+LCD,Công ty Cổ phần Lắp máy - Thí nghiệm cơ điện,Công nghiệp,HNX
+LAW,Công ty Cổ phần Cấp thoát nước Long An,Tiện ích Cộng đồng,UPCOM
+DC1,Công ty Cổ phần Đầu tư Phát triển Xây dựng số 1,Công nghiệp,UPCOM
+DRL,Công ty Cổ phần Thủy điện - Điện lực 3,Tiện ích Cộng đồng,HOSE
+LQN,Công ty Cổ phần Licogi Quảng Ngãi,Công nghiệp,UPCOM
+HIO,Công ty Cổ Phần Helio Energy,Tiện ích Cộng đồng,UPCOM
+C32,Công ty Cổ phần Đầu tư và Xây dựng 3-2,Công nghiệp,HOSE
+DSH,Công ty Cổ Phần Đầu tư Hạ tầng Đông Sơn,Công nghiệp,UPCOM
+DSC,Công ty Cổ phần Chứng khoán DSC,Tài chính,HOSE
+LCM,Công ty Cổ phần Khai thác và Chế biến Khoáng sản Lào Cai,Nguyên vật liệu,UPCOM
+HLY,Công ty Cổ phần Gốm xây dựng Yên Hưng,Công nghiệp,UPCOM
+TTE,Công ty Cổ phần Đầu tư Năng lượng Trường Thịnh,Tiện ích Cộng đồng,HOSE
+DNT,Công ty Cổ phần Du lịch Đồng Nai,Dịch vụ Tiêu dùng,UPCOM
+LTG,Công ty Cổ phần Tập đoàn Lộc Trời,Hàng Tiêu dùng,UPCOM
+HMC,Công ty Cổ phần Kim khí Thành phố Hồ Chí Minh - VNSTEEL,Nguyên vật liệu,HOSE
+HMS,Công ty Cổ phần Xây dựng Bảo tàng Hồ Chí Minh,Công nghiệp,UPCOM
+CST,Công ty Cổ phần Than Cao Sơn - TKV,Nguyên vật liệu,HNX
+LGC,Công ty Cổ phần Đầu tư Cầu đường CII,Công nghiệp,HOSE
+HAR,Công ty Cổ phần Đầu tư Thương mại Bất động sản An Dương Thảo Điền,Tài chính,HOSE
+EVE,Công ty Cổ phần Everpia,Hàng Tiêu dùng,HOSE
+DIH,Công ty Cổ phần Đầu tư Phát triển Xây dựng - Hội An,Công nghiệp,HNX
+CMG,Công ty Cổ phần Tập đoàn Công nghệ CMC,Công nghệ Thông tin,HOSE
 LGL,Công ty Cổ phần Đầu tư và Phát triển Đô thị Long Giang,Tài chính,HOSE
-FID,Công ty Cổ phần Đầu tư và Phát triển Doanh nghiệp Việt Nam,Tài chính,HNX
-NAG,Công ty Cổ phần Tập đoàn Nagakawa,Công nghiệp,HNX
+LHG,Công ty Cổ phần Long Hậu,Tài chính,HOSE
+GCF,Công ty Cổ phần Thực phẩm G.C,Hàng Tiêu dùng,UPCOM
+LIC,Tổng Công ty LICOGI - Công ty Cổ phần,Công nghiệp,UPCOM
+L12,Công ty Cổ phần Licogi 12,Công nghiệp,UPCOM
+BII,Công ty Cổ phần Đầu tư và Phát triển Công nghiệp Bảo Thư,Tài chính,UPCOM
+LG9,Công ty Cổ phần Cơ giới và Xây lắp số 9,Công nghiệp,UPCOM
+EIC,Công ty Cổ phần EVN Quốc Tế,Công nghiệp,UPCOM
+AMS,Công ty Cổ phần Cơ khí Xây dựng AMECC,Công nghiệp,UPCOM
+HPO,Công ty Cổ phần Công nghiệp Hapulico,Công nghiệp,UPCOM
+LKW,Công ty Cổ phần Cấp nước Long Khánh,Tiện ích Cộng đồng,UPCOM
+LM7,Công ty Cổ phần Lilama 7,Công nghiệp,UPCOM
+BIO,Công ty Cổ phần Vắc xin và Sinh phẩm Nha Trang,Dược phẩm và Y tế,UPCOM
+LO5,Công ty Cổ phần Lilama 5,Công nghiệp,UPCOM
+CMD,Công ty Cổ phần Vật liệu xây dựng và Trang trí nội thất TP Hồ Chí Minh,Công nghiệp,UPCOM
+HRC,Công ty Cổ phần Cao su Hòa Bình,Nguyên vật liệu,HOSE
+FLC,Công ty Cổ phần Tập đoàn FLC,Tài chính,UPCOM
+AGG,Công ty Cổ phần Đầu tư và Phát triển Bất động sản An Gia,Tài chính,HOSE
+LTC,Công ty Cổ phần Điện nhẹ Viễn Thông,Công nghệ Thông tin,UPCOM
+CRC,Công ty Cổ phần Create Capital Việt Nam,Công nghiệp,HOSE
+DCH,Công ty Cổ phần Địa chính Hà Nội,Tài chính,UPCOM
+LUT,Công ty Cổ phần Đầu tư Xây dựng Lương Tài,Công nghiệp,UPCOM
+C4G,Công ty Cổ phần Tập Đoàn Cienco4,Công nghiệp,UPCOM
+MAC,Công ty Cổ phần Tập đoàn Macstar,Công nghiệp,HNX
+HNA,Công ty Cổ phần Thủy điện Hủa Na,Tiện ích Cộng đồng,HOSE
+HTM,Tổng Công ty Thương mại Hà Nội – Công ty cổ phần,Dịch vụ Tiêu dùng,UPCOM
+HES,Công ty Cổ phần Dịch vụ Giải trí Hà Nội,Dịch vụ Tiêu dùng,UPCOM
+HOM,Công ty Cổ phần Xi măng VICEM Hoàng Mai,Công nghiệp,HNX
+DCT,Công ty Cổ phần Tấm lợp Vật liệu Xây dựng Đồng Nai,Công nghiệp,UPCOM
+BWE,Công ty Cổ phần - Tổng công ty Nước - Môi trường Bình Dương,Tiện ích Cộng đồng,HOSE
+MA1,Công ty Cổ phần Thiết bị,Tài chính,UPCOM
+BKC,Công ty Cổ phần Khoáng sản Bắc Kạn,Nguyên vật liệu,HNX
+MAS,Công ty cổ phần Dịch vụ Hàng Không Sân Bay Đà Nẵng,Dịch vụ Tiêu dùng,HNX
+TRV,Công ty Cổ Phần Vận tải Đường sắt,Công nghiệp,UPCOM
+BKG,Công ty Cổ phần Đầu tư BKG Việt Nam,Hàng Tiêu dùng,HOSE
+CYC,Công ty Cổ phần Gạch men Chang Yih,Công nghiệp,UPCOM
+CAR,Công ty cổ phần Tập đoàn Giáo dục Trí Việt,Công nghiệp,HNX
+HBC,Công ty Cổ phần Tập đoàn Xây dựng Hòa Bình,Công nghiệp,UPCOM
+AGX,Công ty Cổ phần Thực phẩm Nông sản Xuất khẩu Sài Gòn,Dịch vụ Tiêu dùng,UPCOM
+MCC,Công ty Cổ phần Gạch ngói cao cấp,Công nghiệp,HNX
+MCF,Công ty Cổ phần Xây lắp Cơ khí và Lương thực Thực phẩm,Hàng Tiêu dùng,HNX
+MCM,Công ty Cổ phần Giống bò sữa Mộc Châu,Hàng Tiêu dùng,HOSE
+MDA,Công ty Cổ phần Môi trường Đô thị Đông Anh,Công nghiệp,UPCOM
+MDC,Công ty Cổ phần Than Mông Dương - Vinacomin,Nguyên vật liệu,HNX
+CMT,Công ty Cổ phần Công nghệ mạng và Truyền thông,Công nghệ Thông tin,UPCOM
+HMD,Công ty Cổ phần Hóa chất Minh Đức,Nguyên vật liệu,UPCOM
+C92,Công ty Cổ phần Xây dựng và Đầu tư 492,Công nghiệp,UPCOM
+D11,Công ty Cổ phần Địa ốc 11,Tài chính,HNX
+MDF,Công ty Cổ phần Gỗ MDF VRG - Quảng Trị,Nguyên vật liệu,UPCOM
+EFI,Công ty Cổ phần Đầu tư Tài chính Giáo dục,Tài chính,UPCOM
+DTT,Công ty Cổ phần Kỹ nghệ Đô Thành,Nguyên vật liệu,HOSE
+MEC,Công ty Cổ phần Cơ khí - Lắp máy Sông Đà,Công nghiệp,UPCOM
+MEF,Công ty Cổ phần MEINFA,Dược phẩm và Y tế,UPCOM
+BLI,Tổng Công ty Cổ phần Bảo hiểm Bảo Long,Tài chính,UPCOM
+MED,Công ty Cổ phần Dược Trung ương Mediplantex,Dược phẩm và Y tế,HNX
+HLO,Công Ty Cổ Phần Công Nghệ Ha Lô,Công nghiệp,UPCOM
+MFS,Công ty Cổ phần Dịch vụ kỹ thuật Mobifone,Viễn thông,UPCOM
+GPC,Công ty Cổ phần Tập đoàn Green+,Dược phẩm và Y tế,UPCOM
+EIB,Ngân hàng Thương mại Cổ phần Xuất nhập khẩu Việt Nam,Ngân hàng,HOSE
+HSI,Công ty Cổ phần Vật tư Tổng hợp và Phân bón Hóa sinh,Nguyên vật liệu,UPCOM
+JOS,Công ty Cổ phần Chế biến Thủy sản Xuất khẩu Minh Hải,Hàng Tiêu dùng,UPCOM
+MIC,Công ty Cổ phần Kỹ nghệ Khoáng sản Quảng Nam,Nguyên vật liệu,HNX
+MIM,Công ty Cổ phần Khoáng sản và Cơ khí,Nguyên vật liệu,UPCOM
+C12,Công ty Cổ phần Cầu 12,Công nghiệp,UPCOM
+CT3,Công ty Cổ phần Đầu tư và Xây dựng công trình 3,Công nghiệp,UPCOM
+D2D,Công ty Cổ phần Phát triển Đô thị Công nghiệp số 2,Tài chính,HOSE
+MBT,Công ty Cổ phần Bất động sản cho thuê Minh Bảo Tín,Tài chính,UPCOM
+MLS,Công ty Cổ phần Chăn nuôi - Mitraco,Hàng Tiêu dùng,UPCOM
+MLC,Công ty Cổ phần Môi trường Đô thị Tỉnh Lào Cai,Công nghiệp,UPCOM
+MH3,Công ty Cổ phần Khu công nghiệp Cao su Bình Long,Tài chính,UPCOM
+HKB,Công ty Cổ phần Nông nghiệp và Thực phẩm Hà Nội - Kinh Bắc,Hàng Tiêu dùng,UPCOM
+DAC,Công ty Cổ phần 382 Đông Anh,Công nghiệp,UPCOM
+CIG,Công ty Cổ phần COMA 18,Công nghiệp,HOSE
+MZG,Công ty Cổ Phần Miza,Nguyên vật liệu,UPCOM
+MML,Công ty Cổ phần Masan MEATLife,Hàng Tiêu dùng,UPCOM
+HPT,Công ty Cổ phần Dịch vụ Công nghệ Tin học HPT,Công nghệ Thông tin,UPCOM
+DAE,Công ty Cổ phần Sách Giáo dục tại Thành phố Đà Nẵng,Dịch vụ Tiêu dùng,HNX
+DMC,Công ty Cổ phần Xuất nhập khẩu Y tế DOMESCO,Dược phẩm và Y tế,HOSE
+HLD,Công ty Cổ phần Đầu tư và Phát triển Bất động sản HUDLAND,Tài chính,HNX
+MPC,Công ty Cổ phần Tập đoàn Thủy sản Minh Phú,Hàng Tiêu dùng,UPCOM
+RYG,Công ty Cổ phần Sản xuất và Đầu tư Hoàng Gia,Công nghiệp,HOSE
+MQB,Công ty Cổ phần Môi trường và Phát triển đô thị Quảng Bình,Công nghiệp,UPCOM
+MCH,Công ty Cổ phần Hàng Tiêu Dùng MaSan,Hàng Tiêu dùng,UPCOM
+BMF,Công ty Cổ phần Vật liệu Xây dựng và Chất đốt Đồng Nai,Tiện ích Cộng đồng,UPCOM
+BVL,Công ty Cổ phần BV Land,Tài chính,UPCOM
+SGI,Công ty Cổ phần Đầu tư SGI Holdings,Hàng Tiêu dùng,UPCOM
+HWS,Công ty Cổ phần Cấp nước Huế,Tiện ích Cộng đồng,UPCOM
+VTG,Công ty Cổ phần Du lịch tỉnh Bà Rịa - Vũng Tàu,Dịch vụ Tiêu dùng,UPCOM
+GIC,Công ty Cổ phần VSC Green Logistics,Công nghiệp,HNX
+BCA,Công ty cổ phần B.C.H,Nguyên vật liệu,UPCOM
+MSR,Công ty Cổ phần Masan High-Tech Materials,Nguyên vật liệu,UPCOM
+MST,Công ty Cổ phần Đầu tư MST,Công nghiệp,HNX
+BTG,Công ty Cổ phần Bao bì Tiền Giang,Công nghiệp,UPCOM
+CNA,Công ty Cổ phần Tổng công ty Chè Nghệ An,Hàng Tiêu dùng,UPCOM
+MTG,Công ty Cổ phần MT Gas,Tiện ích Cộng đồng,UPCOM
+MTH,Công ty Cổ phần Môi trường Đô thị Hà Đông,Công nghiệp,UPCOM
+HHN,Công ty Cổ phần Vận tải và Dịch vụ Hàng hóa Hà Nội,Công nghiệp,UPCOM
+MTL,Công ty Cổ phần Dịch vụ Môi trường Đô thị Từ Liêm,Công nghiệp,UPCOM
+CMX,Công ty Cổ phần CAMIMEX Group,Hàng Tiêu dùng,HOSE
+EMG,Công ty Cổ phần Thiết bị Phụ tùng Cơ điện,Công nghiệp,UPCOM
+DDN,Công ty Cổ phần Dược - Thiết bị y tế Đà Nẵng,Dược phẩm và Y tế,UPCOM
+ODE,Công ty cổ phần Tập đoàn Truyền thông và Giải trí ODE,Dịch vụ Tiêu dùng,UPCOM
+HMR,Công ty Cổ phần Đá Hoàng Mai,Công nghiệp,HNX
+TD6,Công ty Cổ Phần Than Đèo Nai - Cọc Sáu - TKV,Nguyên vật liệu,HNX
+PCH,Công ty Cổ phần Nhựa Picomat,Nguyên vật liệu,HNX
+NAU,Công ty Cổ phần Môi trường và Công trình Đô thị Nghệ An,Công nghiệp,UPCOM
+MTP,Công ty Cổ phần Dược Medipharco,Dược phẩm và Y tế,UPCOM
+NJC,Công ty Cổ phần May Nam Định,Hàng Tiêu dùng,UPCOM
+HEV,Công ty Cổ phần Sách Đại học - Dạy nghề,Dịch vụ Tiêu dùng,HNX
+HTI,Công ty Cổ phần Đầu tư Phát triển Hạ tầng IDICO,Công nghiệp,HOSE
+HTL,Công ty Cổ phần Kỹ thuật và Ô tô Trường Long,Hàng Tiêu dùng,HOSE
+BBC,Công ty Cổ phần Bibica,Hàng Tiêu dùng,HOSE
+HD8,Công ty Cổ phần Đầu tư Phát triển Nhà và Đô thị HUD8,Tài chính,UPCOM
+MWG,Công ty Cổ phần Đầu tư Thế Giới Di Động,Dịch vụ Tiêu dùng,HOSE
+VLB,Công ty Cổ phần Xây dựng và Sản xuất Vật liệu Xây dựng Biên Hòa,Công nghiệp,UPCOM
+CTF,Công ty Cổ phần City Auto,Hàng Tiêu dùng,HOSE
+DWS,Công ty Cổ phần Cấp nước và Môi trường Đô thị Đồng Tháp,Tiện ích Cộng đồng,UPCOM
+NDP,Công ty Cổ phần Dược phẩm 2/9,Dược phẩm và Y tế,UPCOM
+CDP,Công ty Cổ phần Dược phẩm Trung ương Codupha,Dược phẩm và Y tế,UPCOM
+NAC,Công ty Cổ phần Tư vấn Xây dựng Tổng hợp,Công nghiệp,UPCOM
+DDH,Công ty Cổ phần Đảm bảo giao thông đường thủy Hải Phòng,Công nghiệp,UPCOM
 NAP,Công ty Cổ phần Cảng Nghệ Tĩnh,Công nghiệp,HNX
 BAB,Ngân hàng Thương mại Cổ phần Bắc Á,Ngân hàng,HNX
+HGT,Công ty Cổ phần Du lịch Hương Giang,Dịch vụ Tiêu dùng,UPCOM
+HCI,Công ty Cổ phần Đầu tư - Xây dựng Hà Nội,Công nghiệp,UPCOM
+NAS,Công ty Cổ phần Dịch vụ Hàng không Sân bay Việt Nam,Công nghiệp,UPCOM
+CTG,Ngân hàng Thương mại Cổ phần Công thương Việt Nam,Ngân hàng,HOSE
 NAV,Công ty Cổ phần Nam Việt,Công nghiệp,HOSE
-CTD,Công ty Cổ phần Xây dựng Coteccons,Công nghiệp,HOSE
-MWG,Công ty Cổ phần Đầu tư Thế Giới Di Động,Dịch vụ Tiêu dùng,HOSE
-MWG,Công ty Cổ phần Đầu tư Thế Giới Di Động,Dịch vụ Tiêu dùng,VN30
+VET,Công ty Cổ phần Thuốc Thú y Trung ương NAVETCO,Nguyên vật liệu,UPCOM
+SBG,Công ty Cổ Phần Tập Đoàn Cơ Khí Công Nghệ Cao Siba,Công nghiệp,HOSE
+DPP,Công ty Cổ phần Dược Đồng Nai,Dược phẩm và Y tế,UPCOM
 NBB,Công ty Cổ phần Đầu tư Năm Bảy Bảy,Tài chính,HOSE
+BBM,Công ty Cổ phần Bia Hà Nội - Nam Định,Hàng Tiêu dùng,UPCOM
 NBC,Công ty Cổ phần Than Núi Béo - Vinacomin,Nguyên vật liệu,HNX
+FIC,Tổng Công ty Vật liệu Xây dựng số 1 - Công ty Cổ phần,Công nghiệp,UPCOM
+CHP,Công ty Cổ phần Thủy điện Miền Trung,Tiện ích Cộng đồng,HOSE
 NBP,Công ty Cổ phần Nhiệt Điện Ninh Bình,Tiện ích Cộng đồng,HNX
+HPG,Công ty Cổ phần Tập đoàn Hòa Phát,Nguyên vật liệu,HOSE
+FID,Công ty Cổ phần Đầu tư và Phát triển Doanh nghiệp Việt Nam,Công nghiệp,HNX
+NBW,Công ty Cổ phần Cấp nước Nhà Bè,Tiện ích Cộng đồng,HNX
+CI5,Công ty Cổ phần Đầu tư Xây dựng số 5,Công nghiệp,UPCOM
+DNL,Công ty Cổ phần Logistics Cảng Đà Nẵng,Công nghiệp,UPCOM
+DRG,Công ty Cổ phần Cao su Đắk Lắk,Nguyên vật liệu,UPCOM
+DRI,Công ty Cổ phần Đầu tư Cao su Đắk Lắk,Nguyên vật liệu,UPCOM
+BBT,Công ty Cổ phần Bông Bạch Tuyết,Hàng Tiêu dùng,UPCOM
+NCS,Công ty Cổ phần Suất ăn Hàng không Nội Bài,Hàng Tiêu dùng,UPCOM
+ACB,Ngân hàng Thương mại Cổ phần Á Châu,Ngân hàng,HOSE
+IHK,Công ty Cổ phần In Hàng Không,Dịch vụ Tiêu dùng,UPCOM
+CTS,Công ty Cổ phần Chứng khoán Ngân hàng Công thương Việt Nam,Tài chính,HOSE
+HJS,Công ty Cổ phần Thủy điện Nậm Mu,Tiện ích Cộng đồng,HNX
+ILS,Công ty Cổ phần Đầu tư Thương mại và Dịch vụ Quốc tế,Công nghiệp,UPCOM
+CJC,Công ty Cổ phần Cơ điện Miền Trung,Công nghiệp,HNX
+HAD,Công ty Cổ phần Bia Hà Nội - Hải Dương,Hàng Tiêu dùng,HNX
+DC2,Công ty Cổ phần Đầu tư Phát triển - Xây dựng (DIC) số 2,Công nghiệp,HNX
+HOT,Công ty Cổ phần Du lịch - Dịch vụ Hội An,Dịch vụ Tiêu dùng,UPCOM
+HNI,Công ty Cổ phần May Hữu Nghị,Hàng Tiêu dùng,UPCOM
+BMI,Tổng Công ty Cổ phần Bảo Minh,Tài chính,HOSE
+ALV,Công ty Cổ phần Tập đoàn MCST,Công nghiệp,UPCOM
 NCT,Công ty Cổ phần Dịch vụ Hàng hóa Nội Bài,Công nghiệp,HOSE
+DHN,Công ty Cổ phần Dược phẩm Hà Nội,Dược phẩm và Y tế,UPCOM
+GDT,Công ty Cổ phần Chế biến Gỗ Đức Thành,Hàng Tiêu dùng,HOSE
+IFS,Công ty Cổ phần Thực phẩm Quốc tế,Hàng Tiêu dùng,UPCOM
+ITD,Công ty Cổ phần Công nghệ ITD,Công nghệ Thông tin,HOSE
+CPC,Công ty Cổ phần Thuốc sát trùng Cần Thơ,Nguyên vật liệu,HNX
+DLR,Công ty Cổ phần Địa ốc Đà Lạt,Công nghiệp,UPCOM
+DDG,Công ty Cổ phần Đầu tư Công nghiệp Xuất nhập khẩu Đông Dương,Tiện ích Cộng đồng,HNX
+TUG,Công ty Cổ phần Lai dắt và Vận tải Cảng Hải Phòng,Công nghiệp,UPCOM
+DHT,Công ty Cổ phần Dược phẩm Hà Tây,Dược phẩm và Y tế,HNX
+DBT,Công ty Cổ phần Dược phẩm Bến Tre,Dược phẩm và Y tế,HOSE
+HQC,Công ty Cổ phần Tư vấn - Thương mại - Dịch vụ Địa ốc Hoàng Quân,Tài chính,HOSE
+HTG,Tổng Công ty Cổ phần Dệt may Hòa Thọ,Hàng Tiêu dùng,HOSE
+MND,Công ty Cổ phần Môi trường Nam Định,Công nghiệp,UPCOM
+HSL,Công ty Cổ phần Đầu tư Phát triển Thực phẩm Hồng Hà,Hàng Tiêu dùng,HOSE
+C47,Công ty Cổ phần Xây dựng 47,Công nghiệp,HOSE
+CLX,Công ty Cổ phần Xuất nhập khẩu và Đầu tư Chợ Lớn (CHOLIMEX),Hàng Tiêu dùng,UPCOM
+CDR,Công ty Cổ phần Xây dựng Cao su Đồng Nai,Công nghiệp,UPCOM
+NDF,Công ty Cổ phần Chế biến thực phẩm nông sản xuất khẩu Nam Định,Hàng Tiêu dùng,UPCOM
+IBD,Công ty Cổ phần In Tổng hợp Bình Dương,Dịch vụ Tiêu dùng,UPCOM
+HTV,Công ty Cổ phần Logistics Vicem,Công nghiệp,HOSE
+DXL,Công ty Cổ phần Du lịch và Xuất nhập khẩu Lạng Sơn,Dịch vụ Tiêu dùng,UPCOM
+CDG,Công ty Cổ phần Cầu Đuống,Công nghiệp,UPCOM
+GEX,Công ty Cổ phần Tập đoàn Gelex,Công nghiệp,HOSE
+HSA,Công ty Cổ phần HESTIA,Công nghiệp,UPCOM
+KTC,Công ty Cổ phần Thương mại Kiên Giang,Hàng Tiêu dùng,UPCOM
+GLW,Công ty Cổ phần Cấp thoát nước Gia Lai,Tiện ích Cộng đồng,UPCOM
+HND,Công ty Cổ phần Nhiệt điện Hải Phòng,Tiện ích Cộng đồng,UPCOM
+IDP,Công ty Cổ phần Sữa Quốc tế LOF,Hàng Tiêu dùng,UPCOM
+BTU,Công ty Cổ phần Công trình Đô thị Bến Tre,Công nghiệp,UPCOM
+EVG,Công ty Cổ phần Tập đoàn Everland,Công nghiệp,HOSE
+BVS,Công ty Cổ phần Chứng khoán Bảo Việt,Tài chính,HNX
+BWS,Công ty Cổ phần Cấp Nước Bà Rịa - Vũng Tàu,Tiện ích Cộng đồng,UPCOM
+KSD,Công ty Cổ phần Đầu tư DNA,Hàng Tiêu dùng,HNX
+HDA,Công ty Cổ phần Hãng sơn Đông Á,Công nghiệp,HNX
 NDN,Công ty Cổ phần Đầu tư Phát triển Nhà Đà Nẵng,Tài chính,HNX
-NDX,Công ty Cổ phần Xây lắp Phát triển Nhà Đà Nẵng,Công nghiệp,HNX
-FCM,Công ty Cổ phần Khoáng sản FECON,Công nghiệp,HOSE
-NRC,Công ty Cổ phần Tập đoàn Danh Khôi,Tài chính,HNX
-NFC,Công ty Cổ phần Phân lân Ninh Bình,Nguyên vật liệu,HNX
-KSV,Tổng Công ty Khoáng sản TKV - Công ty Cổ phần,Nguyên vật liệu,HNX
+ADG,Công ty Cổ phần Clever Group,Dịch vụ Tiêu dùng,HOSE
+KDH,Công ty Cổ phần Đầu tư và Kinh doanh nhà Khang Điền,Tài chính,HOSE
+KLB,Ngân hàng Thương mại Cổ phần Kiên Long,Ngân hàng,UPCOM
+IMP,Công ty Cổ phần Dược phẩm IMEXPHARM,Dược phẩm và Y tế,HOSE
+HSG,Công ty Cổ phần Tập đoàn Hoa Sen,Nguyên vật liệu,HOSE
+FRM,Công ty Cổ phần Lâm nghiệp Sài Gòn,Nguyên vật liệu,UPCOM
+HLB,Công ty Cổ phần Bia và Nước giải khát Hạ Long,Hàng Tiêu dùng,UPCOM
+NDW,Công ty Cổ phần Cấp nước Nam Định,Tiện ích Cộng đồng,UPCOM
+KST,Công ty Cổ phần KASATI,Công nghệ Thông tin,HNX
+FTI,Công ty Cổ phần Công nghiệp - Thương mại Hữu Nghị,Hàng Tiêu dùng,UPCOM
+HHG,Công ty Cổ phần Hoàng Hà,Dịch vụ Tiêu dùng,UPCOM
+ITC,Công ty Cổ phần Đầu tư - Kinh doanh nhà,Tài chính,HOSE
+HTP,Công ty Cổ phần In Sách Giáo Khoa Hòa Phát,Dịch vụ Tiêu dùng,UPCOM
+JVC,Công ty Cổ phần Đầu tư và Phát triển Y tế Việt Nhật,Dược phẩm và Y tế,HOSE
+KHS,Công ty Cổ phần Kiên Hùng,Hàng Tiêu dùng,HNX
+FTM,Công ty Cổ phần Đầu tư và Phát triển Đức Quân,Hàng Tiêu dùng,UPCOM
+HBD,Công ty Cổ phần Bao bì PP Bình Dương,Công nghiệp,UPCOM
+NGC,Công ty Cổ phần Chế biến Thủy sản Xuất khẩu Ngô Quyền,Hàng Tiêu dùng,UPCOM
+HNM,Công ty Cổ phần Sữa Hà Nội,Hàng Tiêu dùng,UPCOM
+DCF,Công ty Cổ phần Xây dựng và Thiết kế số 1,Công nghiệp,UPCOM
+VBG,Công ty Cổ phần Địa chất Việt Bắc - TKV,Nguyên vật liệu,UPCOM
+DTA,Công ty Cổ phần Đệ Tam,Tài chính,HOSE
+HAG,Công ty Cổ phần Hoàng Anh Gia Lai,Hàng Tiêu dùng,HOSE
+DTI,Công ty Cổ phần Đầu tư Đức Trung,Dịch vụ Tiêu dùng,UPCOM
+DCG,Công ty Cổ phần Tổng Công ty May Đáp Cầu,Hàng Tiêu dùng,UPCOM
+ILC,Công ty Cổ phần Hợp tác lao động với nước ngoài,Công nghiệp,UPCOM
+HAM,Công ty Cổ phần Vật tư Hậu Giang,Công nghiệp,UPCOM
+LHC,Công ty Cổ phần Đầu tư và Xây dựng Thủy lợi Lâm Đồng,Công nghiệp,HNX
+ABR,Công ty Cổ phần Đầu tư Nhãn Hiệu Việt,Công nghiệp,HOSE
+KWA,Công ty Cổ phần Cấp thoát nước và Môi trường Kiến Tường,Tiện ích Cộng đồng,UPCOM
+LBE,Công ty Cổ phần Thương mại và Dịch vụ LVA,Hàng Tiêu dùng,HNX
+DPG,Công ty Cổ phần Tập đoàn Đạt Phương,Công nghiệp,HOSE
+BNW,Công ty Cổ phần Nước sạch Bắc Ninh,Tiện ích Cộng đồng,UPCOM
+AGF,Công ty Cổ phần Xuất nhập khẩu Thủy sản An Giang,Hàng Tiêu dùng,UPCOM
+LM3,Công ty Cổ phần Lilama 3,Công nghiệp,UPCOM
+BT6,Công ty Cổ phần BETON 6,Công nghiệp,UPCOM
+LNC,Công ty Cổ phần Lệ Ninh,Nguyên vật liệu,UPCOM
+HVT,Công ty Cổ phần Hóa chất Việt Trì,Nguyên vật liệu,HNX
+HJC,Công ty Cổ phần Hoà Việt,Hàng Tiêu dùng,UPCOM
+LMC,Công ty Cổ phần Long Beach LMC,Nguyên vật liệu,UPCOM
+LCG,Công ty Cổ phần Lizen,Công nghiệp,HOSE
+HSM,Tổng Công ty Cổ phần Dệt May Hà Nội,Hàng Tiêu dùng,UPCOM
+GTT,Công ty Cổ phần Thuận Thảo,Dịch vụ Tiêu dùng,UPCOM
+MBB,Ngân hàng Thương mại Cổ phần Quân đội,Ngân hàng,HOSE
+HBH,Công ty Cổ phần HABECO - Hải Phòng,Hàng Tiêu dùng,UPCOM
 NHH,Công ty Cổ phần Nhựa Hà Nội,Nguyên vật liệu,HOSE
-DXP,Công ty Cổ phần Cảng Đoạn Xá,Công nghiệp,HNX
-DXP,Công ty Cổ phần Cảng Đoạn Xá,Công nghiệp,HNX30
+FOC,Công ty Cổ phần Dịch vụ Trực tuyến FPT,Dịch vụ Tiêu dùng,UPCOM
+IVS,Công ty Cổ phần Chứng khoán Guotai Junan (Việt Nam),Tài chính,HNX
+BIC,Tổng Công ty Cổ phần Bảo hiểm Ngân hàng Đầu tư và Phát triển Việt Nam,Tài chính,HOSE
+CAT,Công ty Cổ phần Thủy sản Cà Mau,Hàng Tiêu dùng,UPCOM
+EME,Công ty Cổ phần Điện Cơ,Công nghiệp,UPCOM
+BLF,Công ty Cổ phần Thủy sản Bạc Liêu,Hàng Tiêu dùng,UPCOM
+HDP,Công ty Cổ phần Dược Hà Tĩnh,Dược phẩm và Y tế,UPCOM
 NHT,Công ty Cổ phần Sản xuất và Thương mại Nam Hoa,Hàng Tiêu dùng,HOSE
-NLG,Công ty Cổ phần Đầu tư Nam Long,Tài chính,HOSE
-HDB,Ngân hàng Thương mại Cổ phần Phát Triển Thành phố Hồ Chí Minh,Ngân hàng,HOSE
-HDB,Ngân hàng Thương mại Cổ phần Phát Triển Thành phố Hồ Chí Minh,Ngân hàng,VN30
-NNC,Công ty Cổ phần Đá Núi Nhỏ,Công nghiệp,HOSE
-PMB,Công ty Cổ phần Phân bón và Hóa chất Dầu khí Miền Bắc,Nguyên vật liệu,HNX
-HOM,Công ty Cổ phần Xi măng VICEM Hoàng Mai,Công nghiệp,HNX
-NSC,Công ty Cổ phần Tập đoàn Giống cây trồng Việt Nam,Hàng Tiêu dùng,HOSE
-PSH,Công ty Cổ phần Thương mại Đầu tư Dầu khí Nam Sông Hậu,Tiện ích Cộng đồng,HOSE
-NST,Công ty Cổ phần Ngân Sơn,Hàng Tiêu dùng,HNX
-NT2,Công ty Cổ phần Điện lực Dầu khí Nhơn Trạch 2,Tiện ích Cộng đồng,HOSE
-NTL,Công ty Cổ phần Phát triển Đô thị Từ Liêm,Tài chính,HOSE
-MEL,Công ty Cổ phần Thép Mê Lin,Nguyên vật liệu,HNX
-NVT,Công ty Cổ phần Bất động sản Du lịch Ninh Vân Bay,Tài chính,HOSE
+MKV,Công ty Cổ phần Dược Thú Y Cai Lậy,Dược phẩm và Y tế,HNX
+HPP,Công ty Cổ phần Sơn Hải Phòng,Công nghiệp,UPCOM
+LDG,Công ty Cổ phần Đầu tư LDG,Tài chính,HOSE
+M10,Tổng công ty May 10 - Công ty Cổ phần,Hàng Tiêu dùng,UPCOM
+CVT,Công ty Cổ phần CMC,Công nghiệp,HOSE
+GDW,Công ty Cổ phần Cấp nước Gia Định,Tiện ích Cộng đồng,HNX
+HHP,Công ty Cổ phần HHP Global,Nguyên vật liệu,HOSE
+MPY,Công ty Cổ phần Môi trường đô thị Phú Yên,Công nghiệp,UPCOM
+HPD,Công ty Cổ phần Thủy điện Đăk Đoa,Tiện ích Cộng đồng,UPCOM
+L10,Công ty Cổ phần Lilama 10,Công nghiệp,HOSE
+MPT,Công ty Cổ phần Tập đoàn MPT,Hàng Tiêu dùng,UPCOM
+GSP,Công ty Cổ phần Vận tải Sản phẩm Khí Quốc tế,Công nghiệp,HOSE
+BVB,Ngân hàng Thương mại Cổ phần Bản Việt,Ngân hàng,UPCOM
+NAG,Công ty Cổ phần Tập đoàn Nagakawa,Công nghiệp,HNX
+GEE,Công ty Cổ phần Điện lực Gelex,Công nghiệp,HOSE
+HAF,Công ty Cổ phần Thực phẩm Hà Nội,Hàng Tiêu dùng,UPCOM
+HTT,Công ty Cổ phần Thương mại Hà Tây,Dịch vụ Tiêu dùng,UPCOM
+CNT,Công ty Cổ phần Tập đoàn CNT,Tài chính,UPCOM
+HAN,Tổng Công ty Xây dựng Hà Nội - CTCP,Công nghiệp,UPCOM
+BHC,Công ty Cổ phần Bê tông Biên Hòa,Công nghiệp,UPCOM
+HFC,Công ty Cổ phần Xăng dầu HFC,Tiện ích Cộng đồng,UPCOM
 HVX,Công ty Cổ phần Xi măng Vicem Hải Vân,Công nghiệp,HOSE
-OCB,Ngân hàng Thương mại Cổ phần Phương Đông,Ngân hàng,HOSE
-OCH,Công ty Cổ phần One Capital Hospitality,Hàng Tiêu dùng,HNX
-EVS,Công ty Cổ phần Chứng khoán Everest,Tài chính,HNX
-ONE,Công ty Cổ phần Công nghệ ONE,Công nghệ Thông tin,HNX
+HHS,Công ty Cổ phần Đầu tư Dịch vụ Hoàng Huy,Hàng Tiêu dùng,HOSE
+NET,Công ty Cổ phần Bột giặt Net,Hàng Tiêu dùng,HNX
+DKC,Công ty Cổ phần Chợ Lạng Sơn,Dịch vụ Tiêu dùng,UPCOM
+MIG,Tổng Công ty Cổ phần Bảo hiểm Quân đội,Tài chính,HOSE
+PCT,Công ty Cổ phần Vận tải Biển Global Pacific,Công nghiệp,HNX
+NBE,Công ty Cổ phần Sách và Thiết bị Giáo dục Miền Bắc,Dịch vụ Tiêu dùng,UPCOM
+CCI,Công ty Cổ phần Đầu tư Phát triển Công nghiệp Thương mại Củ Chi,Tiện ích Cộng đồng,HOSE
+NED,Công ty Cổ phần Đầu tư và Phát triển Điện Tây Bắc,Công nghiệp,UPCOM
+IJC,Công ty Cổ phần Phát triển Hạ tầng Kỹ thuật,Tài chính,HOSE
+DXP,Công ty Cổ phần Cảng Đoạn Xá,Công nghiệp,HNX
+NRC,Công ty Cổ phần Tập đoàn NRC,Tài chính,HNX
+NFC,Công ty Cổ phần Phân lân Ninh Bình,Nguyên vật liệu,HNX
+PMB,Công ty Cổ phần Phân bón và Hóa chất Dầu khí Miền Bắc,Nguyên vật liệu,HNX
+NOS,Công ty Cổ phần Vận tải Biển và Thương mại Phương Đông,Công nghiệp,UPCOM
+HUG,Tổng công ty May Hưng Yên - Công ty Cổ phần,Hàng Tiêu dùng,UPCOM
+VCE,Công ty Cổ phần Xây lắp Môi trường,Công nghiệp,UPCOM
+DHA,Công ty Cổ phần Hóa An,Công nghiệp,HOSE
+CLL,Công ty Cổ phần Cảng Cát Lái,Công nghiệp,HOSE
+NQB,Công ty Cổ phần Cấp nước Quảng Bình,Tiện ích Cộng đồng,UPCOM
+AMP,Công ty Cổ phần Armephaco,Dược phẩm và Y tế,UPCOM
+H11,Công ty Cổ phần Xây dựng HUD101,Công nghiệp,UPCOM
+NHP,Công ty Cổ phần Sản xuất Xuất nhập khẩu NHP,Công nghiệp,UPCOM
+DIG,Tổng Công ty Cổ phần Đầu tư Phát triển Xây dựng,Tài chính,HOSE
+NS2,Công ty Cổ phần Nước sạch số 2 Hà Nội,Tiện ích Cộng đồng,UPCOM
+HU4,Công ty Cổ phần Đầu tư và Xây dựng HUD4,Công nghiệp,UPCOM
+CCP,Công ty Cổ phần Cảng Cửa Cấm Hải Phòng,Công nghiệp,UPCOM
+IDJ,Công ty Cổ phần Đầu tư IDJ Việt Nam,Tài chính,HNX
+NSC,Công ty Cổ phần Tập đoàn Giống cây trồng Việt Nam,Hàng Tiêu dùng,HOSE
+NHV,Công ty Cổ phần Sức khỏe Hồi sinh Việt Nam,Nguyên vật liệu,UPCOM
+HDW,Công ty Cổ phần Kinh doanh Nước sạch Hải Dương,Tiện ích Cộng đồng,UPCOM
+HAP,Công ty Cổ phần Tập Đoàn Hapaco,Nguyên vật liệu,HOSE
+IST,Công ty Cổ phần ICD Tân Cảng Sóng Thần,Công nghiệp,UPCOM
+ITS,"Công ty Cổ phần Đầu tư, Thương mại và Dịch vụ - Vinacomin",Công nghiệp,UPCOM
+L45,Công ty Cổ phần Lilama 45.1,Công nghiệp,UPCOM
+CTX,Tổng Công ty Cổ phần Đầu tư Xây dựng và Thương mại Việt Nam,Công nghiệp,UPCOM
+NST,Công ty Cổ phần Ngân Sơn,Hàng Tiêu dùng,HNX
+NTB,Công ty Cổ phần Đầu tư Xây dựng và Khai thác Công trình giao thông 584,Tài chính,UPCOM
+NTC,Công ty Cổ phần Khu Công nghiệp Nam Tân Uyên,Tài chính,HOSE
+NLS,Công ty Cổ phần Cấp thoát nước Lạng Sơn,Tiện ích Cộng đồng,UPCOM
+NAB,Ngân hàng Thương mại Cổ phần Nam Á,Ngân hàng,HOSE
+NNC,Công ty Cổ phần Đá Núi Nhỏ,Công nghiệp,HOSE
+NTL,Công ty Cổ phần Phát triển Đô thị Từ Liêm,Tài chính,HOSE
+NVL,Công ty Cổ phần Tập đoàn Đầu tư Địa ốc No Va,Tài chính,HOSE
+HD6,Công ty Cổ phần Đầu tư và Phát triển nhà số 6 Hà Nội,Tài chính,UPCOM
+NUE,Công ty Cổ phần Môi trường Đô thị Nha Trang,Công nghiệp,UPCOM
+NTW,Công ty Cổ phần Cấp nước Nhơn Trạch,Tiện ích Cộng đồng,UPCOM
+LIX,Công ty Cổ phần Bột Giặt LIX,Hàng Tiêu dùng,HOSE
+PSH,Công ty Cổ phần Thương mại Đầu tư Dầu khí Nam Sông Hậu,Tiện ích Cộng đồng,UPCOM
+DGW,Công ty Cổ phần Thế Giới Số,Dịch vụ Tiêu dùng,HOSE
+ITA,Công ty Cổ phần Đầu tư và Công nghiệp Tân Tạo,Tài chính,UPCOM
+LM8,Công ty Cổ phần Lilama 18,Công nghiệp,HOSE
+NT2,Công ty Cổ phần Điện lực Dầu khí Nhơn Trạch 2,Tiện ích Cộng đồng,HOSE
+HU3,Công ty Cổ phần Đầu tư và Xây dựng HUD3,Công nghiệp,UPCOM
+HTE,Công ty Cổ phần Đầu tư Kinh doanh Điện lực Thành phố Hồ Chí Minh,Tiện ích Cộng đồng,UPCOM
+HPW,Công ty Cổ phần Cấp nước Hải Phòng,Tiện ích Cộng đồng,UPCOM
+NWT,Công ty Cổ phần Vận tải Newway,Dịch vụ Tiêu dùng,UPCOM
+NTT,Công ty Cổ phần Dệt - May Nha Trang,Hàng Tiêu dùng,UPCOM
+KDM,Công ty Cổ phần Tập đoàn GCL,Công nghiệp,HNX
+ONW,Công ty Cổ phần Dịch vụ Một Thế giới,Dịch vụ Tiêu dùng,UPCOM
+HGM,Công ty Cổ phần Cơ khí và Khoáng sản Hà Giang,Nguyên vật liệu,HNX
+ICC,Công ty Cổ phần Xây dựng Công nghiệp,Công nghiệp,UPCOM
+HAC,Công ty Cổ phần Chứng khoán Hải Phòng,Tài chính,UPCOM
 ORS,Công ty Cổ phần Chứng khoán Tiên Phong,Tài chính,HOSE
 PAC,Công ty Cổ phần Pin Ắc quy Miền Nam,Công nghiệp,HOSE
-PBP,Công ty Cổ phần Bao bì Dầu khí Việt Nam,Công nghiệp,HNX
-PCG,Công ty Cổ phần Đầu tư Phát triển Gas Đô thị,Tiện ích Cộng đồng,HNX
-GEE,Công ty Cổ phần Điện lực Gelex,Công nghiệp,HOSE
-PCT,Công ty Cổ phần Vận tải Biển Global Pacific,Công nghiệp,HNX
-PDB,Công ty Cổ phần Tập đoàn Đầu tư DIN Capital,Công nghiệp,HNX
-OGC,Công ty Cổ phần Tập đoàn Đại Dương,Tài chính,HOSE
-DCL,Công ty Cổ phần Dược phẩm Cửu Long,Dược phẩm và Y tế,HOSE
-PDN,Công ty Cổ phần Cảng Đồng Nai,Công nghiệp,HOSE
-PEN,Công ty Cổ phần Xây lắp III Petrolimex,Công nghiệp,HNX
-MSB,Ngân hàng Thương mại Cổ phần Hàng Hải Việt Nam,Ngân hàng,HOSE
-PET,Tổng Công ty Cổ phần Dịch vụ Tổng hợp Dầu khí,Dịch vụ Tiêu dùng,HOSE
-PLX,Tập đoàn Xăng dầu Việt Nam,Dầu khí,HOSE
-PLX,Tập đoàn Xăng dầu Việt Nam,Dầu khí,VN30
-HGM,Công ty Cổ phần Cơ khí và Khoáng sản Hà Giang,Nguyên vật liệu,HNX
-DHP,Công ty Cổ phần Điện cơ Hải Phòng,Công nghiệp,HNX
-PGC,Tổng Công ty Gas Petrolimex - Công ty Cổ phần,Tiện ích Cộng đồng,HOSE
-PGD,Công ty Cổ phần Phân phối khí thấp áp dầu khí Việt Nam,Tiện ích Cộng đồng,HOSE
-PGN,Công ty Cổ phần Phụ Gia Nhựa,Nguyên vật liệu,HNX
-PGT,Công ty Cổ phần PGT Holdings,Dịch vụ Tiêu dùng,HNX
-PHC,Công ty Cổ phần Xây dựng Phục Hưng Holdings,Công nghiệp,HOSE
-PIA,Công ty Cổ phần Tin học Viễn thông Petrolimex,Viễn thông,HNX
-PIC,Công ty Cổ phần Đầu tư Điện lực 3,Tiện ích Cộng đồng,HNX
 PC1,Công ty Cổ phần Tập đoàn PC1,Công nghiệp,HOSE
-PJT,Công ty Cổ phần Vận tải Xăng dầu đường thủy Petrolimex,Công nghiệp,HOSE
-PMC,Công ty Cổ phần Dược phẩm Dược liệu Pharmedic,Dược phẩm và Y tế,HNX
-GKM,Công ty Cổ phần GKM Holdings,Công nghiệp,HNX
-PMP,Công ty Cổ phần Bao bì Đạm Phú Mỹ,Công nghiệp,HNX
-PGI,Tổng Công ty Cổ phần Bảo hiểm Petrolimex,Tài chính,HOSE
-PNC,Công ty Cổ phần Văn hóa Phương Nam,Dịch vụ Tiêu dùng,HOSE
-PNJ,Công ty Cổ phần Vàng bạc Đá quý Phú Nhuận,Hàng Tiêu dùng,HOSE
-HID,Công ty Cổ phần Halcom Vietnam,Công nghiệp,HOSE
-POT,Công ty Cổ phần Thiết bị Bưu điện,Công nghệ Thông tin,HNX
-PPE,Công ty Cổ phần Tư vấn Đầu tư PP Enterprise,Công nghiệp,HNX
-PLC,Tổng Công ty Hóa dầu Petrolimex - Công ty Cổ phần,Nguyên vật liệu,HNX
-PLC,Tổng Công ty Hóa dầu Petrolimex - Công ty Cổ phần,Nguyên vật liệu,HNX30
-PPP,Công ty Cổ phần Dược phẩm Phong Phú,Dược phẩm và Y tế,HNX
-PRC,Công ty Cổ phần Logistics Portserco,Công nghiệp,HNX
-PSC,Công ty Cổ phần Vận tải và Dịch vụ Petrolimex Sài Gòn,Công nghiệp,HNX
-PSE,Công ty Cổ phần Phân bón và hóa chất dầu khí Đông Nam Bộ,Nguyên vật liệu,HNX
-PSI,Công ty Cổ phần Chứng khoán Dầu khí,Tài chính,HNX
-PMS,Công ty Cổ phần Cơ khí Xăng dầu,Công nghiệp,HNX
-PTD,Công ty Cổ phần Thiết kế - Xây dựng - Thương mại Phúc Thịnh,Công nghiệp,HNX
-PTI,Tổng Công ty Cổ phần Bảo hiểm Bưu điện,Tài chính,HNX
-PPS,Công ty Cổ phần Dịch vụ Kỹ thuật Điện lực Dầu khí Việt Nam,Công nghiệp,HNX
-PTC,Công ty Cổ phần Đầu tư ICAPITAL,Công nghiệp,HOSE
-PTL,Công ty Cổ phần Victory Group,Tài chính,HOSE
-PTS,Công ty Cổ phần Vận tải và Dịch vụ Petrolimex Hải Phòng,Công nghiệp,HNX
+PCG,Công ty Cổ phần Đầu tư Phát triển Gas Đô thị,Tiện ích Cộng đồng,UPCOM
+FMC,Công ty Cổ phần Thực phẩm Sao Ta,Hàng Tiêu dùng,HOSE
+FHN,Công ty Cổ phần Xuất nhập khẩu Lương thực - Thực phẩm Hà Nội,Dịch vụ Tiêu dùng,UPCOM
+EVS,Công ty Cổ phần Chứng khoán EVS,Tài chính,HNX
+PCM,Công ty Cổ phần Vật liệu Xây dựng Bưu điện,Công nghiệp,UPCOM
+NVT,Công ty Cổ phần Bất động sản Du lịch Ninh Vân Bay,Tài chính,HOSE
+PDB,Công ty Cổ phần Tập đoàn Đầu tư DIN Capital,Công nghiệp,HNX
+OCB,Ngân hàng Thương mại Cổ phần Phương Đông,Ngân hàng,HOSE
+OCH,Công ty Cổ phần One Capital Hospitality,Hàng Tiêu dùng,HNX
+CSV,Công ty Cổ phần Hóa chất Cơ bản miền Nam,Nguyên vật liệu,HOSE
+OGC,Công ty Cổ phần Tập đoàn Đại Dương,Tài chính,HOSE
+CTB,Công ty Cổ phần Chế tạo Bơm Hải Dương,Công nghiệp,HNX
+CTD,Công ty Cổ phần Xây dựng Coteccons,Công nghiệp,HOSE
+GEG,Công ty Cổ phần Điện Gia Lai,Tiện ích Cộng đồng,HOSE
+GMC,Công ty Cổ phần Garmex Sài Gòn,Hàng Tiêu dùng,UPCOM
+PDC,Công ty Cổ phần Du lịch Dầu khí Phương Đông,Dịch vụ Tiêu dùng,UPCOM
+IN4,Công ty Cổ phần In số 4,Dịch vụ Tiêu dùng,UPCOM
+OPC,Công ty Cổ phần Dược Phẩm OPC,Dược phẩm và Y tế,HOSE
+HVG,Công ty Cổ phần Hùng Vương,Hàng Tiêu dùng,UPCOM
+ONE,Công ty Cổ phần Công nghệ ONE,Công nghệ Thông tin,HNX
+PAP,Công ty Cổ phần Dầu khí đầu tư khai thác Cảng Phước An,Công nghiệp,UPCOM
+LAI,Công ty Cổ phần Đầu tư Xây dựng Long An IDICO,Công nghiệp,UPCOM
+LPB,Ngân hàng Thương mại Cổ phần Lộc Phát Việt Nam,Ngân hàng,HOSE
+PDN,Công ty Cổ phần Cảng Đồng Nai,Công nghiệp,HOSE
+L61,Công ty Cổ phần Lilama 69-1,Công nghiệp,UPCOM
+MSN,Công ty Cổ phần Tập đoàn Masan,Hàng Tiêu dùng,HOSE
+PAI,"Công ty Cổ phần Công nghê thông tin, Viễn thông và Tự động hóa Dầu khí",Viễn thông,UPCOM
 PDR,Công ty Cổ phần Phát triển Bất động sản Phát Đạt,Tài chính,HOSE
-PTX,Công ty Cổ phần Vận tải và Dịch vụ Petrolimex Nghệ Tĩnh,Tiện ích Cộng đồng,HNX
-DTD,Công ty Cổ phần Đầu tư Phát triển Thành Đạt,Tài chính,HNX
-DTD,Công ty Cổ phần Đầu tư Phát triển Thành Đạt,Tài chính,HNX30
-HLD,Công ty Cổ phần Đầu tư và Phát triển Bất động sản HUDLAND,Tài chính,HNX
-HLD,Công ty Cổ phần Đầu tư và Phát triển Bất động sản HUDLAND,Tài chính,HNX30
-DAT,Công ty Cổ phần Đầu tư Du lịch và Phát triển Thủy sản,Hàng Tiêu dùng,HOSE
-PVB,Công ty Cổ phần Bọc ống Dầu khí Việt Nam,Dầu khí,HNX
-PVB,Công ty Cổ phần Bọc ống Dầu khí Việt Nam,Dầu khí,HNX30
-MCF,Công ty Cổ phần Xây lắp Cơ khí và Lương thực Thực phẩm,Hàng Tiêu dùng,HNX
-PVD,Tổng Công ty Cổ phần Khoan và Dịch vụ khoan Dầu khí,Dầu khí,HOSE
-LDG,Công ty Cổ phần Đầu tư LDG,Tài chính,HOSE
-KMR,Công ty Cổ phần Mirae,Hàng Tiêu dùng,HOSE
-PSW,Công ty Cổ phần Phân bón và hóa chất dầu khí Tây Nam Bộ,Nguyên vật liệu,HNX
-PRE,Tổng Công ty Cổ phần Tái bảo hiểm Hà Nội,Tài chính,HNX
+HNF,Công ty Cổ phần Thực phẩm Hữu Nghị,Hàng Tiêu dùng,UPCOM
+PAS,Công ty Cổ phần Quốc tế Phương Anh,Nguyên vật liệu,UPCOM
+PBP,Công ty Cổ phần Bao bì Dầu khí Việt Nam,Công nghiệp,HNX
+PEC,Công ty Cổ phần Cơ khí Điện lực,Công nghiệp,UPCOM
+DM7,Công ty Cổ phần Dệt may 7,Hàng Tiêu dùng,UPCOM
+PCC,Công ty Cổ phần Tập đoàn Xây lắp 1 - Petrolimex,Công nghiệp,UPCOM
+INC,Công ty Cổ phần Tư vấn Đầu tư IDICO,Công nghiệp,HNX
+IRC,Công ty Cổ phần Cao su Công nghiệp,Nguyên vật liệu,UPCOM
+HBS,Công ty Cổ phần Chứng khoán Hòa Bình,Tài chính,HNX
+PEN,Công ty Cổ phần Xây lắp III Petrolimex,Công nghiệp,HNX
+MES,Công ty Cổ phần Cơ điện Công trình,Công nghiệp,UPCOM
+PTV,Công ty Cổ phần Thương mại Dầu khí,Dầu khí,UPCOM
+LMH,Công ty Cổ phần Quốc Tế Holding,Tài chính,UPCOM
+PFL,Công ty Cổ phần Dầu khí Đông Đô,Công nghiệp,UPCOM
+KVC,Công ty Cổ phần Sản xuất Xuất nhập khẩu Inox Kim Vĩ,Nguyên vật liệu,UPCOM
+PGC,Tổng Công ty Gas Petrolimex - Công ty Cổ phần,Tiện ích Cộng đồng,HOSE
+PGN,Công ty Cổ phần Phụ Gia Nhựa,Nguyên vật liệu,HNX
+KPF,Công ty Cổ phần Đầu tư Tài sản KOJI,Công nghiệp,UPCOM
+PGT,Công ty Cổ phần PGT Holdings,Dịch vụ Tiêu dùng,HNX
+MTA,Tổng Công ty Khoáng sản và Thương mại Hà Tĩnh - Công ty Cổ phần,Nguyên vật liệu,UPCOM
+PDV,Công ty Cổ phần Vận tải và Tiếp vận Phương Đông Việt,Công nghiệp,UPCOM
+PEQ,Công ty Cổ phần Thiết bị xăng dầu Petrolimex,Dầu khí,UPCOM
+PLP,Công ty Cổ phần Sản xuất và Công nghệ Nhựa Pha Lê,Nguyên vật liệu,HOSE
+MKP,Công ty Cổ phần Hóa - Dược phẩm Mekophar,Dược phẩm và Y tế,UPCOM
+PET,Tổng Công ty Cổ phần Dịch vụ Tổng hợp Dầu khí,Dịch vụ Tiêu dùng,HOSE
+MEL,Công ty Cổ phần Thép Mê Lin,Nguyên vật liệu,HNX
+PLX,Tập đoàn Xăng dầu Việt Nam,Dầu khí,HOSE
+KHW,Công ty Cổ phần Cấp thoát nước Khánh Hòa,Tiện ích Cộng đồng,UPCOM
+PCF,Công ty Cổ phần Cà phê PETEC,Hàng Tiêu dùng,UPCOM
+PEG,Tổng Công ty Thương mại Kỹ thuật và Đầu tư - Công ty Cổ phần,Tiện ích Cộng đồng,UPCOM
 PHR,Công ty Cổ phần Cao su Phước Hòa,Nguyên vật liệu,HOSE
-PPY,Công ty Cổ phần Xăng dầu dầu khí Phú Yên,Tiện ích Cộng đồng,HNX
-IDV,Công ty Cổ phần Phát triển Hạ tầng Vĩnh Phúc,Tài chính,HNX
-IDV,Công ty Cổ phần Phát triển Hạ tầng Vĩnh Phúc,Tài chính,HNX30
-POW,Tổng Công ty Điện lực Dầu khí Việt Nam - CTCP,Tiện ích Cộng đồng,HOSE
-POW,Tổng Công ty Điện lực Dầu khí Việt Nam - CTCP,Tiện ích Cộng đồng,VN30
-PSD,Công ty Cổ phần Dịch vụ Phân phối Tổng hợp Dầu khí,Dịch vụ Tiêu dùng,HNX
-PSD,Công ty Cổ phần Dịch vụ Phân phối Tổng hợp Dầu khí,Dịch vụ Tiêu dùng,HNX30
-PVT,Tổng Công ty Cổ phần Vận tải Dầu khí,Công nghiệp,HOSE
-KHS,Công ty Cổ phần Kiên Hùng,Hàng Tiêu dùng,HNX
+PIC,Công ty Cổ phần Đầu tư Điện lực 3,Tiện ích Cộng đồng,HNX
+MSB,Ngân hàng Thương mại Cổ phần Hàng Hải Việt Nam,Ngân hàng,HOSE
+PGB,Ngân hàng Thương mại Cổ phần Thịnh vượng và Phát triển,Ngân hàng,UPCOM
+PID,Công ty Cổ phần Trang trí nội thất Dầu khí,Công nghiệp,UPCOM
+PGD,Công ty Cổ phần Phân phối khí thấp áp dầu khí Việt Nam,Tiện ích Cộng đồng,HOSE
+MNB,Tổng Công ty May Nhà Bè - Công ty Cổ phần,Hàng Tiêu dùng,UPCOM
+PIS,Tổng Công ty Pisico Bình Định - Công ty Cổ phần,Nguyên vật liệu,UPCOM
+HHB,Công ty Cổ Phần Bia Hà Nội - Hồng Hà,Hàng Tiêu dùng,UPCOM
+PIT,Công ty Cổ phần Xuất nhập khẩu Petrolimex,Dịch vụ Tiêu dùng,HOSE
+HC1,Công ty Cổ phần Xây dựng số 1 Hà Nội,Công nghiệp,UPCOM
+PIV,Công ty Cổ phần PIV,Tài chính,UPCOM
+PJC,Công ty Cổ phần Thương mại và Vận tải Petrolimex Hà Nội,Tiện ích Cộng đồng,HNX
+PBC,Công ty Cổ phần Dược Phẩm Trung ương 1 - Pharbaco,Dược phẩm và Y tế,UPCOM
+PJT,Công ty Cổ phần Vận tải Xăng dầu đường thủy Petrolimex,Công nghiệp,HOSE
+PHH,Công ty Cổ phần Hồng Hà Việt Nam,Công nghiệp,UPCOM
+PLO,Công ty Cổ phần Kho vận Petec,Công nghiệp,UPCOM
+PLA,Công ty Cổ phần Đầu tư và Dịch vụ hạ tầng Xăng dầu,Công nghiệp,UPCOM
+MCO,Công ty Cổ phần Đầu tư và Xây dựng BDC Việt Nam,Công nghiệp,HNX
+PHS,Công ty Cổ phần Chứng khoán Phú Hưng,Tài chính,UPCOM
+PMP,Công ty Cổ phần Bao bì Đạm Phú Mỹ,Công nghiệp,HNX
+MHC,Công ty Cổ phần MHC,Công nghiệp,HOSE
+PNC,Công ty Cổ phần Văn hóa Phương Nam,Dịch vụ Tiêu dùng,HOSE
+PND,Công ty Cổ phần Xăng dầu Dầu khí Nam Định,Tiện ích Cộng đồng,UPCOM
+PNJ,Công ty Cổ phần Vàng bạc Đá quý Phú Nhuận,Hàng Tiêu dùng,HOSE
+PNT,Công ty Cổ phần Kỹ thuật Xây dựng Phú Nhuận,Công nghiệp,UPCOM
+EIN,Công ty Cổ phần Đầu tư - Thương Mại - Dịch vụ Điện lực,Dịch vụ Tiêu dùng,UPCOM
+POM,Công ty Cổ phần Thép Pomina,Nguyên vật liệu,UPCOM
+POV,Công ty Cổ phần Xăng dầu Dầu khí Vũng Áng,Tiện ích Cộng đồng,UPCOM
+MRF,Công ty Cổ phần MERUFA,Dược phẩm và Y tế,UPCOM
+PPE,Công ty Cổ phần Tư vấn Đầu tư PP Enterprise,Công nghiệp,HNX
+L63,Công ty Cổ phần Lilama 69-3,Công nghiệp,UPCOM
+PLE,Công ty Cổ phần Tư vấn Xây dựng Petrolimex,Công nghiệp,UPCOM
+PPI,Công ty Cổ phần Đầu tư và Phát triển dự án hạ tầng Thái Bình Dương,Tài chính,UPCOM
+PMS,Công ty Cổ phần Cơ khí Xăng dầu,Công nghiệp,HNX
+HCM,Công ty Cổ phần Chứng khoán Thành phố Hồ Chí Minh,Tài chính,HOSE
+PPP,Công ty Cổ phần Dược phẩm Phong Phú,Dược phẩm và Y tế,HNX
+POT,Công ty Cổ phần Thiết bị Bưu điện,Công nghệ Thông tin,HNX
+PPS,Công ty Cổ phần Dịch vụ Kỹ thuật Điện lực Dầu khí Việt Nam,Công nghiệp,HNX
+L35,Công ty Cổ phần Cơ khí Lắp máy Lilama,Công nghiệp,UPCOM
+LCS,Công ty Cổ phần Licogi 16.6,Công nghiệp,UPCOM
+LDP,Công ty Cổ phần Dược Lâm Đồng - Ladophar,Dược phẩm và Y tế,HNX
+NAW,Công ty Cổ phần Cấp nước Nghệ An,Tiện ích Cộng đồng,UPCOM
+HD2,Công ty Cổ phần Đầu tư phát triển nhà HUD2,Tài chính,UPCOM
+PNP,Công ty Cổ phần Tân Cảng – Phú Hữu,Công nghiệp,UPCOM
+POB,Công ty Cổ phần Xăng dầu Dầu khí Hưng Yên,Tiện ích Cộng đồng,UPCOM
+DNA,Công ty Cổ phần Điện nước An Giang,Tiện ích Cộng đồng,UPCOM
+PSC,Công ty Cổ phần Vận tải và Dịch vụ Petrolimex Sài Gòn,Công nghiệp,HNX
+NDX,Công ty Cổ phần Xây lắp Phát triển Nhà Đà Nẵng,Công nghiệp,HNX
+BT1,Công ty Cổ phần Bảo vệ thực vật 1 Trung ương,Nguyên vật liệu,UPCOM
+ILB,Công ty Cổ phần ICD Tân Cảng - Long Bình,Công nghiệp,HOSE
+PSG,Công ty Cổ phần Đầu tư và Xây lắp Dầu khí Sài Gòn,Công nghiệp,UPCOM
+PSI,Công ty Cổ phần Chứng khoán Dầu khí,Tài chính,HNX
+PSP,Công ty Cổ phần Cảng Dịch vụ Dầu khí Đình Vũ,Công nghiệp,UPCOM
+PRO,Công ty Cổ phần Procimex Việt Nam,Hàng Tiêu dùng,UPCOM
+PSB,Công ty Cổ phần Đầu tư Dầu khí Sao Mai Bến Đình,Công nghiệp,UPCOM
+GCB,Công ty Cổ phần PETEC Bình Định,Tiện ích Cộng đồng,UPCOM
+PTD,Công ty Cổ phần Thiết kế - Xây dựng - Thương mại Phúc Thịnh,Công nghiệp,HNX
+PSE,Công ty Cổ phần Phân bón và hóa chất dầu khí Đông Nam Bộ,Nguyên vật liệu,HNX
+PTL,Công ty Cổ phần Victory Group,Tài chính,HOSE
+PSL,Công ty Cổ phần Chăn nuôi Phú Sơn,Hàng Tiêu dùng,UPCOM
+PTM,"Công ty Cổ phần Sản xuất, Thương mại Và Dịch vụ Ô tô PTM",Hàng Tiêu dùng,UPCOM
+NHA,Tổng Công ty Đầu tư Phát triển Nhà và Đô thị Nam Hà Nội,Công nghiệp,HOSE
+NTP,Công ty Cổ phần Nhựa Thiếu niên Tiền Phong,Công nghiệp,HNX
+PTC,Công ty Cổ phần Đầu tư ICAPITAL,Công nghiệp,HOSE
+PTE,Công ty Cổ phần Xi măng Phú Thọ,Công nghiệp,UPCOM
+KSF,Công ty Cổ phần Tập đoàn Sunshine,Tài chính,HNX
+PTG,Công ty Cổ phần May Xuất Khẩu Phan Thiết,Hàng Tiêu dùng,UPCOM
+PTH,Công ty Cổ phần Vận tải và Dịch vụ Petrolimex Hà Tây,Tiện ích Cộng đồng,UPCOM
+NNT,Công ty Cổ phần Cấp nước Ninh Thuận,Tiện ích Cộng đồng,UPCOM
+POS,Công ty Cổ phần Vận hành và Xây lắp PTSC,Dầu khí,UPCOM
+PSN,Công ty Cổ phần Dịch vụ Kỹ thuật PTSC Thanh Hóa,Công nghiệp,UPCOM
+MHL,Công ty Cổ phần Minh Hữu Liên,Nguyên vật liệu,UPCOM
+MIE,Tổng Công ty Máy và Thiết bị Công nghiệp - CTCP,Công nghiệp,UPCOM
+PIA,Công ty Cổ phần Tin học Viễn thông Petrolimex,Viễn thông,HNX
+DAT,Công ty Cổ phần Đầu tư Du lịch và Phát triển Thủy sản,Hàng Tiêu dùng,HOSE
+L40,Công ty Cổ phần Đầu tư và Xây dựng 40,Công nghiệp,HNX
+PTS,Công ty Cổ phần Vận tải và Dịch vụ Petrolimex Hải Phòng,Công nghiệp,HNX
+NDC,Công ty Cổ phần Nam Dược,Dược phẩm và Y tế,UPCOM
+PTT,Công ty Cổ phần Vận tải Dầu khí Đông Dương,Công nghiệp,UPCOM
+DSP,Công ty Cổ phần Dịch vụ Du lịch Phú Thọ,Dịch vụ Tiêu dùng,UPCOM
+HNG,Công ty Cổ phần Nông nghiệp Quốc tế Hoàng Anh Gia Lai,Hàng Tiêu dùng,UPCOM
+DTD,Công ty Cổ phần Đầu tư Phát triển Thành Đạt,Tài chính,HNX
+PV2,Công ty Cổ phần Đầu tư PV2,Tài chính,HNX
+PVA,Công ty Cổ phần Tổng Công ty Xây lắp Dầu khí Nghệ An,Công nghiệp,UPCOM
+PJS,Công ty Cổ phần Cấp nước Phú Hòa Tân,Tiện ích Cộng đồng,UPCOM
+PVB,Công ty Cổ phần Bọc ống Dầu khí Việt Nam,Dầu khí,HNX
+PCE,Công ty Cổ phần Phân bón và hóa chất dầu khí Miền Trung,Nguyên vật liệu,HNX
+PVH,Công ty Cổ phần Xây lắp Dầu khí Thanh Hóa,Công nghiệp,UPCOM
+PVD,Tổng Công ty Cổ phần Khoan và Dịch vụ khoan Dầu khí,Dầu khí,HOSE
+PHP,Công ty Cổ phần Cảng Hải Phòng,Công nghiệp,UPCOM
+NHC,Công ty Cổ phần Gạch ngói Nhị Hiệp,Công nghiệp,HNX
+PVE,Tổng Công ty Tư vấn Thiết kế Dầu khí - Công ty Cổ phần,Dầu khí,UPCOM
+PVM,Công ty Cổ phần Máy - Thiết bị Dầu khí,Công nghiệp,UPCOM
+PHC,Công ty Cổ phần Xây dựng Phục Hưng Holdings,Công nghiệp,HOSE
+PPH,Tổng Công ty Cổ phần Phong Phú,Hàng Tiêu dùng,UPCOM
+CRV,Công ty Cổ phần Tập đoàn Bất động sản CRV,Tài chính,HOSE
+PRE,Tổng Công ty Cổ phần Tái bảo hiểm Hà Nội,Tài chính,HNX
+GKM,Công ty Cổ phần GKM Holdings,Công nghiệp,HNX
+OIL,Tổng Công ty Dầu Việt Nam - Công ty Cổ phần,Dầu khí,UPCOM
+NVB,Ngân hàng Thương mại Cổ phần Quốc Dân,Ngân hàng,HNX
+PMW,Công ty Cổ phần Cấp Nước Phú Mỹ,Tiện ích Cộng đồng,UPCOM
+PVG,Công ty Cổ phần Kinh doanh LPG Việt Nam,Tiện ích Cộng đồng,HNX
 PVI,Công ty Cổ phần PVI,Tài chính,HNX
-IDC,Tổng Công ty IDICO - CTCP,Tài chính,HNX
-IDC,Tổng Công ty IDICO - CTCP,Tài chính,HNX30
-QCG,Công ty Cổ phần Quốc Cường Gia Lai,Tài chính,HOSE
-QNP,Công ty Cổ phần Cảng Quy Nhơn,Công nghiệp,HOSE
+PVL,Công ty Cổ phần Đầu tư Nhà Đất Việt,Tài chính,UPCOM
+PXL,Công ty Cổ phần Đầu tư Khu Công Nghiệp Dầu khí Long Sơn,Tài chính,UPCOM
+QCC,Công ty Cổ phần Đầu tư Xây dựng và Phát triển Hạ tầng Viễn Thông,Công nghiệp,UPCOM
+PVX,Tổng Công ty Cổ phần Xây lắp Dầu khí Việt Nam,Công nghiệp,UPCOM
+PPC,Công ty Cổ phần Nhiệt điện Phả Lại,Tiện ích Cộng đồng,HOSE
+QHD,Công ty Cổ phần Que hàn điện Việt Đức,Công nghiệp,HNX
+QHW,Công ty Cổ phần Nước khoáng Quảng Ninh,Hàng Tiêu dùng,UPCOM
+PQN,Công ty Cổ phần Dịch vụ Dầu khí Quảng Ngãi PTSC,Công nghiệp,UPCOM
+LBM,Công ty Cổ phần Khoáng sản và Vật liệu xây dựng Lâm Đồng,Công nghiệp,HOSE
+QNT,Công ty Cổ phần Tư vấn và Đầu tư Phát triển Quảng Nam,Công nghiệp,UPCOM
+QNW,Công ty Cổ phần Cấp thoát nước và xây dựng Quảng Ngãi,Tiện ích Cộng đồng,UPCOM
+RCC,Công ty Cổ phần Tổng Công ty Công trình Đường sắt Việt Nam,Công nghiệp,UPCOM
+PPY,Công ty Cổ phần Xăng dầu dầu khí Phú Yên,Tiện ích Cộng đồng,HNX
+PTO,Công ty Cổ phần Dịch vụ - Xây dựng Công trình Bưu điện,Công nghiệp,UPCOM
+BQB,Công ty Cổ phần Bia Hà Nội - Quảng Bình,Hàng Tiêu dùng,UPCOM
+POW,Tổng Công ty Điện lực Dầu khí Việt Nam - CTCP,Tiện ích Cộng đồng,HOSE
+PVS,Tổng Công ty Cổ phần Dịch vụ Kỹ thuật Dầu khí Việt Nam,Dầu khí,HNX
+NXT,Công ty Cổ phần Sản xuất và Cung ứng vật liệu xây dựng Kon Tum,Công nghiệp,UPCOM
+MQN,Công ty Cổ phần Môi trường đô thị Quảng Ngãi,Công nghiệp,UPCOM
+PTP,Công ty Cổ phần PTP,Viễn thông,UPCOM
+PVY,Công ty Cổ phần Chế tạo Giàn khoan Dầu khí,Công nghiệp,UPCOM
+DS3,Công ty Cổ phần DS3,Công nghiệp,HNX
+PVT,Tổng Công ty Cổ phần Vận tải Dầu khí,Công nghiệp,HOSE
+PVC,Tổng Công ty Hóa chất và Dịch vụ Dầu khí - Công ty Cổ phần,Dầu khí,HNX
 PVP,Công ty Cổ phần Vận tải Dầu khí Thái Bình Dương,Công nghiệp,HOSE
+PSD,Công ty Cổ phần Dịch vụ Phân phối Tổng hợp Dầu khí,Dịch vụ Tiêu dùng,HNX
+NTF,Công ty Cổ phần Dược - Vật tư y tế Nghệ An,Dược phẩm và Y tế,UPCOM
+PWA,Công ty Cổ phần Bất động sản dầu khí,Tài chính,UPCOM
+PX1,Công ty Cổ phần Xi măng Sông Lam 2,Công nghiệp,UPCOM
+PXA,Công ty Cổ phần Đầu tư và Thương mại Dầu khí Nghệ An,Tài chính,UPCOM
+PXI,Công ty Cổ phần Xây dựng Công nghiệp và Dân dụng Dầu khí,Công nghiệp,UPCOM
+PMT,Công ty Cổ phần Viễn thông Telvina Việt Nam,Công nghệ Thông tin,UPCOM
+ND2,Công ty Cổ phần Đầu tư và Phát triển điện Miền Bắc 2,Tiện ích Cộng đồng,UPCOM
+S55,Công ty Cổ phần Sông Đà 505,Công nghiệp,HNX
+S74,Công ty Cổ phần Sông Đà 7.04,Công nghiệp,UPCOM
+PXS,Công ty Cổ phần Kết cấu Kim loại và Lắp máy Dầu khí,Công nghiệp,UPCOM
+PXT,Công ty Cổ phần Xây lắp Đường ống Bể chứa Dầu khí,Công nghiệp,UPCOM
+S12,Công ty Cổ phần Sông Đà 12,Công nghiệp,UPCOM
+BSH,Công ty Cổ phần Bia Sài Gòn - Hà Nội,Hàng Tiêu dùng,UPCOM
+SAL,Công ty Cổ phần Trục vớt Cứu hộ Việt Nam,Công nghiệp,UPCOM
+PXM,Công ty Cổ phần Xây lắp Dầu khí Miền Trung,Công nghiệp,UPCOM
+VHM,Công ty Cổ phần Vinhomes,Tài chính,HOSE
+PWS,Công ty Cổ phần Cấp thoát nước Phú Yên,Tiện ích Cộng đồng,UPCOM
+QBS,Công ty Cổ phần Xuất nhập khẩu Quảng Bình,Nguyên vật liệu,UPCOM
+PTB,Công ty Cổ phần Phú Tài,Nguyên vật liệu,HOSE
+SAB,Tổng Công ty Cổ phần Bia - Rượu - Nước Giải khát Sài Gòn,Hàng Tiêu dùng,HOSE
+PMJ,Công ty Cổ phần Vật tư Bưu điện,Công nghệ Thông tin,UPCOM
+QCG,Công ty Cổ phần Quốc Cường Gia Lai,Tài chính,HOSE
+PTX,Công ty Cổ phần Vận tải và Dịch vụ Petrolimex Nghệ Tĩnh,Tiện ích Cộng đồng,HNX
+NAF,Công ty Cổ phần Nafoods Group,Hàng Tiêu dùng,HOSE
+QNC,Công ty Cổ phần Xi măng và Xây dựng Quảng Ninh,Công nghiệp,UPCOM
+MCP,Công ty Cổ phần In và Bao bì Mỹ Châu,Công nghiệp,HOSE
+QSP,Công ty Cổ phần Tân cảng Quy Nhơn,Công nghiệp,UPCOM
+PRC,Công ty Cổ phần Logistics Portserco,Công nghiệp,HNX
+TOW,Công ty Cổ phần Cấp nước Trà Nóc - Ô Môn,Tiện ích Cộng đồng,UPCOM
+QNP,Công ty Cổ phần Cảng Quy Nhơn,Công nghiệp,HOSE
+SAF,Công ty Cổ phần Lương thực Thực phẩm SAFOCO,Hàng Tiêu dùng,HNX
+CQN,Công ty Cổ phần Cảng Quảng Ninh,Công nghiệp,UPCOM
+SD1,Công ty Cổ phần Sông Đà 1,Công nghiệp,UPCOM
+QNS,Công ty Cổ phần Đường Quảng Ngãi,Hàng Tiêu dùng,UPCOM
+PTI,Tổng Công ty Cổ phần Bảo hiểm Bưu điện,Tài chính,HNX
+REE,Công ty Cổ phần Cơ điện Lạnh,Tiện ích Cộng đồng,HOSE
+SD2,Công ty Cổ phần Sông Đà 2,Công nghiệp,UPCOM
+QTP,Công ty Cổ phần Nhiệt điện Quảng Ninh,Tiện ích Cộng đồng,UPCOM
+SD9,Công ty Cổ phần Sông Đà 9,Công nghiệp,HNX
+NLG,Công ty Cổ phần Đầu tư Nam Long,Tài chính,HOSE
+QNU,Công ty Cổ phần Môi trường Đô thị Quảng Nam,Công nghiệp,UPCOM
+SAM,Công ty Cổ phần SAM Holdings,Công nghệ Thông tin,HOSE
+SKH,Công ty Cổ phần Nước giải khát Sanest Khánh Hòa,Hàng Tiêu dùng,UPCOM
+QPH,Công ty Cổ phần Thủy điện Quế Phong,Tiện ích Cộng đồng,UPCOM
+PGS,Công ty Cổ phần Kinh doanh Khí Miền Nam,Tiện ích Cộng đồng,HNX
+PXC,Công ty Cổ phần Phát triển Đô thị Dầu khí,Tài chính,UPCOM
+SD5,Công ty Cổ phần Sông Đà 5,Công nghiệp,HNX
+VNB,Công ty Cổ phần Sách Việt Nam,Dịch vụ Tiêu dùng,UPCOM
 QST,Công ty Cổ phần Sách và Thiết bị trường học Quảng Ninh,Dịch vụ Tiêu dùng,HNX
 QTC,Công ty Cổ phần Công trình Giao thông Vận tải Quảng Nam,Công nghiệp,HNX
-RAL,Công ty Cổ phần Bóng đèn Phích nước Rạng Đông,Hàng Tiêu dùng,HOSE
-RDP,Công ty Cổ phần Rạng Đông Holding,Nguyên vật liệu,HOSE
-FRT,Công ty Cổ phần Bán lẻ Kỹ thuật số FPT,Dịch vụ Tiêu dùng,HOSE
-NAF,Công ty Cổ phần Nafoods Group,Hàng Tiêu dùng,HOSE
-LGC,Công ty Cổ phần Đầu tư Cầu đường CII,Công nghiệp,HOSE
-HDA,Công ty Cổ phần Hãng sơn Đông Á,Công nghiệp,HNX
-MKV,Công ty Cổ phần Dược Thú Y Cai Lậy,Dược phẩm và Y tế,HNX
-S55,Công ty Cổ phần Sông Đà 505,Công nghiệp,HNX
-S99,Công ty Cổ phần SCI,Công nghiệp,HNX
-REE,Công ty Cổ phần Cơ điện Lạnh,Tiện ích Cộng đồng,HOSE
-DS3,Công ty Cổ phần DS3,Công nghiệp,HNX
-SAF,Công ty Cổ phần Lương thực Thực phẩm SAFOCO,Hàng Tiêu dùng,HNX
-SAM,Công ty Cổ phần SAM Holdings,Công nghệ Thông tin,HOSE
-L10,Công ty Cổ phần Lilama 10,Công nghiệp,HOSE
-HAG,Công ty Cổ phần Hoàng Anh Gia Lai,Hàng Tiêu dùng,HOSE
-NKG,Công ty Cổ phần Thép Nam Kim,Nguyên vật liệu,HOSE
-SAV,Công ty Cổ phần Hợp tác Kinh tế và Xuất nhập khẩu Savimex,Nguyên vật liệu,HOSE
+SD3,Công ty Cổ phần Sông Đà 3,Công nghiệp,UPCOM
 SBA,Công ty Cổ phần Sông Ba,Tiện ích Cộng đồng,HOSE
-SAB,Tổng Công ty Cổ phần Bia - Rượu - Nước Giải khát Sài Gòn,Hàng Tiêu dùng,HOSE
-SAB,Tổng Công ty Cổ phần Bia - Rượu - Nước Giải khát Sài Gòn,Hàng Tiêu dùng,VN30
+XLV,Công ty Cổ phần Xây lắp và Dịch vụ Sông Đà,Công nghiệp,UPCOM
+PVR,Công ty Cổ phần Đầu tư PVR Hà Nội,Tài chính,UPCOM
+SDV,Công ty Cổ phần Dịch vụ Sonadezi,Công nghiệp,UPCOM
+SDC,Công ty Cổ phần Tư vấn Sông Đà,Công nghiệp,HNX
+LSS,Công ty Cổ phần Mía đường Lam Sơn,Hàng Tiêu dùng,HOSE
+NQN,Công ty Cổ phần Nước sạch Quảng Ninh,Tiện ích Cộng đồng,UPCOM
+SSB,Ngân hàng Thương mại Cổ phần Đông Nam Á,Ngân hàng,HOSE
+SBL,Công ty Cổ phần Bia Sài Gòn - Bạc Liêu,Hàng Tiêu dùng,UPCOM
+PLC,Tổng Công ty Hóa dầu Petrolimex - Công ty Cổ phần,Nguyên vật liệu,HNX
+SEB,Công ty Cổ phần Đầu tư và Phát triển Điện Miền Trung,Tiện ích Cộng đồng,HNX
+RAL,Công ty Cổ phần Bóng đèn Phích nước Rạng Đông,Hàng Tiêu dùng,HOSE
+RAT,Công ty Cổ phần Vận tải và Thương mại Đường sắt,Công nghiệp,UPCOM
+RCD,Công ty Cổ phần Xây dựng - Địa ốc Cao su,Công nghiệp,UPCOM
+SFN,Công ty Cổ phần Dệt lưới Sài Gòn,Công nghiệp,HNX
+BSG,Công ty Cổ phần Xe khách Sài Gòn,Dịch vụ Tiêu dùng,UPCOM
+CSI,Công ty Cổ phần Chứng khoán Kiến thiết Việt Nam,Tài chính,UPCOM
+SGD,Công ty Cổ phần Sách Giáo dục tại Thành phố Hồ Chí Minh,Dịch vụ Tiêu dùng,HNX
+MDG,Công ty Cổ phần Miền Đông,Công nghiệp,HOSE
+NKG,Công ty Cổ phần Thép Nam Kim,Nguyên vật liệu,HOSE
+RCL,Công ty Cổ phần Địa ốc Chợ Lớn,Tài chính,HNX
+RDP,Công ty Cổ phần Rạng Đông Holding,Nguyên vật liệu,UPCOM
+SGH,Công ty Cổ phần Khách sạn Sài Gòn,Dịch vụ Tiêu dùng,HNX
+SDP,Công ty Cổ phần SDP,Công nghiệp,UPCOM
+SGT,Công ty Cổ phần Công nghệ Viễn thông Sài Gòn,Công nghệ Thông tin,HOSE
+TBR,Công ty Cổ phần Địa ốc Tân Bình,Tài chính,UPCOM
+SDY,Công ty Cổ phần Xi măng Sông Đà Yaly,Công nghiệp,UPCOM
+SHA,Công ty Cổ phần Sơn Hà Sài Gòn,Nguyên vật liệu,HOSE
+SHI,Công ty Cổ phần Quốc tế Sơn Hà,Nguyên vật liệu,HOSE
+SHN,Công ty Cổ phần Đầu tư Tổng hợp Hà Nội,Nguyên vật liệu,HNX
+RBC,Công ty Cổ phần Công Nghiệp và Xuất nhập khẩu Cao Su,Nguyên vật liệu,UPCOM
+PBT,Công ty Cổ Phần Bao bì và Thương mại Dầu khí Bình Sơn,Công nghiệp,UPCOM
+SHG,Tổng Công ty Cổ phần Sông Hồng,Công nghiệp,UPCOM
+SGB,Ngân hàng Thương mại Cổ phần Sài Gòn Công thương,Ngân hàng,UPCOM
+SBB,Công ty Cổ phần Tập đoàn Bia Sài Gòn Bình Tây,Hàng Tiêu dùng,UPCOM
+PNG,Công ty Cổ phần Thương Mại Phú Nhuận,Dịch vụ Tiêu dùng,UPCOM
+S72,Công ty Cổ phần Sông Đà 7.02,Công nghiệp,UPCOM
+SZC,Công ty Cổ phần Sonadezi Châu Đức,Tài chính,HOSE
+S96,Công ty Cổ phần Sông Đà 9.06,Công nghiệp,UPCOM
+SKV,Công ty Cổ phần Nước Giải khát Yến sào Khánh Hòa,Hàng Tiêu dùng,UPCOM
+S99,Công ty Cổ phần SCI,Công nghiệp,HNX
+SMC,Công ty Cổ phần Đầu tư Thương mại SMC,Nguyên vật liệu,HOSE
+PVV,Công ty Cổ phần Vinaconex 39,Công nghiệp,UPCOM
+BSQ,Công ty Cổ phần Bia Sài Gòn - Quảng Ngãi,Hàng Tiêu dùng,UPCOM
+SGN,Công ty Cổ phần Phục vụ mặt đất Sài Gòn,Công nghiệp,HOSE
+NSH,Công ty Cổ phần Tập đoàn Nhôm Sông Hồng Shalumi,Nguyên vật liệu,HNX
+SIG,Công ty Cổ phần Đầu tư và Thương mại Sông Đà,Công nghiệp,UPCOM
+SZG,Công ty Cổ phần Sonadezi Giang Điền,Tài chính,UPCOM
+PMC,Công ty Cổ phần Dược phẩm Dược liệu Pharmedic,Dược phẩm và Y tế,HNX
+SAP,Công ty Cổ phần In Sách Giáo khoa TP.Hồ Chí Minh,Dịch vụ Tiêu dùng,UPCOM
+RIC,Công ty Cổ phần Quốc Tế Hoàng Gia,Dịch vụ Tiêu dùng,UPCOM
+PSW,Công ty Cổ phần Phân bón và hóa chất dầu khí Tây Nam Bộ,Nguyên vật liệu,HNX
+APT,Công ty Cổ phần Kinh doanh thủy hải sản Sài Gòn,Hàng Tiêu dùng,UPCOM
+CHS,Công ty Cổ phần Chiếu sáng Công cộng Thành phố Hồ Chí Minh,Tiện ích Cộng đồng,UPCOM
+SLD,Công ty Cổ phần Địa Ốc Sacom,Tài chính,UPCOM
+SAS,Công ty Cổ phần Dịch vụ Hàng không Sân bay Tân Sơn Nhất,Dịch vụ Tiêu dùng,UPCOM
+SMB,Công ty Cổ phần Bia Sài Gòn - Miền Trung,Hàng Tiêu dùng,HOSE
+BSL,Công ty Cổ phần Bia Sài Gòn - Sông Lam,Hàng Tiêu dùng,UPCOM
+SAC,Công ty Cổ phần Xếp dỡ và Dịch vụ cảng Sài Gòn,Công nghiệp,UPCOM
+PAN,Công ty Cổ phần Tập đoàn PAN,Hàng Tiêu dùng,HOSE
+SHE,Công ty Cổ phần Phát triển Năng Lượng Sơn Hà,Hàng Tiêu dùng,HNX
+SAV,Công ty Cổ phần Hợp tác Kinh tế và Xuất nhập khẩu Savimex,Nguyên vật liệu,HOSE
+SPC,Công ty Cổ phần Bảo vệ Thực vật Sài Gòn,Nguyên vật liệu,HNX
+SPI,Công ty Cổ phần Spiral Galaxy,Nguyên vật liệu,UPCOM
+SQC,Công ty Cổ phần Khoáng sản Sài Gòn - Quy Nhơn,Nguyên vật liệu,UPCOM
+SPH,Công ty Cổ phần Xuất Nhập khẩu Thủy sản Hà Nội,Hàng Tiêu dùng,UPCOM
+STL,Công ty Cổ phần Sông Đà - Thăng Long,Tài chính,UPCOM
+SBD,Công ty Cổ phần Công nghệ Sao Bắc Đẩu,Công nghệ Thông tin,UPCOM
+SVD,Công ty Cổ phần Đầu tư & Thương mại Vũ Đăng,Hàng Tiêu dùng,HOSE
+SBH,Công ty Cổ phần Thủy điện Sông Ba Hạ,Tiện ích Cộng đồng,UPCOM
+SBM,Công ty Cổ phần Đầu tư phát triển Bắc Minh,Công nghiệp,UPCOM
+SBS,Công ty Cổ phần Chứng khoán SBS,Tài chính,UPCOM
+NSL,Công ty Cổ phần Cấp nước Sơn La,Tiện ích Cộng đồng,UPCOM
+SD8,Công ty Cổ phần Sông Đà 8,Công nghiệp,UPCOM
+PGI,Tổng Công ty Cổ phần Bảo hiểm Petrolimex,Tài chính,HOSE
+SDT,Công ty Cổ phần Sông Đà 10,Công nghiệp,UPCOM
 SBT,Công ty Cổ phần Thành Thành Công - Biên Hòa,Hàng Tiêu dùng,HOSE
+SVN,Công ty Cổ phần Tập đoàn Vexilla Việt Nam,Công nghiệp,HNX
+SWC,Tổng Công ty Cổ phần Đường Sông Miền Nam,Công nghiệp,UPCOM
 SC5,Công ty Cổ phần Xây dựng số 5,Công nghiệp,HOSE
+SRF,Công ty Cổ phần Searefico,Công nghiệp,HOSE
+SSI,Công ty Cổ phần Chứng khoán SSI,Tài chính,HOSE
+SCC,Công ty Cổ phần Thương mại Đầu tư SHB,Công nghiệp,UPCOM
+SBR,Công ty Cổ phần Cao su Sông Bé,Nguyên vật liệu,UPCOM
+SZB,Công ty Cổ phần Sonadezi Long Bình,Tài chính,HNX
+SCD,Công ty Cổ phần Nước giải khát Chương Dương,Hàng Tiêu dùng,UPCOM
+PMG,Công ty Cổ phần Đầu tư và Sản xuất Petro Miền Trung,Tiện ích Cộng đồng,HOSE
 SCG,Công ty Cổ phần Tập đoàn Xây dựng SCG,Công nghiệp,HNX
 SCI,Công ty Cổ phần SCI E&C,Công nghiệp,HNX
-PCE,Công ty Cổ phần Phân bón và hóa chất dầu khí Miền Trung,Nguyên vật liệu,HNX
-MHC,Công ty Cổ phần MHC,Công nghiệp,HOSE
+SID,Công ty Cổ phần Đầu tư Phát triển Sài Gòn Co.op,Tài chính,UPCOM
+SCJ,Công ty Cổ phần Xi măng Sài Sơn,Công nghiệp,UPCOM
+STS,Công ty Cổ phần Dịch vụ vận tải Sài Gòn,Công nghiệp,UPCOM
+SCL,Công ty Cổ phần Sông Đà Cao Cường,Công nghiệp,UPCOM
+STT,Công ty Cổ phần Vận chuyển Sài Gòn Tourist,Dịch vụ Tiêu dùng,UPCOM
+SCO,Công ty Cổ phần Công nghiệp Thủy sản,Công nghiệp,UPCOM
 SCR,Công ty Cổ phần Địa Ốc Sài Gòn Thương Tín,Tài chính,HOSE
 SCS,Công ty Cổ phần Dịch vụ Hàng hóa Sài Gòn,Dịch vụ Tiêu dùng,HOSE
-SD5,Công ty Cổ phần Sông Đà 5,Công nghiệp,HNX
-NVB,Ngân hàng Thương mại Cổ phần Quốc Dân,Ngân hàng,HNX
-NVB,Ngân hàng Thương mại Cổ phần Quốc Dân,Ngân hàng,HNX30
-SD9,Công ty Cổ phần Sông Đà 9,Công nghiệp,HNX
-SDC,Công ty Cổ phần Tư vấn Sông Đà,Công nghiệp,HNX
-LHC,Công ty Cổ phần Đầu tư và Xây dựng Thủy lợi Lâm Đồng,Công nghiệp,HNX
-LHC,Công ty Cổ phần Đầu tư và Xây dựng Thủy lợi Lâm Đồng,Công nghiệp,HNX30
-KPF,Công ty Cổ phần Đầu tư Tài sản KOJI,Công nghiệp,HOSE
-NVL,Công ty Cổ phần Tập đoàn Đầu tư Địa ốc No Va,Tài chính,HOSE
-SSB,Ngân hàng Thương mại Cổ phần Đông Nam Á,Ngân hàng,HOSE
-SSB,Ngân hàng Thương mại Cổ phần Đông Nam Á,Ngân hàng,VN30
-SFI,Công ty Cổ phần Đại lý Vận tải SAFI,Công nghiệp,HOSE
-SGH,Công ty Cổ phần Khách sạn Sài Gòn,Dịch vụ Tiêu dùng,HNX
-SHS,Công ty Cổ phần Chứng khoán Sài Gòn - Hà Nội,Tài chính,HNX
-SHS,Công ty Cổ phần Chứng khoán Sài Gòn - Hà Nội,Tài chính,HNX30
-SJD,Công ty Cổ phần Thủy điện Cần Đơn,Tiện ích Cộng đồng,HOSE
-SGN,Công ty Cổ phần Phục vụ mặt đất Sài Gòn,Công nghiệp,HOSE
-SHE,Công ty Cổ phần Phát triển Năng Lượng Sơn Hà,Hàng Tiêu dùng,HNX
-SPC,Công ty Cổ phần Bảo vệ Thực vật Sài Gòn,Nguyên vật liệu,HNX
-NAB,Ngân hàng Thương mại Cổ phần Nam Á,Ngân hàng,HOSE
-SRF,Công ty Cổ phần Searefico,Công nghiệp,HOSE
-LDP,Công ty Cổ phần Dược Lâm Đồng - Ladophar,Dược phẩm và Y tế,HNX
-SVN,Công ty Cổ phần Tập đoàn Vexilla Việt Nam,Công nghiệp,HNX
-SGC,Công ty Cổ phần Xuất nhập khẩu Sa Giang,Hàng Tiêu dùng,HNX
-TCM,Công ty Cổ phần Dệt may - Đầu tư - Thương mại Thành Công,Hàng Tiêu dùng,HOSE
-MST,Công ty Cổ phần Đầu tư MST,Công nghiệp,HNX
-SDN,Công ty Cổ phần Sơn Đồng Nai,Công nghiệp,HNX
-TCT,Công ty Cổ phần Cáp treo Núi Bà Tây Ninh,Dịch vụ Tiêu dùng,HOSE
-SFC,Công ty Cổ phần Nhiên liệu Sài Gòn,Tiện ích Cộng đồng,HOSE
-SEB,Công ty Cổ phần Đầu tư và Phát triển Điện Miền Trung,Tiện ích Cộng đồng,HNX
-TIG,Công ty Cổ phần Tập đoàn Đầu tư Thăng Long,Tài chính,HNX
-TIG,Công ty Cổ phần Tập đoàn Đầu tư Thăng Long,Tài chính,HNX30
-TJC,Công ty Cổ phần Dịch vụ Vận tải và Thương mại,Công nghiệp,HNX
-TKU,Công ty Cổ phần Công nghiệp Tung Kuang,Nguyên vật liệu,HNX
-SFN,Công ty Cổ phần Dệt lưới Sài Gòn,Công nghiệp,HNX
-TTL,Tổng Công ty Thăng Long - Công ty Cổ phần,Công nghiệp,HNX
-TPC,Công ty Cổ phần Nhựa Tân Đại Hưng,Nguyên vật liệu,HOSE
-NHA,Tổng Công ty Đầu tư Phát triển Nhà và Đô thị Nam Hà Nội,Công nghiệp,HOSE
-PAN,Công ty Cổ phần Tập đoàn PAN,Hàng Tiêu dùng,HOSE
-TVB,Công ty Cổ phần Chứng khoán Trí Việt,Tài chính,HOSE
-MIG,Tổng Công ty Cổ phần Bảo hiểm Quân đội,Tài chính,HOSE
-HSG,Công ty Cổ phần Tập đoàn Hoa Sen,Nguyên vật liệu,HOSE
-PPC,Công ty Cổ phần Nhiệt điện Phả Lại,Tiện ích Cộng đồng,HOSE
-TTA,Công ty Cổ phần Đầu tư Xây dựng và Phát triển Trường Thành,Tiện ích Cộng đồng,HOSE
-SZC,Công ty Cổ phần Sonadezi Châu Đức,Tài chính,HOSE
-KTT,Công ty Cổ phần Tập đoàn Đầu tư KTT,Công nghiệp,HNX
-NHC,Công ty Cổ phần Gạch ngói Nhị Hiệp,Công nghiệp,HNX
-VHM,Công ty Cổ phần Vinhomes,Tài chính,HOSE
-VHM,Công ty Cổ phần Vinhomes,Tài chính,VN30
-NET,Công ty Cổ phần Bột giặt Net,Hàng Tiêu dùng,HNX
-SMT,Công ty Cổ phần SAMETEL,Công nghệ Thông tin,HNX
-PVS,Tổng Công ty Cổ phần Dịch vụ Kỹ thuật Dầu khí Việt Nam,Dầu khí,HNX
-PVS,Tổng Công ty Cổ phần Dịch vụ Kỹ thuật Dầu khí Việt Nam,Dầu khí,HNX30
-SGR,Công ty Cổ phần Tổng Công ty Cổ phần Địa ốc Sài Gòn,Tài chính,HOSE
-MCP,Công ty Cổ phần In và Bao bì Mỹ Châu,Công nghiệp,HOSE
-SJE,Công ty Cổ phần Sông Đà 11,Công nghiệp,HNX
-NBW,Công ty Cổ phần Cấp nước Nhà Bè,Tiện ích Cộng đồng,HNX
-OPC,Công ty Cổ phần Dược Phẩm OPC,Dược phẩm và Y tế,HOSE
-SHA,Công ty Cổ phần Sơn Hà Sài Gòn,Nguyên vật liệu,HOSE
-TV3,Công ty Cổ phần Tư vấn Xây dựng Điện 3,Công nghiệp,HNX
-SHB,Ngân hàng Thương mại Cổ phần Sài Gòn – Hà Nội,Ngân hàng,HOSE
-SHB,Ngân hàng Thương mại Cổ phần Sài Gòn – Hà Nội,Ngân hàng,VN30
-PGS,Công ty Cổ phần Kinh doanh Khí Miền Nam,Tiện ích Cộng đồng,HNX
-KSF,Công ty Cổ phần Tập đoàn Sunshine,Tài chính,HNX
-SHN,Công ty Cổ phần Đầu tư Tổng hợp Hà Nội,Nguyên vật liệu,HNX
-PLP,Công ty Cổ phần Sản xuất và Công nghệ Nhựa Pha Lê,Nguyên vật liệu,HOSE
-SHP,Công ty Cổ phần Thủy điện Miền Nam,Tiện ích Cộng đồng,HOSE
-PV2,Công ty Cổ phần Đầu tư PV2,Tài chính,HNX
-PMG,Công ty Cổ phần Đầu tư và Sản xuất Petro Miền Trung,Tiện ích Cộng đồng,HOSE
-TVS,Công ty Cổ phần Chứng khoán Thiên Việt,Tài chính,HOSE
-SJ1,Công ty Cổ phần Nông nghiệp Hùng Hậu,Hàng Tiêu dùng,HNX
-TIP,Công ty Cổ phần Phát triển Khu công nghiệp Tín Nghĩa,Tài chính,HOSE
-NTP,Công ty Cổ phần Nhựa Thiếu niên Tiền Phong,Công nghiệp,HNX
-NTP,Công ty Cổ phần Nhựa Thiếu niên Tiền Phong,Công nghiệp,HNX30
-PVC,Tổng Công ty Hóa chất và Dịch vụ Dầu khí - Công ty Cổ phần,Dầu khí,HNX
-PVC,Tổng Công ty Hóa chất và Dịch vụ Dầu khí - Công ty Cổ phần,Dầu khí,HNX30
-VC7,Công ty Cổ phần Tập đoàn BGI,Công nghiệp,HNX
-TTF,Công ty Cổ phần Tập đoàn Kỹ nghệ Gỗ Trường Thành,Nguyên vật liệu,HOSE
-SJS,Công ty Cổ phần SJ Group,Tài chính,HOSE
-SGT,Công ty Cổ phần Công nghệ Viễn thông Sài Gòn,Công nghệ Thông tin,HOSE
-SKG,Công ty Cổ phần Tàu Cao tốc Superdong - Kiên Giang,Dịch vụ Tiêu dùng,HOSE
-SMA,Công ty Cổ phần Thiết bị Phụ tùng Sài Gòn,Tiện ích Cộng đồng,HOSE
-SMB,Công ty Cổ phần Bia Sài Gòn - Miền Trung,Hàng Tiêu dùng,HOSE
-TDG,Công ty Cổ phần Đầu tư TDG Global,Tiện ích Cộng đồng,HOSE
-VFG,Công ty Cổ phần Khử trùng Việt Nam,Nguyên vật liệu,HOSE
-MSH,Công ty Cổ phần May Sông Hồng,Hàng Tiêu dùng,HOSE
-SMC,Công ty Cổ phần Đầu tư Thương mại SMC,Nguyên vật liệu,HOSE
-PJC,Công ty Cổ phần Thương mại và Vận tải Petrolimex Hà Nội,Tiện ích Cộng đồng,HNX
-SLS,Công ty Cổ phần Mía đường Sơn La,Hàng Tiêu dùng,HNX
-SLS,Công ty Cổ phần Mía đường Sơn La,Hàng Tiêu dùng,HNX30
-VGP,Công ty Cổ phần Cảng Rau Quả,Công nghiệp,HNX
-S4A,Công ty Cổ phần Thủy điện Sê San 4A,Tiện ích Cộng đồng,HOSE
-SMN,Công ty Cổ phần Sách và thiết bị giáo dục Miền Nam,Dịch vụ Tiêu dùng,HNX
-SPI,Công ty Cổ phần Spiral Galaxy,Nguyên vật liệu,HNX
-PVG,Công ty Cổ phần Kinh doanh LPG Việt Nam,Tiện ích Cộng đồng,HNX
-SPM,Công ty Cổ phần S.P.M,Dược phẩm và Y tế,HOSE
-TSB,Công ty Cổ phần Ắc quy Tia Sáng,Công nghiệp,HNX
-SFG,Công ty Cổ phần Phân bón Miền Nam,Nguyên vật liệu,HOSE
-SRA,Công ty Cổ phần SARA Việt Nam,Công nghệ Thông tin,HNX
-SRC,Công ty Cổ phần Cao su Sao Vàng,Hàng Tiêu dùng,HOSE
-SDG,Công ty Cổ phần Sadico Cần Thơ,Công nghiệp,HNX
-MBG,Công ty Cổ phần Tập đoàn MBG,Công nghiệp,HNX
-SSC,Công ty Cổ phần Giống cây trồng Miền Nam,Hàng Tiêu dùng,HOSE
-SED,Công ty Cổ phần Đầu tư và Phát triển Giáo dục Phương Nam,Dịch vụ Tiêu dùng,HNX
-SDA,Công ty Cổ phần SIMCO Sông Đà,Công nghiệp,HNX
-MVB,Tổng Công ty Công nghiệp mỏ Việt Bắc TKV - Công ty Cổ phần,Nguyên vật liệu,HNX
-TMX,Công ty Cổ phần VICEM Thương mại Xi măng,Công nghiệp,HNX
-SGD,Công ty Cổ phần Sách Giáo dục tại Thành phố Hồ Chí Minh,Dịch vụ Tiêu dùng,HNX
-VJC,Công ty Cổ phần Hàng không Vietjet,Dịch vụ Tiêu dùng,HOSE
-VJC,Công ty Cổ phần Hàng không Vietjet,Dịch vụ Tiêu dùng,VN30
-NSH,Công ty Cổ phần Tập đoàn Nhôm Sông Hồng Shalumi,Nguyên vật liệu,HNX
-QHD,Công ty Cổ phần Que hàn điện Việt Đức,Công nghiệp,HNX
-SSM,Công ty Cổ phần Chế tạo kết cấu thép VNECO.SSM,Nguyên vật liệu,HNX
-SIP,Công ty Cổ phần Đầu tư Sài Gòn VRG,Tài chính,HOSE
-STG,Công ty Cổ phần Kho Vận Miền Nam,Công nghiệp,HOSE
-SBV,Công ty Cổ phần Siam Brothers Việt Nam,Dịch vụ Tiêu dùng,HOSE
-TMC,Công ty Cổ phần Thương mại Xuất nhập khẩu Thủ Đức,Tiện ích Cộng đồng,HNX
-ST8,Công ty Cổ phần Tập đoàn ST8,Công nghệ Thông tin,HOSE
-STC,Công ty Cổ phần Sách và Thiết bị trường học Thành phố Hồ Chí Minh,Dịch vụ Tiêu dùng,HNX
-STB,Ngân hàng Thương mại Cổ phần Sài Gòn Thương Tín,Ngân hàng,HOSE
-STB,Ngân hàng Thương mại Cổ phần Sài Gòn Thương Tín,Ngân hàng,VN30
-STP,Công ty Cổ phần Công nghiệp Thương mại Sông Đà,Công nghiệp,HNX
-SSI,Công ty Cổ phần Chứng khoán SSI,Tài chính,HOSE
-SSI,Công ty Cổ phần Chứng khoán SSI,Tài chính,VN30
-TCR,Công ty Cổ phần Công nghiệp Gốm sứ TAICERA,Công nghiệp,HOSE
-SHI,Công ty Cổ phần Quốc tế Sơn Hà,Nguyên vật liệu,HOSE
-SDU,Công ty Cổ phần Đầu tư Xây dựng và Phát triển Đô thị Sông Đà,Công nghiệp,HNX
-VHE,Công ty Cổ phần Dược liệu và Thực phẩm Việt Nam,Dược phẩm và Y tế,HNX
-TTT,Công ty Cổ phần Du Lịch - Thương Mại Tây Ninh,Dịch vụ Tiêu dùng,HNX
-SVC,Công ty Cổ phần Dịch vụ tổng hợp Sài Gòn,Hàng Tiêu dùng,HOSE
-SVD,Công ty Cổ phần Đầu tư & Thương mại Vũ Đăng,Hàng Tiêu dùng,HOSE
-SVI,Công ty Cổ phần Bao bì Biên Hòa,Công nghiệp,HOSE
-SVT,Công ty Cổ phần Công nghệ Sài Gòn Viễn Đông,Nguyên vật liệu,HOSE
-SZL,Công ty Cổ phần Sonadezi Long Thành,Tài chính,HOSE
-SZB,Công ty Cổ phần Sonadezi Long Bình,Tài chính,HNX
-TA9,Công ty Cổ phần Xây lắp Thành An 96,Công nghiệp,HNX
-VPS,Công ty Cổ phần Thuốc sát trùng Việt Nam,Nguyên vật liệu,HOSE
 AST,Công ty Cổ phần Dịch vụ Hàng không Taseco,Dịch vụ Tiêu dùng,HOSE
+SD4,Công ty Cổ phần Sông Đà 4,Công nghiệp,UPCOM
+TCX,Công ty Cổ phần Chứng khoán Kỹ Thương,Tài chính,HOSE
+SD6,Công ty Cổ phần Sông Đà 6,Công nghiệp,UPCOM
+SD7,Công ty Cổ phần Sông Đà 7,Công nghiệp,UPCOM
+SFG,Công ty Cổ phần Phân bón Miền Nam,Nguyên vật liệu,HOSE
+SDA,Công ty Cổ phần SIMCO Sông Đà,Công nghiệp,HNX
+SDB,Công ty Cổ phần Sông Đà 207,Công nghiệp,UPCOM
+TDH,Công ty Cổ phần Phát triển Nhà Thủ Đức,Tài chính,HOSE
+TDT,Công ty Cổ phần Đầu tư và Phát triển TDT,Hàng Tiêu dùng,HNX
+SZE,Công ty Cổ phần Môi trường Sonadezi,Công nghiệp,UPCOM
+SDD,Công ty Cổ phần Đầu tư và Xây lắp Sông Đà,Công nghiệp,UPCOM
+SDG,Công ty Cổ phần Sadico Cần Thơ,Công nghiệp,HNX
+TDW,Công ty Cổ phần Cấp nước Thủ Đức,Tiện ích Cộng đồng,HOSE
+SDK,Công ty Cổ phần Cơ khí Luyện Kim,Công nghiệp,UPCOM
+SDN,Công ty Cổ phần Sơn Đồng Nai,Công nghiệp,HNX
+SDU,Công ty Cổ phần Đầu tư Xây dựng và Phát triển Đô thị Sông Đà,Công nghiệp,HNX
+TQN,Công ty Cổ phần Thông Quảng Ninh,Nguyên vật liệu,UPCOM
+THW,Công ty Cổ phần Cấp nước Tân Hòa,Tiện ích Cộng đồng,UPCOM
+TID,Công ty Cổ phần Tổng Công ty Tín Nghĩa,Tài chính,UPCOM
+TLH,Công ty Cổ phần Tập đoàn Thép Tiến Lên,Nguyên vật liệu,HOSE
+MBS,Công ty Cổ phần Chứng khoán MB,Tài chính,HNX
+SEA,Tổng Công ty Thủy sản Việt Nam - Công ty Cổ phần,Hàng Tiêu dùng,UPCOM
+SPV,Công ty Cổ phần Thủy Đặc Sản,Hàng Tiêu dùng,UPCOM
+RTB,Công ty Cổ phần Cao su Tân Biên,Nguyên vật liệu,UPCOM
+SIP,Công ty Cổ phần Đầu tư Sài Gòn VRG,Tài chính,HOSE
+STC,Công ty Cổ phần Sách và Thiết bị trường học Thành phố Hồ Chí Minh,Dịch vụ Tiêu dùng,HNX
+SED,Công ty Cổ phần Đầu tư và Phát triển Giáo dục Phương Nam,Dịch vụ Tiêu dùng,HNX
+TMW,Công ty Cổ phần Tổng hợp Gỗ Tân Mai,Nguyên vật liệu,UPCOM
+TAW,Công ty Cổ phần Cấp nước Trung An,Tiện ích Cộng đồng,UPCOM
+SEP,Công ty Cổ phần Tổng Công ty Thương mại Quảng Trị,Nguyên vật liệu,UPCOM
+SHC,Công ty Cổ phần Hàng hải Sài Gòn,Công nghiệp,UPCOM
+SFC,Công ty Cổ phần Nhiên liệu Sài Gòn,Tiện ích Cộng đồng,HOSE
+SFI,Công ty Cổ phần Đại lý Vận tải SAFI,Công nghiệp,HOSE
+SGC,Công ty Cổ phần Xuất nhập khẩu Sa Giang,Hàng Tiêu dùng,HNX
+TMX,Công ty Cổ phần VICEM Thương mại Xi măng,Công nghiệp,HNX
+TOT,Công ty Cổ phần Transimex Logistics,Công nghiệp,HNX
+BTB,Công ty Cổ phần Bia Hà Nội - Thái Bình,Hàng Tiêu dùng,UPCOM
+NSG,Công ty Cổ phần Nhựa Sài Gòn,Nguyên vật liệu,UPCOM
+SGR,Công ty Cổ phần Tổng Công ty Cổ phần Địa ốc Sài Gòn,Tài chính,HOSE
+SGS,Công ty Cổ phần Vận tải biển Sài Gòn,Công nghiệp,UPCOM
+TPS,Công ty Cổ phần Bến bãi vận tải Sài Gòn,Dịch vụ Tiêu dùng,UPCOM
+SHB,Ngân hàng Thương mại Cổ phần Sài Gòn – Hà Nội,Ngân hàng,HOSE
+TNG,Công ty Cổ phần Đầu tư và Thương mại TNG,Hàng Tiêu dùng,HNX
+MSH,Công ty Cổ phần May Sông Hồng,Hàng Tiêu dùng,HOSE
+SHP,Công ty Cổ phần Thủy điện Miền Nam,Tiện ích Cộng đồng,HOSE
+SHS,Công ty Cổ phần Chứng khoán Sài Gòn - Hà Nội,Tài chính,HNX
+TMP,Công ty Cổ phần Thủy điện Thác Mơ,Tiện ích Cộng đồng,HOSE
+SBV,Công ty Cổ phần Siam Brothers Việt Nam,Dịch vụ Tiêu dùng,HOSE
+TBW,Công ty cổ phần Nước sạch Thái Bình,Tiện ích Cộng đồng,UPCOM
+SII,Công ty Cổ phần Hạ tầng Nước Sài Gòn,Tiện ích Cộng đồng,UPCOM
+SIV,Công ty Cổ phần SIVICO,Công nghiệp,UPCOM
+SJ1,Công ty Cổ phần Nông nghiệp Hùng Hậu,Hàng Tiêu dùng,HNX
+SJC,Công ty Cổ phần Sông Đà 1.01,Công nghiệp,UPCOM
+SJD,Công ty Cổ phần Thủy điện Cần Đơn,Tiện ích Cộng đồng,HOSE
+SJE,Công ty Cổ phần Sông Đà 11,Công nghiệp,HNX
+SJF,Công ty Cổ phần Đầu tư Sao Thái Dương,Nguyên vật liệu,UPCOM
+SJM,Công ty Cổ phần Sông Đà 19,Công nghiệp,UPCOM
+SJS,Công ty Cổ phần SJ Group,Tài chính,HOSE
+SKG,Công ty Cổ phần Tàu Cao tốc Superdong - Kiên Giang,Dịch vụ Tiêu dùng,HOSE
+SKN,Công ty Cổ phần Nước giải khát Sanna Khánh Hòa,Hàng Tiêu dùng,UPCOM
+SLS,Công ty Cổ phần Mía đường Sơn La,Hàng Tiêu dùng,HNX
+SMA,Công ty Cổ phần Thiết bị Phụ tùng Sài Gòn,Tiện ích Cộng đồng,HOSE
+SMT,Công ty Cổ phần SAMETEL,Công nghệ Thông tin,HNX
+SNC,Công ty Cổ phần Xuất nhập khẩu Thủy sản Năm Căn,Hàng Tiêu dùng,UPCOM
+SMN,Công ty Cổ phần Sách và thiết bị giáo dục Miền Nam,Dịch vụ Tiêu dùng,HNX
+SNZ,Tổng Công ty Cổ phần Phát triển Khu Công nghiệp,Công nghiệp,UPCOM
+TCR,Công ty Cổ phần Công nghiệp Gốm sứ TAICERA,Công nghiệp,HOSE
+SJG,Tổng Công ty Sông Đà,Công nghiệp,UPCOM
+G36,Tổng Công ty 36 - Công ty Cổ phần,Công nghiệp,UPCOM
+VCP,Công ty Cổ phần Xây dựng và Năng lượng VCP,Tiện ích Cộng đồng,UPCOM
+TPB,Ngân hàng Thương mại Cổ phần Tiên Phong,Ngân hàng,HOSE
+BCF,Công ty Cổ phần Thực phẩm Bích Chi,Hàng Tiêu dùng,HNX
+TPC,Công ty Cổ phần Nhựa Tân Đại Hưng,Nguyên vật liệu,HOSE
+SPB,Công ty Cổ phần Sợi Phú Bài,Hàng Tiêu dùng,UPCOM
+SPD,Công ty Cổ phần Xuất nhập khẩu Thủy sản Miền Trung,Hàng Tiêu dùng,UPCOM
+SP2,Công ty Cổ phần Thủy điện Sử Pán 2,Tiện ích Cộng đồng,UPCOM
+SPM,Công ty Cổ phần S.P.M,Dược phẩm và Y tế,HOSE
+ISH,Công ty Cổ phần Thủy điện Srok Phu Miêng IDICO,Tiện ích Cộng đồng,UPCOM
+TTT,Công ty Cổ phần Du Lịch - Thương Mại Tây Ninh,Dịch vụ Tiêu dùng,HNX
+SRA,Công ty Cổ phần SARA Việt Nam,Công nghệ Thông tin,HNX
+SRB,Công ty Cổ phần Tập đoàn Sara,Công nghệ Thông tin,UPCOM
+SRC,Công ty Cổ phần Cao su Sao Vàng,Hàng Tiêu dùng,HOSE
+TSG,Công ty Cổ phần Thông tin Tín hiệu Đường sắt Sài Gòn,Công nghiệp,UPCOM
+S4A,Công ty Cổ phần Thủy điện Sê San 4A,Tiện ích Cộng đồng,HOSE
+SSC,Công ty Cổ phần Giống cây trồng Miền Nam,Hàng Tiêu dùng,HOSE
+SSF,Công ty Cổ phần Giáo dục G Sài Gòn,Hàng Tiêu dùng,UPCOM
+SSG,Công ty Cổ phần Vận tải Biển Hải Âu,Công nghiệp,UPCOM
+SSM,Công ty Cổ phần Chế tạo kết cấu thép VNECO.SSM,Nguyên vật liệu,HNX
+HUB,Công ty Cổ phần Xây lắp Thừa Thiên Huế,Công nghiệp,HOSE
+SSN,Công ty Cổ phần Xuất nhập khẩu Thủy sản Sài Gòn,Hàng Tiêu dùng,UPCOM
+ST8,Công ty Cổ phần Tập đoàn ST8,Công nghệ Thông tin,HOSE
+STB,Ngân hàng Thương mại Cổ phần Sài Gòn Thương Tín,Ngân hàng,HOSE
+STG,Công ty Cổ phần Kho Vận Miền Nam,Công nghiệp,HOSE
+STP,Công ty Cổ phần Công nghiệp Thương mại Sông Đà,Công nghiệp,HNX
+STW,Công ty Cổ phần Cấp nước Sóc Trăng,Tiện ích Cộng đồng,UPCOM
+SVC,Công ty Cổ phần Dịch vụ tổng hợp Sài Gòn,Hàng Tiêu dùng,HOSE
+SVG,Công ty Cổ phần Hơi kỹ nghệ Que hàn,Công nghiệp,UPCOM
+SVH,Công ty Cổ phần Thủy điện Sông Vàng,Tiện ích Cộng đồng,UPCOM
+SVI,Công ty Cổ phần Bao bì Biên Hòa,Công nghiệp,HOSE
+SVT,Công ty Cổ phần Công nghệ Sài Gòn Viễn Đông,Dịch vụ Tiêu dùng,HOSE
+MTB,Công ty Cổ phần Môi trường và Công trình đô thị tỉnh Thái Bình,Công nghiệp,UPCOM
+SZL,Công ty Cổ phần Sonadezi Long Thành,Tài chính,HOSE
+TA6,Công ty Cổ phần Đầu tư và Xây lắp Thành An 665,Công nghiệp,UPCOM
+TA9,Công ty Cổ phần Xây lắp Thành An 96,Công nghiệp,HNX
+TAL,Công Ty Cổ Phần Đầu Tư Bất Động Sản Taseco,Tài chính,HOSE
+VTR,Công ty Cổ phần Du lịch Vietravel,Dịch vụ Tiêu dùng,UPCOM
+TB8,Công ty Cổ phần Sản xuất và Kinh doanh Vật tư Thiết bị - VVMI,Công nghiệp,UPCOM
+TKA,Công ty Cổ phần Bao bì Tân Khánh An,Công nghiệp,UPCOM
+TBD,Tổng công ty Thiết bị điện Đông Anh - Công ty Cổ phần,Công nghiệp,UPCOM
+UDJ,Công ty Cổ phần Phát triển Đô thị,Công nghiệp,UPCOM
 TBC,Công ty Cổ phần Thủy điện Thác Bà,Tiện ích Cộng đồng,HOSE
+TBH,Công ty Cổ phần Tổng Bách Hóa,Công nghiệp,UPCOM
+TCM,Công ty Cổ phần Dệt may - Đầu tư - Thương mại Thành Công,Hàng Tiêu dùng,HOSE
 TBX,Công ty Cổ phần Xi măng Thái Bình,Công nghiệp,HNX
 TCB,Ngân hàng Thương mại Cổ phần Kỹ thương Việt Nam,Ngân hàng,HOSE
-TCB,Ngân hàng Thương mại Cổ phần Kỹ thương Việt Nam,Ngân hàng,VN30
-TCL,Công ty Cổ phần Đại lý Giao nhận Vận tải Xếp dỡ Tân Cảng,Công nghiệp,HOSE
-TCO,Công ty Cổ phần TCO Holdings,Công nghiệp,HOSE
 TCI,Công ty Cổ phần Chứng khoán Thành Công,Tài chính,HOSE
+TCT,Công ty Cổ phần Cáp treo Núi Bà Tây Ninh,Dịch vụ Tiêu dùng,HOSE
+TCL,Công ty Cổ phần Đại lý Giao nhận Vận tải Xếp dỡ Tân Cảng,Công nghiệp,HOSE
+DTH,Công ty Cổ phần Dược - Vật tư Y tế Thanh Hóa,Dược phẩm và Y tế,UPCOM
+TCO,Công ty Cổ phần TCO Holdings,Hàng Tiêu dùng,HOSE
+TTD,Công ty Cổ phần Bệnh viện Tim Tâm Đức,Dược phẩm và Y tế,UPCOM
+TCW,Công ty Cổ phần Kho Vận Tân Cảng,Công nghiệp,UPCOM
 TDC,Công ty Cổ phần Kinh doanh và Phát triển Bình Dương,Tài chính,HOSE
-TDH,Công ty Cổ phần Phát triển Nhà Thủ Đức,Tài chính,HOSE
+TDS,Công ty Cổ phần Thép Thủ Đức - VNSTEEL,Nguyên vật liệu,UPCOM
+GTD,Công ty Cổ phần Giầy Thượng Đình,Hàng Tiêu dùng,UPCOM
+TDG,Công ty Cổ phần Đầu tư TDG Global,Tiện ích Cộng đồng,HOSE
 TDM,Công ty Cổ phần Nước Thủ Dầu Một,Tiện ích Cộng đồng,HOSE
 NTH,Công ty Cổ phần Thủy điện Nước Trong,Tiện ích Cộng đồng,HNX
 TDP,Công ty Cổ phần Thuận Đức,Công nghiệp,HOSE
-TDT,Công ty Cổ phần Đầu tư và Phát triển TDT,Hàng Tiêu dùng,HNX
-TDW,Công ty Cổ phần Cấp nước Thủ Đức,Tiện ích Cộng đồng,HOSE
-CET,Công ty Cổ phần HTC Holding,Hàng Tiêu dùng,HNX
 TEG,Công ty Cổ phần Năng Lượng và Bất động sản Trường Thành,Tài chính,HOSE
+CET,Công ty Cổ phần HTC Holding,Hàng Tiêu dùng,HNX
+TED,Tổng Công ty Tư vấn Thiết kế Giao thông Vận tải - CTCP,Công nghiệp,UPCOM
 TET,Công ty Cổ phần Vải sợi May mặc Miền Bắc,Hàng Tiêu dùng,HNX
+TEL,Công ty Cổ phần Phát triển Công trình Viễn thông,Công nghiệp,UPCOM
 TFC,Công ty Cổ phần Trang,Hàng Tiêu dùng,HNX
+TGG,Công ty Cổ phần The Golden Group,Công nghiệp,UPCOM
+TGP,Công ty Cổ phần Trường Phú,Công nghiệp,UPCOM
+TH1,Công ty Cổ phần Xuất nhập khẩu Tổng hợp I Việt Nam,Dịch vụ Tiêu dùng,UPCOM
+TLP,Tổng Công ty Thương mại Xuất nhập khẩu Thanh Lễ - CTCP,Tiện ích Cộng đồng,UPCOM
+THN,Công ty Cổ phần Cấp nước Thanh Hóa,Tiện ích Cộng đồng,UPCOM
 THB,Công ty Cổ phần Bia Hà Nội - Thanh Hóa,Hàng Tiêu dùng,HNX
-VLA,Công ty Cổ phần Đầu tư và Phát triển Công nghệ Văn Lang,Công nghệ Thông tin,HNX
 THD,Công ty Cổ phần Thaiholdings,Tài chính,HNX
 THG,Công ty Cổ phần Đầu tư và Xây dựng Tiền Giang,Công nghiệp,HOSE
+TNV,Công ty Cổ phần Thống Nhất Hà Nội,Hàng Tiêu dùng,UPCOM
 THS,Công ty Cổ phần Thanh Hoa Sông Đà,Dịch vụ Tiêu dùng,HNX
 THT,Công ty Cổ phần Than Hà Tu - Vinacomin,Nguyên vật liệu,HNX
+UPH,Công ty Cổ phần Dược phẩm TW25,Dược phẩm và Y tế,UPCOM
+THU,Công ty Cổ phần Môi trường và Công trình đô thị Thanh Hóa,Công nghiệp,UPCOM
+TAN,Công ty Cổ phần Cà phê Thuận An,Hàng Tiêu dùng,UPCOM
 TTH,Công ty Cổ phần Thương mại và Dịch vụ Tiến Thành,Nguyên vật liệu,HNX
+TJC,Công ty Cổ phần Dịch vụ Vận tải và Thương mại,Công nghiệp,HNX
+TIE,Công ty Cổ phần TIE,Công nghiệp,UPCOM
+TIG,Công ty Cổ phần Tập đoàn Đầu tư Thăng Long,Tài chính,HNX
+UXC,Công ty Cổ phần Chế biến Thủy sản Út Xi,Hàng Tiêu dùng,UPCOM
+TIP,Công ty Cổ phần Phát triển Khu công nghiệp Tín Nghĩa,Tài chính,HOSE
+TRT,Công ty Cổ phần RedstarCera,Công nghiệp,UPCOM
 DTG,Công ty Cổ phần Dược phẩm Tipharco,Dược phẩm và Y tế,HNX
+TIS,Công ty Cổ phần Gang thép Thái Nguyên,Nguyên vật liệu,UPCOM
 TIX,Công ty Cổ phần Sản xuất Kinh doanh Xuất nhập khẩu Dịch vụ và Đầu tư Tân Bình,Tài chính,HOSE
-TKG,Công ty Cổ phần Sản xuất và Thương mại Tùng Khánh,Nguyên vật liệu,HNX
-TLD,Công ty Cổ phần Đầu tư Xây dựng và Phát triển Đô thị Thăng Long,Tài chính,HOSE
+TKC,Công ty Cổ phần Xây dựng và Kinh doanh Địa ốc Tân Kỷ,Công nghiệp,UPCOM
+TKU,Công ty Cổ phần Công nghiệp Tung Kuang,Nguyên vật liệu,HNX
+TLT,Công ty Cổ phần Viglacera Thăng Long,Công nghiệp,UPCOM
+TL4,Tổng Công ty Xây dựng Thủy lợi 4 - Công ty Cổ phần,Công nghiệp,UPCOM
+TCJ,Công ty Cổ phần Tô Châu,Hàng Tiêu dùng,UPCOM
+GDA,Công ty Cổ phần Tôn Đông Á,Nguyên vật liệu,UPCOM
+TOP,Công ty Cổ phần Phân phối Top One,Dịch vụ Tiêu dùng,UPCOM
+TLD,Công ty Cổ phần Đầu tư Xây dựng và Phát triển Đô thị Thăng Long,Công nghiệp,HOSE
 TLG,Công ty Cổ phần Tập đoàn Thiên Long,Hàng Tiêu dùng,HOSE
-TLH,Công ty Cổ phần Tập đoàn Thép Tiến Lên,Nguyên vật liệu,HOSE
-MBS,Công ty Cổ phần Chứng khoán MB,Tài chính,HNX
-MBS,Công ty Cổ phần Chứng khoán MB,Tài chính,HNX30
-TMP,Công ty Cổ phần Thủy điện Thác Mơ,Tiện ích Cộng đồng,HOSE
+TTL,Tổng Công ty Thăng Long - Công ty Cổ phần,Công nghiệp,HNX
+TCD,Công ty cổ phần Tập đoàn Xây dựng Tracodi,Công nghiệp,HOSE
+TV1,Công ty Cổ phần Tư vấn Xây dựng Điện 1,Công nghiệp,UPCOM
+TLI,Công ty Cổ phần May Quốc tế Thắng Lợi,Hàng Tiêu dùng,UPCOM
+TPP,Công ty Cổ phần Tân Phú Việt Nam,Công nghiệp,HNX
+THP,Công ty Cổ phần Thủy sản và Thương mại Thuận Phước,Hàng Tiêu dùng,UPCOM
+VCR,Công ty Cổ phần Đầu tư và Phát triển Du lịch Vinaconex,Tài chính,UPCOM
+TMC,Công ty Cổ phần Thương mại Xuất nhập khẩu Thủ Đức,Tiện ích Cộng đồng,HNX
+TSB,Công ty Cổ phần Ắc quy Tia Sáng,Công nghiệp,HNX
+TTZ,Công ty Cổ phần Đầu tư Xây dựng và Công nghệ Tiến Trung,Công nghiệp,UPCOM
+FCC,Công ty Cổ phần Liên hợp Thực phẩm,Tài chính,UPCOM
+TRC,Công ty Cổ phần Cao su Tây Ninh,Nguyên vật liệu,HOSE
+TSD,Công ty Cổ phần Du lịch Trường Sơn Coecco,Dịch vụ Tiêu dùng,UPCOM
 TMS,Công ty Cổ phần Transimex,Công nghiệp,HOSE
 TMT,Công ty Cổ phần Ô tô TMT,Hàng Tiêu dùng,HOSE
+VE8,Công ty Cổ phần Xây dựng Điện Vneco 8,Công nghiệp,UPCOM
+TAR,Công ty Cổ phần Nông nghiệp Công nghệ cao Trung An,Hàng Tiêu dùng,UPCOM
 TN1,Công ty Cổ phần Rox Key Holdings,Tài chính,HOSE
+TNA,Công ty Cổ phần Thương mại Xuất nhập khẩu Thiên Nam,Nguyên vật liệu,UPCOM
+TTC,Công ty Cổ phần Gạch men Thanh Thanh,Công nghiệp,HNX
+TNB,Công ty Cổ phần Thép Nhà Bè - VNSTEEL,Nguyên vật liệu,UPCOM
+STH,Công ty Cổ phần Phát hành sách Thái Nguyên,Dịch vụ Tiêu dùng,UPCOM
 TNC,Công ty Cổ phần Cao su Thống Nhất,Nguyên vật liệu,HOSE
 BAX,Công ty Cổ phần Thống Nhất,Công nghiệp,HNX
-VNC,Công ty Cổ phần Tập đoàn Vinacontrol,Công nghiệp,HNX
-TNG,Công ty Cổ phần Đầu tư và Thương mại TNG,Hàng Tiêu dùng,HNX
-TNG,Công ty Cổ phần Đầu tư và Thương mại TNG,Hàng Tiêu dùng,HNX30
+TST,Công ty Cổ phần Dịch vụ Kỹ thuật Viễn thông,Công nghệ Thông tin,UPCOM
+TTA,Công ty Cổ phần Đầu tư Xây dựng và Phát triển Trường Thành,Tiện ích Cộng đồng,HOSE
+TNS,Công ty Cổ phần Thép tấm lá Thống Nhất,Nguyên vật liệu,UPCOM
 TNI,Công ty Cổ phần Tập đoàn Thành Nam,Nguyên vật liệu,HOSE
-TNT,Công ty Cổ phần Tập đoàn TNT,Nguyên vật liệu,HOSE
-TOT,Công ty Cổ phần Transimex Logistics,Công nghiệp,HNX
-TPB,Ngân hàng Thương mại Cổ phần Tiên Phong,Ngân hàng,HOSE
-TPB,Ngân hàng Thương mại Cổ phần Tiên Phong,Ngân hàng,VN30
-BCF,Công ty Cổ phần Thực phẩm Bích Chi,Hàng Tiêu dùng,HNX
-TPH,Công ty Cổ phần In Sách giáo khoa tại Thành phố Hà Nội,Dịch vụ Tiêu dùng,HNX
-TPP,Công ty Cổ phần Tân Phú Việt Nam,Công nghiệp,HNX
-TRA,Công ty Cổ phần Traphaco,Dược phẩm và Y tế,HOSE
-TCD,Công ty cổ phần Tập đoàn Xây dựng Tracodi,Công nghiệp,HOSE
-TRC,Công ty Cổ phần Cao su Tây Ninh,Nguyên vật liệu,HOSE
-TSC,Công ty Cổ phần Vật tư Kỹ thuật Nông nghiệp Cần Thơ,Nguyên vật liệu,HOSE
-TTC,Công ty Cổ phần Gạch men Thanh Thanh,Công nghiệp,HNX
-HUB,Công ty Cổ phần Xây lắp Thừa Thiên Huế,Công nghiệp,HOSE
-VHC,Công ty Cổ phần Vĩnh Hoàn,Hàng Tiêu dùng,HOSE
-VIF,Tổng Công ty Lâm nghiệp Việt Nam - Công ty Cổ phần,Nguyên vật liệu,HNX
-VNF,Công ty Cổ phần Vinafreight,Công nghiệp,HNX
+TTB,Công ty Cổ phần TTBGROUP,Công nghiệp,UPCOM
+VEF,Công ty Cổ phần Trung tâm Hội chợ Triển lãm Việt Nam,Tài chính,UPCOM
+TTF,Công ty Cổ phần Tập đoàn Kỹ nghệ Gỗ Trường Thành,Nguyên vật liệu,HOSE
+TNM,Công ty Cổ phần Xuất nhập khẩu và Xây dựng Công trình,Công nghiệp,UPCOM
+TNP,Công ty Cổ phần Cảng Thị Nại,Công nghiệp,UPCOM
+TNT,Công ty Cổ phần Tập đoàn TNT,Công nghiệp,HOSE
 TV2,Công ty Cổ phần Tư vấn Xây dựng Điện 2,Công nghiệp,HOSE
-TYA,Công ty Cổ phần Dây và Cáp điện Taya Việt Nam,Công nghiệp,HOSE
 TV4,Công ty Cổ phần Tư vấn Xây dựng Điện 4,Công nghiệp,HNX
-TVC,Công ty Cổ phần Tập đoàn Quản lý Tài sản Trí Việt,Tài chính,HNX
+TVA,Công ty cổ phần Sứ Viglacera Thanh Trì,Công nghiệp,UPCOM
 TVD,Công ty Cổ phần Than Vàng Danh - Vinacomin,Nguyên vật liệu,HNX
-TVD,Công ty Cổ phần Than Vàng Danh - Vinacomin,Nguyên vật liệu,HNX30
+TVS,Công ty Cổ phần Chứng khoán Thiên Việt,Tài chính,HOSE
+VE3,Công ty Cổ phần Xây dựng điện VNECO 3,Công nghiệp,HNX
 TXM,Công ty Cổ phần VICEM Thạch cao Xi Măng,Công nghiệp,HNX
-VNM,Công ty Cổ phần Sữa Việt Nam,Hàng Tiêu dùng,HOSE
-VNM,Công ty Cổ phần Sữa Việt Nam,Hàng Tiêu dùng,VN30
+TYA,Công ty Cổ phần Dây và Cáp điện Taya Việt Nam,Công nghiệp,HOSE
+TRA,Công ty Cổ phần Traphaco,Dược phẩm và Y tế,HOSE
+VCS,Công ty Cổ phần VICOSTONE,Công nghiệp,HNX
+TR1,Công ty Cổ phần Vận Tải 1 Traco,Công nghiệp,UPCOM
+VGC,Tổng Công ty Viglacera - Công ty Cổ phần,Công nghiệp,HOSE
+VGP,Công ty Cổ phần Cảng Rau Quả,Công nghiệp,HNX
+VCX,Công ty Cổ phần Xi măng Yên Bình,Công nghiệp,UPCOM
+TRS,Công ty Cổ phần Vận tải và Dịch vụ Hàng Hải,Công nghiệp,UPCOM
+VAV,Công ty Cổ phần VIWACO,Tiện ích Cộng đồng,UPCOM
+TDF,Công ty Cổ phần Trung Đô,Công nghiệp,UPCOM
+UCT,Công ty Cổ phần Đô thị Cần Thơ,Công nghiệp,UPCOM
+VE2,Công ty Cổ phần Xây dựng Điện VNECO 2,Công nghiệp,UPCOM
+TVB,Công ty Cổ phần Chứng khoán T-Cap,Tài chính,HOSE
+TS4,Công ty Cổ phần Thủy sản số 4,Hàng Tiêu dùng,UPCOM
+VHC,Công ty Cổ phần Vĩnh Hoàn,Hàng Tiêu dùng,HOSE
+TSC,Công ty Cổ phần Vật tư Kỹ thuật Nông nghiệp Cần Thơ,Nguyên vật liệu,HOSE
+UEM,Công ty Cổ phần Cơ điện Uông Bí - Vinacomin,Công nghiệp,UPCOM
+VHG,Công ty Cổ phần Đầu tư và Phát triển Việt Trung Nam,Công nghiệp,UPCOM
+TTG,Công ty Cổ phần May Thanh Trì,Hàng Tiêu dùng,UPCOM
+VC3,Công ty Cổ phần Tập đoàn Nam Mê Kông,Tài chính,HNX
 UIC,Công ty Cổ phần Đầu tư Phát triển Nhà và Đô thị IDICO,Tiện ích Cộng đồng,HOSE
 UNI,Công ty Cổ phần Đầu tư và Phát triển Sao Mai Việt,Công nghệ Thông tin,HNX
+TTN,Công ty Cổ phần Công nghệ & Truyền thông Việt Nam,Viễn thông,UPCOM
+VIF,Tổng Công ty Lâm nghiệp Việt Nam - Công ty Cổ phần,Nguyên vật liệu,HNX
+GND,Công ty Cổ phần Gạch ngói Đồng Nai,Công nghiệp,UPCOM
+TQW,Công ty Cổ phần Cấp thoát nước Tuyên Quang,Tiện ích Cộng đồng,UPCOM
+UPC,Công ty Cổ phần Phát triển Công viên Cây xanh và Đô thị Vũng Tàu,Tiện ích Cộng đồng,UPCOM
+TV3,Công ty Cổ phần Tư vấn Xây dựng Điện 3,Công nghiệp,HNX
+TV6,Công ty Cổ phần Tập đoàn EMA LAND,Tài chính,UPCOM
+VHL,Công ty Cổ phần Viglacera Hạ Long,Công nghiệp,HNX
+TVC,Công ty Cổ phần Tập đoàn Quản lý tài sản T-Corp,Tài chính,HNX
+TVG,Công ty Cổ phần Tư vấn Đầu tư và Xây dựng Giao thông Vận tải,Công nghiệp,UPCOM
+VIB,Ngân hàng Thương mại Cổ phần Quốc tế Việt Nam,Ngân hàng,HOSE
+TNW,Công ty Cổ phần Nước sạch Thái Nguyên,Tiện ích Cộng đồng,UPCOM
+USC,Công ty Cổ phần Khảo sát và Xây dựng - USCO,Công nghiệp,UPCOM
+UDC,Công ty Cổ phần Đầu tư Xây dựng UDCons,Công nghiệp,UPCOM
+USD,Công ty Cổ phần Công trình Đô thị Sóc Trăng,Công nghiệp,UPCOM
+UMC,Công ty Cổ phần Công trình đô thị Nam Định,Công nghiệp,UPCOM
+UTT,Công ty Cổ phần Môi trường Đô thị Thanh Trì,Công nghiệp,UPCOM
+VIC,Tập đoàn Vingroup - Công ty CP,Tài chính,HOSE
 V12,Công ty Cổ phần Xây dựng số 12,Công nghiệp,HNX
+V15,Công ty Cổ phần Xây dựng số 15,Công nghiệp,UPCOM
 V21,Công ty Cổ phần Vinaconex 21,Tài chính,HNX
+VAB,Ngân hàng Thương mại Cổ phần Việt Á,Ngân hàng,HOSE
 VAF,Công ty Cổ phần Phân lân nung chảy Văn Điển,Nguyên vật liệu,HOSE
-VCF,Công ty Cổ phần VinaCafé Biên Hòa,Hàng Tiêu dùng,HOSE
+PAT,Công ty Cổ phần Phốt pho Apatit Việt Nam,Nguyên vật liệu,UPCOM
 VBC,"Công ty Cổ phần Nhựa, Bao bì Vinh",Công nghiệp,HNX
-VCG,Tổng Công ty Cổ phần Xuất nhập khẩu và Xây dựng Việt Nam,Công nghiệp,HOSE
+TVT,Tổng Công ty Việt Thắng - CTCP,Hàng Tiêu dùng,HOSE
+VID,Công ty Cổ phần Đầu tư Phát triển Thương mại Viễn Đông,Nguyên vật liệu,HOSE
+VBH,Công ty Cổ phần Điện tử Bình Hòa,Công nghiệp,UPCOM
 VC1,Công ty Cổ phần Xây dựng số 1,Công nghiệp,HNX
 VC2,Công ty Cổ phần Đầu tư và Xây dựng VINA2,Công nghiệp,HNX
-VC3,Công ty Cổ phần Tập đoàn Nam Mê Kông,Tài chính,HNX
-VC3,Công ty Cổ phần Tập đoàn Nam Mê Kông,Tài chính,HNX30
-VCM,Công ty Cổ phần BV Life,Công nghiệp,HNX
-VE3,Công ty Cổ phần Xây dựng điện VNECO 3,Công nghiệp,HNX
-VDL,Công ty Cổ phần Thực phẩm Lâm Đồng,Hàng Tiêu dùng,HNX
-VCS,Công ty Cổ phần VICOSTONE,Công nghiệp,HNX
-VCS,Công ty Cổ phần VICOSTONE,Công nghiệp,HNX30
-VDS,Công ty Cổ phần Chứng khoán Rồng Việt,Tài chính,HOSE
-VE8,Công ty Cổ phần Xây dựng Điện Vneco 8,Công nghiệp,HNX
+VC5,Công ty Cổ phần Xây dựng Số 5,Công nghiệp,UPCOM
 VC6,Công ty cổ phần Xây dựng và Đầu tư Visicons,Công nghiệp,HNX
+VC7,Công ty Cổ phần Tập đoàn BGI,Công nghiệp,HNX
 VC9,Công ty Cổ phần Xây dựng số 9 - VC9,Công nghiệp,HNX
 VCA,Công ty Cổ phần Thép VICASA - VNSTEEL,Nguyên vật liệu,HOSE
+SB1,Công ty Cổ phần Bia Sài Gòn - Nghệ Tĩnh,Hàng Tiêu dùng,UPCOM
 VCB,Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam,Ngân hàng,HOSE
-VCB,Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam,Ngân hàng,VN30
-VE4,Công ty Cổ phần Xây dựng điện VNECO4,Công nghiệp,HNX
+MBG,Công ty Cổ phần Tập đoàn MBG,Công nghiệp,HNX
 VCC,Công ty Cổ phần Vinaconex 25,Công nghiệp,HNX
-VNR,Tổng Công ty Cổ phần Tái bảo hiểm Quốc gia Việt Nam,Tài chính,HNX
-VCI,Công ty Cổ phần Chứng khoán Vietcap,Tài chính,HOSE
+CCV,Công ty Cổ phần Tư vấn Xây dựng Công nghiệp và Đô thị Việt Nam,Công nghiệp,UPCOM
+VCF,Công ty Cổ phần VinaCafé Biên Hòa,Hàng Tiêu dùng,HOSE
+MVB,Tổng Công ty Công nghiệp mỏ Việt Bắc TKV - Công ty Cổ phần,Nguyên vật liệu,HNX
+VCG,Tổng Công ty Cổ phần Xuất nhập khẩu và Xây dựng Việt Nam,Công nghiệp,HOSE
+VIH,Công ty Cổ phần Viglacera Hà Nội,Công nghiệp,UPCOM
 CLM,Công ty Cổ phần Xuất nhập khẩu Than - Vinacomin,Nguyên vật liệu,HNX
-VFS,Công ty Cổ phần Chứng khoán Nhất Việt,Tài chính,HNX
-VHL,Công ty Cổ phần Viglacera Hạ Long,Công nghiệp,HNX
-VIC,Tập đoàn Vingroup - Công ty CP,Tài chính,HOSE
-VIC,Tập đoàn Vingroup - Công ty CP,Tài chính,VN30
-VE1,Công ty Cổ phần Xây dựng điện VNECO 1,Công nghiệp,HNX
-VID,Công ty Cổ phần Đầu tư Phát triển Thương mại Viễn Đông,Nguyên vật liệu,HOSE
-VGS,Công ty Cổ phần Ống thép Việt - Đức VG PIPE,Nguyên vật liệu,HNX
-VGC,Tổng Công ty Viglacera - Công ty Cổ phần,Công nghiệp,HOSE
-TVT,Tổng Công ty Việt Thắng - CTCP,Hàng Tiêu dùng,HOSE
-VIB,Ngân hàng Thương mại Cổ phần Quốc tế Việt Nam,Ngân hàng,HOSE
-VIB,Ngân hàng Thương mại Cổ phần Quốc tế Việt Nam,Ngân hàng,VN30
+VCM,Công ty Cổ phần BV Life,Công nghiệp,HNX
 DVM,Công ty Cổ phần Dược liệu Việt Nam,Dược phẩm và Y tế,HNX
-DVM,Công ty Cổ phần Dược liệu Việt Nam,Dược phẩm và Y tế,HNX30
+VTD,Công ty Cổ phần Vietourist Holdings,Dịch vụ Tiêu dùng,UPCOM
+VCI,Công ty Cổ phần Chứng khoán Vietcap,Tài chính,HOSE
+VCT,Công ty Cổ phần Tư vấn Xây dựng Vinaconex,Công nghiệp,UPCOM
+VDB,Công ty Cổ phần Vận tải và Chế biến Than Đông Bắc,Nguyên vật liệu,UPCOM
+VDL,Công ty Cổ phần Thực phẩm Lâm Đồng,Hàng Tiêu dùng,HNX
+VDN,Công ty Cổ phần Vinatex Đà Nẵng,Hàng Tiêu dùng,UPCOM
+VDS,Công ty Cổ phần Chứng khoán Rồng Việt,Tài chính,HOSE
+VDT,Công ty Cổ phần Lưới thép Bình Tây,Nguyên vật liệu,UPCOM
+VE1,Công ty Cổ phần Xây dựng điện VNECO 1,Công nghiệp,HNX
+VE4,Công ty Cổ phần Xây dựng điện VNECO4,Công nghiệp,HNX
+VE9,Công ty Cổ phần Đầu tư và Xây dựng VNECO 9,Công nghiệp,UPCOM
+VEA,Tổng Công ty Máy động lực và Máy nông nghiệp Việt Nam - CTCP,Công nghiệp,UPCOM
+VEC,Tổng Công ty Cổ phần Điện tử và Tin học Việt Nam,Công nghệ Thông tin,UPCOM
+VES,Công ty Cổ phần Đầu tư và Xây dựng Điện MÊ CA VNECO,Tài chính,UPCOM
+VFC,Công ty Cổ phần VINAFCO,Công nghiệp,UPCOM
+VFG,Công ty Cổ phần Khử trùng Việt Nam,Nguyên vật liệu,HOSE
+VFR,Công ty Cổ phần Vận tải và Thuê tàu,Công nghiệp,UPCOM
+VFS,Công ty Cổ phần Chứng khoán Nhất Việt,Tài chính,HNX
+VGS,Công ty Cổ phần Ống thép Việt - Đức VG PIPE,Nguyên vật liệu,HNX
+VUA,Công ty Cổ phần Chứng khoán Stanley Brothers,Tài chính,UPCOM
+NDT,Tổng Công ty Cổ phần Dệt may Nam Định,Hàng Tiêu dùng,UPCOM
+VHF,Công ty Cổ phần Xây dựng và Chế biến lương thực Vĩnh Hà,Hàng Tiêu dùng,UPCOM
+VHH,Công ty Cổ phần Đầu tư Kinh doanh nhà Thành Đạt,Công nghiệp,UPCOM
+PVO,Công ty Cổ phần Dầu nhờn PV Oil,Nguyên vật liệu,UPCOM
 VDP,Công ty Cổ phần Dược phẩm Trung ương VIDIPHA,Dược phẩm và Y tế,HOSE
+VMT,Công ty Cổ phần Giao nhận Vận tải Miền Trung,Công nghiệp,UPCOM
+VIE,Công ty Cổ phần Công nghệ Viễn thông VI TE CO,Công nghệ Thông tin,UPCOM
+VJC,Công ty Cổ phần Hàng không Vietjet,Dịch vụ Tiêu dùng,HOSE
 VIG,Công ty Cổ phần Chứng khoán Đầu tư Tài chính Việt Nam,Tài chính,HNX
-VPD,Công ty Cổ phần Phát triển Điện lực Việt Nam,Tiện ích Cộng đồng,HOSE
-VNS,Công ty Cổ phần Ánh Dương Việt Nam,Dịch vụ Tiêu dùng,HOSE
+VPS,Công ty Cổ phần Thuốc sát trùng Việt Nam,Nguyên vật liệu,HOSE
+VGR,Công ty Cổ phần Cảng xanh VIP,Công nghiệp,UPCOM
+VLC,Tổng Công ty Chăn nuôi Việt Nam - Công ty Cổ phần,Hàng Tiêu dùng,UPCOM
+VIM,Công ty Cổ phần Khoáng sản Viglacera,Nguyên vật liệu,UPCOM
+TVM,Công ty Cổ phần Tư vấn đầu tư Mỏ và công nghiệp - Vinacomin,Công nghiệp,UPCOM
+TMG,Công ty Cổ phần Kim loại màu Thái Nguyên - Vimico,Nguyên vật liệu,UPCOM
+VIN,Công ty Cổ phần Giao nhận Kho vận Ngoại thương Việt Nam,Công nghiệp,UPCOM
+VIR,Công ty Cổ phần Du lịch Quốc tế Vũng Tàu,Dịch vụ Tiêu dùng,UPCOM
 DTK,Tổng Công ty Điện lực TKV - Công ty Cổ phần,Tiện ích Cộng đồng,HNX
-VIT,Công ty Cổ phần Viglacera Tiên Sơn,Công nghiệp,HNX
-VOS,Công ty Cổ phần Vận tải Biển Việt Nam,Công nghiệp,HOSE
-VSH,Công ty Cổ phần Thủy điện Vĩnh Sơn - Sông Hinh,Tiện ích Cộng đồng,HOSE
-VSI,Công ty Cổ phần Đầu tư và Xây dựng Cấp thoát nước,Tài chính,HOSE
-VTB,Công ty Cổ phần Viettronics Tân Bình,Công nghiệp,HOSE
+VHE,Công ty Cổ phần Dược liệu và Thực phẩm Việt Nam,Dược phẩm và Y tế,HNX
+VHD,Công ty Cổ phần Đầu tư phát triển nhà và đô thị VINAHUD,Tài chính,UPCOM
+VVN,Tổng Công ty Cổ phần Xây dựng Công nghiệp Việt Nam,Công nghiệp,UPCOM
+KIP,Công ty Cổ phần K.I.P Việt Nam,Công nghiệp,UPCOM
+VGT,Tập đoàn Dệt May Việt Nam,Hàng Tiêu dùng,UPCOM
+VGL,Công ty Cổ phần Mạ kẽm công nghiệp Vingal-Vnsteel,Nguyên vật liệu,UPCOM
 VIP,Công ty Cổ phần Vận tải Xăng dầu VIPCO,Công nghiệp,HOSE
+GVT,Công ty Cổ phần Giấy Việt Trì,Nguyên vật liệu,UPCOM
+VIT,Công ty Cổ phần Viglacera Tiên Sơn,Công nghiệp,HNX
+VWS,Công ty Cổ phần Nước và Môi trường Việt Nam,Tiện ích Cộng đồng,UPCOM
+VIW,Tổng công ty Đầu tư Nước và Môi trường Việt Nam - Công ty Cổ phần,Công nghiệp,UPCOM
+VLP,Công ty Cổ phần Công trình Công cộng Vĩnh Long,Công nghiệp,UPCOM
 VIX,Công ty Cổ phần Chứng khoán VIX,Tài chính,HOSE
+VKC,Công ty Cổ phần VKC Holdings,Hàng Tiêu dùng,UPCOM
+VKP,Công ty Cổ phần Nhựa Tân Hóa,Nguyên vật liệu,UPCOM
+VSN,Công ty Cổ phần Việt Nam Kỹ Nghệ Súc Sản,Hàng Tiêu dùng,UPCOM
+VLA,Công ty Cổ phần Đầu tư và Phát triển Công nghệ Văn Lang,Công nghệ Thông tin,HNX
+VLF,Công ty Cổ phần Lương thực Thực phẩm Vĩnh Long,Hàng Tiêu dùng,UPCOM
 VMC,Công ty Cổ phần VIMECO,Công nghiệp,HNX
 VMD,Công ty Cổ phần Y Dược phẩm Vimedimex,Dược phẩm và Y tế,HOSE
+ABC,Công ty Cổ phần Truyền thông VMG,Viễn thông,UPCOM
+MGC,Công ty Cổ phần Địa chất mỏ - TKV,Nguyên vật liệu,UPCOM
+MTS,Công ty Cổ phần Vật tư - TKV,Công nghiệp,UPCOM
+AIC,Công ty Cổ phần Tập đoàn Bảo hiểm DBV,Tài chính,UPCOM
 VMS,Công ty Cổ phần Phát triển Hàng Hải,Công nghiệp,HNX
-HVN,Tổng Công ty Hàng không Việt Nam - CTCP,Dịch vụ Tiêu dùng,HOSE
-TMB,Công ty Cổ phần Kinh doanh Than Miền Bắc - Vinacomin,Nguyên vật liệu,HNX
-TMB,Công ty Cổ phần Kinh doanh Than Miền Bắc - Vinacomin,Nguyên vật liệu,HNX30
-VND,Công ty Cổ phần Chứng khoán VNDIRECT,Tài chính,HOSE
+VMG,Công ty Cổ phần Thương mại và Dịch vụ Dầu khí Vũng Tàu,Tiện ích Cộng đồng,UPCOM
 VNE,Tổng Công ty Cổ phần Xây dựng điện Việt Nam,Công nghiệp,HOSE
+E12,Công ty Cổ phần Xây Dựng Điện VNECO 12,Công nghiệp,UPCOM
+VMA,Công ty Cổ phần Công nghiệp Ô tô - Vinacomin,Hàng Tiêu dùng,UPCOM
+VNA,Công ty Cổ phần Vận tải biển Vinaship,Công nghiệp,UPCOM
+BMV,Công ty Cổ phần Bột mỳ Vinafood 1,Hàng Tiêu dùng,UPCOM
+HVN,Tổng Công ty Hàng không Việt Nam - CTCP,Dịch vụ Tiêu dùng,HOSE
 VNG,Công ty Cổ phần Du Lịch Thành Thành Công,Dịch vụ Tiêu dùng,HOSE
-VNL,Công ty Cổ phần Logistics Vinalink,Công nghiệp,HOSE
-GVR,Tập đoàn Công nghiệp Cao su Việt Nam - Công ty Cổ phần,Nguyên vật liệu,HOSE
-GVR,Tập đoàn Công nghiệp Cao su Việt Nam - Công ty Cổ phần,Nguyên vật liệu,VN30
+VNH,Công ty Cổ phần Đầu tư Việt Việt Nhật,Hàng Tiêu dùng,UPCOM
+MVN,Tổng Công ty Hàng hải Việt Nam - CTCP,Công nghiệp,UPCOM
+VLG,Công ty Cổ phần VIMC Logistics,Công nghiệp,UPCOM
+VPD,Công ty Cổ phần Phát triển Điện lực Việt Nam,Tiện ích Cộng đồng,HOSE
+VNP,Công ty Cổ phần Nhựa Việt Nam,Nguyên vật liệu,UPCOM
+VNC,Công ty Cổ phần Tập đoàn Vinacontrol,Công nghiệp,HNX
+VGV,Tổng Công ty Tư vấn Xây dựng Việt Nam - CTCP,Tài chính,UPCOM
 VNT,Công ty Cổ phần Giao nhận Vận tải Ngoại Thương,Công nghiệp,HNX
-YBM,Công ty Cổ phần Khoáng sản Công nghiệp Yên Bái,Nguyên vật liệu,HOSE
-YEG,Công ty Cổ phần Tập đoàn Yeah1,Dịch vụ Tiêu dùng,HOSE
+CGV,Công ty Cổ phần Vinaceglass,Công nghiệp,UPCOM
+VPW,Công ty Cổ phần Cấp thoát nước số 1 Vĩnh Phúc,Tiện ích Cộng đồng,UPCOM
+VQC,Công ty Cổ phần Giám định Vinaconmin,Công nghiệp,UPCOM
+VSC,Công ty Cổ phần Container Việt Nam,Công nghiệp,HOSE
+TMB,Công ty Cổ phần Kinh doanh Than Miền Bắc - Vinacomin,Nguyên vật liệu,HNX
+VND,Công ty Cổ phần Chứng khoán VNDIRECT,Tài chính,HOSE
+VNF,Công ty Cổ phần Vinafreight,Công nghiệp,HNX
+VSF,Tổng Công ty Lương thực Miền Nam - Công ty Cổ phần,Hàng Tiêu dùng,UPCOM
+VNZ,Công ty Cổ phần Tập đoàn VNG,Dịch vụ Tiêu dùng,UPCOM
+VNI,Công ty Cổ phần Đầu tư Bất động sản Việt Nam,Tài chính,UPCOM
+VTM,Công ty Cổ phần Vận tải và Đưa đón thợ mỏ - Vinacomin,Dịch vụ Tiêu dùng,UPCOM
+VNL,Công ty Cổ phần Logistics Vinalink,Công nghiệp,HOSE
+VTV,Công ty Cổ phần Năng lượng và Môi trường VICEM,Công nghiệp,HNX
+VNM,Công ty Cổ phần Sữa Việt Nam,Hàng Tiêu dùng,HOSE
+DVN,Tổng Công ty Dược Việt Nam - CTCP,Dược phẩm và Y tế,UPCOM
+VNR,Tổng Công ty Cổ phần Tái bảo hiểm Quốc gia Việt Nam,Tài chính,HNX
+GVR,Tập đoàn Công nghiệp Cao su Việt Nam - Công ty Cổ phần,Nguyên vật liệu,HOSE
+VNS,Công ty Cổ phần Ánh Dương Việt Nam,Dịch vụ Tiêu dùng,HOSE
+CQT,Công ty Cổ phần Xi măng Quán Triều VVMI,Công nghiệp,UPCOM
+TVN,Tổng Công ty Thép Việt Nam - Công ty Cổ phần,Nguyên vật liệu,UPCOM
+XPH,Công ty Cổ phần Xà phòng Hà Nội,Hàng Tiêu dùng,UPCOM
+VPH,Công ty Cổ phần Vạn Phát Hưng,Tài chính,HOSE
+VXT,Công ty Cổ phần Kho vận và dịch vụ thương mại,Công nghiệp,UPCOM
+VNY,Công ty Cổ phần Thuốc thú y Trung ương I,Nguyên vật liệu,UPCOM
+VNX,Công ty Cổ phần Quảng cáo và Hội chợ Thương mại Vinexad,Dịch vụ Tiêu dùng,UPCOM
+VOC,Tổng Công ty Công nghiệp Dầu thực vật Việt Nam - Công ty Cổ phần,Hàng Tiêu dùng,UPCOM
+VOS,Công ty Cổ phần Vận tải Biển Việt Nam,Công nghiệp,HOSE
+VPR,Công ty Cổ phần VINAPRINT,Dịch vụ Tiêu dùng,UPCOM
+VPI,Công ty Cổ phần Phát triển Bất động sản Văn Phú,Tài chính,HOSE
 VSA,Công ty Cổ phần Đại lý Hàng hải Việt Nam,Công nghiệp,HNX
 VPB,Ngân hàng Thương mại Cổ phần Việt Nam Thịnh Vượng,Ngân hàng,HOSE
-VPB,Ngân hàng Thương mại Cổ phần Việt Nam Thịnh Vượng,Ngân hàng,VN30
-VPI,Công ty Cổ phần Đầu tư Văn Phú - Invest,Tài chính,HOSE
+VRG,Công ty Cổ phần Phát triển Đô thị và Khu Công nghiệp Cao Su Việt Nam,Tài chính,UPCOM
+VPC,Công ty Cổ phần Đầu tư và Phát triển Năng lượng Việt Nam,Công nghiệp,UPCOM
 VPG,Công ty Cổ phần Đầu tư Thương mại Xuất nhập khẩu Việt Phát,Nguyên vật liệu,HOSE
-VPH,Công ty Cổ phần Vạn Phát Hưng,Tài chính,HOSE
-VSC,Công ty Cổ phần Container Việt Nam,Công nghiệp,HOSE
+VPL,Công ty Cổ phần Vinpearl,Dịch vụ Tiêu dùng,HOSE
+VPA,Công ty Cổ phần Vận tải Hóa dầu VP,Công nghiệp,UPCOM
+NVP,Công ty Cổ phần Nước sạch Vĩnh Phúc,Tiện ích Cộng đồng,UPCOM
 VRC,Công ty Cổ phần Bất động sản và Đầu tư VRC,Tài chính,HOSE
-VTH,Công ty Cổ phần Dây cáp điện Việt Thái,Công nghiệp,HNX
+WSS,Công ty Cổ phần Chứng khoán Phố Wall,Tài chính,HNX
+XHC,Công ty Cổ phần Xuân Hòa Việt Nam,Hàng Tiêu dùng,UPCOM
 VRE,Công ty Cổ phần Vincom Retail,Tài chính,HOSE
-VRE,Công ty Cổ phần Vincom Retail,Tài chính,VN30
+VSE,Công ty Cổ phần Dịch vụ Đường cao tốc Việt Nam,Công nghiệp,UPCOM
+VSG,Công ty Cổ phần Container Phía Nam,Công nghiệp,UPCOM
+VSH,Công ty Cổ phần Thủy điện Vĩnh Sơn - Sông Hinh,Tiện ích Cộng đồng,HOSE
+VSI,Công ty Cổ phần Đầu tư và Xây dựng Cấp thoát nước,Công nghiệp,HOSE
+VST,Công ty Cổ phần Vận tải và Thuê Tàu biển Việt Nam,Công nghiệp,UPCOM
+YEG,Công ty Cổ phần Tập đoàn Yeah1,Dịch vụ Tiêu dùng,HOSE
+VTA,Công ty Cổ phần VITALY,Công nghiệp,UPCOM
+VTB,Công ty Cổ phần Viettronics Tân Bình,Công nghiệp,HOSE
+VTC,Công ty Cổ phần Viễn Thông VTC,Công nghệ Thông tin,HNX
+VTE,Công ty Cổ phần VINACAP Kim Long,Công nghệ Thông tin,UPCOM
+VGG,Tổng Công Ty Cổ phần May Việt Tiến,Hàng Tiêu dùng,UPCOM
+VGI,Tổng Công ty Cổ phần Đầu tư Quốc tế Viettel,Viễn thông,UPCOM
+VTH,Công ty Cổ phần Dây cáp điện Việt Thái,Công nghiệp,HNX
+VTI,Công ty Cổ phần Sản xuất - Xuất nhập khẩu Dệt may,Hàng Tiêu dùng,UPCOM
 VTJ,Công ty Cổ phần Thương mại và Đầu tư VI NA TA BA,Hàng Tiêu dùng,HNX
+VTK,Công ty Cổ phần Tư vấn và Dịch vụ Viettel,Công nghiệp,UPCOM
 VTO,Công ty Cổ phần Vận tải Xăng dầu VITACO,Công nghiệp,HOSE
 VTP,Tổng Công ty Cổ phần Bưu chính Viettel,Công nghiệp,HOSE
-VTC,Công ty Cổ phần Viễn Thông VTC,Công nghệ Thông tin,HNX
-WSS,Công ty Cổ phần Chứng khoán Phố Wall,Tài chính,HNX
-VTV,Công ty Cổ phần Năng lượng và Môi trường VICEM,Công nghiệp,HNX
+VTQ,Công ty Cổ phần Việt Trung Quảng Bình,Nguyên vật liệu,UPCOM
+VTS,Công ty Cổ phần Gạch Ngói Từ Sơn,Công nghiệp,UPCOM
+VBB,Ngân hàng Thương mại Cổ phần Việt Nam Thương Tín,Ngân hàng,UPCOM
+DLT,Công ty Cổ phần Du lịch và Thương mại - Vinacomin,Dịch vụ Tiêu dùng,UPCOM
+YTC,Công ty Cổ phần Xuất nhập khẩu Y tế Thành phố Hồ Chí Minh,Dược phẩm và Y tế,UPCOM
+VTX,Công ty Cổ phần Vận tải Đa phương thức VIETRANSTIMEX,Công nghiệp,UPCOM
 CLH,Công ty Cổ phần Xi măng La Hiên VVMI,Công nghiệp,HNX
+VLW,Công ty Cổ phần Cấp nước Vĩnh Long,Tiện ích Cộng đồng,UPCOM
+VW3,Công ty Cổ phần VIWASEEN3,Công nghiệp,UPCOM
+VCW,Công ty Cổ phần Đầu tư Nước sạch Sông Đà,Tiện ích Cộng đồng,UPCOM
+VXB,Công ty Cổ phần Vật liệu xây dựng Bến Tre,Công nghiệp,UPCOM
+VXP,Công ty Cổ phần Thuốc Thú y Trung ương VETVACO,Nguyên vật liệu,UPCOM
 WCS,Công ty Cổ phần Bến xe Miền Tây,Công nghiệp,HNX
+WSB,Công ty Cổ phần Bia Sài Gòn - Miền Tây,Hàng Tiêu dùng,UPCOM
+WTC,Công ty Cổ phần Vận tải thủy - Vinacomin,Công nghiệp,UPCOM
 X20,Công ty Cổ phần X20,Hàng Tiêu dùng,HNX
+X26,Công ty Cổ phần 26,Hàng Tiêu dùng,UPCOM
+X77,Công ty Cổ phần Thành An 77,Công nghiệp,UPCOM
+DFC,Công ty Cổ phần Xích líp Đông Anh,Nguyên vật liệu,UPCOM
+XMC,Công ty cổ phần Đầu tư và Xây dựng Xuân Mai,Công nghiệp,UPCOM
+XMD,Công ty Cổ phần Xuân Mai - Đạo Tú,Công nghiệp,UPCOM
+XMP,Công ty Cổ phần Thủy điện Xuân Minh,Tiện ích Cộng đồng,UPCOM
+YBC,Công ty Cổ phần Xi măng và Khoáng sản Yên Bái,Công nghiệp,UPCOM
+YBM,Công ty Cổ phần Khoáng sản Công nghiệp Yên Bái,Nguyên vật liệu,HOSE
