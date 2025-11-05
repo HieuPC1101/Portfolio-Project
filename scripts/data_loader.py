@@ -253,3 +253,36 @@ def fetch_fundamental_data_batch(symbols):
     else:
         print(f"\n✗ Không thể lấy dữ liệu phân tích cơ bản cho bất kỳ cổ phiếu nào")
         return pd.DataFrame()
+
+
+def fetch_ohlc_data(ticker, start_date, end_date):
+    """
+    Lấy dữ liệu OHLC (Open, High, Low, Close) cho một cổ phiếu.
+    
+    Args:
+        ticker (str): Mã cổ phiếu
+        start_date (str): Ngày bắt đầu (định dạng 'YYYY-MM-DD')
+        end_date (str): Ngày kết thúc (định dạng 'YYYY-MM-DD')
+    
+    Returns:
+        pd.DataFrame: DataFrame chứa dữ liệu OHLC với các cột time, open, high, low, close, volume
+    """
+    try:
+        stock = Vnstock().stock(symbol=ticker, source='VCI')
+        stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
+        
+        if stock_data is not None and not stock_data.empty:
+            # Lấy các cột cần thiết cho biểu đồ nến
+            required_columns = ['time', 'open', 'high', 'low', 'close', 'volume']
+            available_columns = [col for col in required_columns if col in stock_data.columns]
+            
+            ohlc_data = stock_data[available_columns].copy()
+            ohlc_data['time'] = pd.to_datetime(ohlc_data['time'])
+            
+            return ohlc_data
+        else:
+            print(f"Không có dữ liệu OHLC cho {ticker}")
+            return pd.DataFrame()
+    except Exception as e:
+        print(f"Lỗi khi lấy dữ liệu OHLC cho {ticker}: {str(e)}")
+        return pd.DataFrame()

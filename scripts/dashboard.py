@@ -25,7 +25,8 @@ from scripts.data_loader import (
     fetch_stock_data2,
     get_latest_prices,
     calculate_metrics,
-    fetch_fundamental_data_batch
+    fetch_fundamental_data_batch,
+    fetch_ohlc_data
 )
 from scripts.portfolio_models import (
     markowitz_optimization,
@@ -41,9 +42,10 @@ from scripts.visualization import (
     plot_stock_chart_with_forecast,
     plot_efficient_frontier,
     display_results,
-    backtest_portfolio
+    backtest_portfolio,
+    plot_candlestick_chart
 )
-from scripts.forecasting_models import get_forecast
+from scripts.forecasting_models import get_forecast, backtest_forecast
 from scripts.ui_components import (
     display_selected_stocks,
     display_selected_stocks_2
@@ -158,8 +160,7 @@ def run_models(data):
 
                         # Hiển thị kết quả backtesting
                         if backtest_result:
-                            st.write(f"Mean Sharpe Ratio: {backtest_result['Sharpe Ratio']:.2f}")
-                            st.write(f"Maximum Drawdown: {backtest_result['Maximum Drawdown']:.2%}")
+                            pass  
                         else:
                             st.error("Không thể thực hiện Backtesting. Vui lòng kiểm tra dữ liệu đầu vào.")
                 else:
@@ -183,39 +184,10 @@ def main_manual_selection():
         if not data.empty:
             st.subheader("Giá cổ phiếu")
             
-            # === THÊM UI CHỌN CHỈ BÁO KỸ THUẬT ===
-            with st.expander("Chỉ báo kỹ thuật", expanded=False):
-                st.markdown("*Chọn các chỉ báo kỹ thuật để hiển thị trên biểu đồ*")
-                
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    show_sma_20 = st.checkbox("SMA(20) - Đường trung bình động đơn giản 20 ngày", value=False)
-                    show_sma_50 = st.checkbox("SMA(50) - Đường trung bình động đơn giản 50 ngày", value=False)
-                    show_ema_20 = st.checkbox("EMA(20) - Đường trung bình động mũ 20 ngày", value=False)
-                    show_ema_50 = st.checkbox("EMA(50) - Đường trung bình động mũ 50 ngày", value=False)
-                
-                with col2:
-                    show_rsi = st.checkbox("RSI - Chỉ số sức mạnh tương đối", value=False)
-                    show_macd = st.checkbox("MACD - Phân kỳ hội tụ trung bình động", value=False)
-                    show_bb = st.checkbox("Bollinger Bands - Dải Bollinger", value=False)
-            
-            # Tạo danh sách chỉ báo được chọn
-            selected_indicators = []
-            if show_sma_20:
-                selected_indicators.append('SMA_20')
-            if show_sma_50:
-                selected_indicators.append('SMA_50')
-            if show_ema_20:
-                selected_indicators.append('EMA_20')
-            if show_ema_50:
-                selected_indicators.append('EMA_50')
-            if show_rsi:
-                selected_indicators.append('RSI')
-            if show_macd:
-                selected_indicators.append('MACD')
-            if show_bb:
-                selected_indicators.append('BB')
+            # === THÊM OPTION BIỂU ĐỒ NẾN ===
+            show_candlestick = False
+            if len(selected_stocks) == 1:
+                show_candlestick = st.checkbox("Hiển thị biểu đồ nến (Candlestick)", value=False, key="candlestick_1")
             
             # === THÊM UI DỰ BÁO ===
             with st.expander("Dự báo giá cổ phiếu", expanded=False):
@@ -258,7 +230,17 @@ def main_manual_selection():
                         st.info("Vui lòng chọn ít nhất 1 cổ phiếu để sử dụng chức năng dự báo.")
             
             # Vẽ biểu đồ giá cổ phiếu
-            if enable_forecast and len(selected_stocks) == 1:
+            if show_candlestick and len(selected_stocks) == 1:
+                # Hiển thị biểu đồ nến
+                ticker = selected_stocks[0]
+                with st.spinner(f"Đang tải dữ liệu OHLC cho {ticker}..."):
+                    ohlc_data = fetch_ohlc_data(ticker, data_loader_module.ANALYSIS_START_DATE, data_loader_module.ANALYSIS_END_DATE)
+                    if not ohlc_data.empty:
+                        plot_candlestick_chart(ohlc_data, ticker)
+                    else:
+                        st.error("Không thể tải dữ liệu OHLC. Hiển thị biểu đồ đường thay thế.")
+                        plot_interactive_stock_chart(data, selected_stocks)
+            elif enable_forecast and len(selected_stocks) == 1:
                 # Lấy dự báo
                 ticker = selected_stocks[0]
                 with st.spinner(f"Đang dự báo giá {ticker}..."):
@@ -268,23 +250,31 @@ def main_manual_selection():
                         method=forecast_method, 
                         forecast_periods=forecast_days
                     )
+                    
+                    # Thực hiện backtesting để tính các chỉ số đánh giá
+                    if forecast_result:
+                        with st.spinner("Đang tính toán các chỉ số đánh giá..."):
+                            backtest_result = backtest_forecast(
+                                data,
+                                ticker,
+                                method=forecast_method,
+                                test_periods=min(30, len(data) // 3)  # Sử dụng 30 ngày hoặc 1/3 dữ liệu cho test
+                            )
+                            
+                            if backtest_result and 'metrics' in backtest_result:
+                                # Thêm metrics vào forecast_result
+                                forecast_result['metrics'] = backtest_result['metrics']
                 
                 if forecast_result:
                     # Vẽ biểu đồ với dự báo
-                    plot_stock_chart_with_forecast(data, ticker, forecast_result, selected_indicators)
+                    plot_stock_chart_with_forecast(data, ticker, forecast_result, None)
                 else:
                     st.error("Không thể tạo dự báo. Vui lòng thử phương pháp khác hoặc tăng khoảng thời gian dữ liệu.")
                     # Vẽ biểu đồ bình thường
-                    if selected_indicators:
-                        plot_interactive_stock_chart_with_indicators(data, selected_stocks, selected_indicators)
-                    else:
-                        plot_interactive_stock_chart(data, selected_stocks)
+                    plot_interactive_stock_chart(data, selected_stocks)
             else:
                 # Vẽ biểu đồ bình thường
-                if selected_indicators:
-                    plot_interactive_stock_chart_with_indicators(data, selected_stocks, selected_indicators)
-                else:
-                    plot_interactive_stock_chart(data, selected_stocks)
+                plot_interactive_stock_chart(data, selected_stocks)
             
             # Chạy các mô hình
             run_models(data)
@@ -334,39 +324,10 @@ def main_auto_selection():
         if not data.empty:
             st.subheader("Giá cổ phiếu")
             
-            # === THÊM UI CHỌN CHỈ BÁO KỸ THUẬT ===
-            with st.expander("Chỉ báo kỹ thuật", expanded=False):
-                st.markdown("*Chọn các chỉ báo kỹ thuật để hiển thị trên biểu đồ*")
-                
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    show_sma_20_2 = st.checkbox("SMA(20) - Đường trung bình động đơn giản 20 ngày", value=False, key="sma20_2")
-                    show_sma_50_2 = st.checkbox("SMA(50) - Đường trung bình động đơn giản 50 ngày", value=False, key="sma50_2")
-                    show_ema_20_2 = st.checkbox("EMA(20) - Đường trung bình động mũ 20 ngày", value=False, key="ema20_2")
-                    show_ema_50_2 = st.checkbox("EMA(50) - Đường trung bình động mũ 50 ngày", value=False, key="ema50_2")
-                
-                with col2:
-                    show_rsi_2 = st.checkbox("RSI - Chỉ số sức mạnh tương đối", value=False, key="rsi_2")
-                    show_macd_2 = st.checkbox("MACD - Phân kỳ hội tụ trung bình động", value=False, key="macd_2")
-                    show_bb_2 = st.checkbox("Bollinger Bands - Dải Bollinger", value=False, key="bb_2")
-            
-            # Tạo danh sách chỉ báo được chọn
-            selected_indicators_2 = []
-            if show_sma_20_2:
-                selected_indicators_2.append('SMA_20')
-            if show_sma_50_2:
-                selected_indicators_2.append('SMA_50')
-            if show_ema_20_2:
-                selected_indicators_2.append('EMA_20')
-            if show_ema_50_2:
-                selected_indicators_2.append('EMA_50')
-            if show_rsi_2:
-                selected_indicators_2.append('RSI')
-            if show_macd_2:
-                selected_indicators_2.append('MACD')
-            if show_bb_2:
-                selected_indicators_2.append('BB')
+            # === THÊM OPTION BIỂU ĐỒ NẾN ===
+            show_candlestick_2 = False
+            if len(selected_stocks_2) == 1:
+                show_candlestick_2 = st.checkbox("Hiển thị biểu đồ nến (Candlestick)", value=False, key="candlestick_2")
             
             # === THÊM UI DỰ BÁO ===
             with st.expander("🔮 Dự báo giá cổ phiếu", expanded=False):
@@ -411,7 +372,17 @@ def main_auto_selection():
                         st.info("Vui lòng chọn ít nhất 1 cổ phiếu để sử dụng chức năng dự báo.")
             
             # Vẽ biểu đồ giá cổ phiếu
-            if enable_forecast_2 and len(selected_stocks_2) == 1:
+            if show_candlestick_2 and len(selected_stocks_2) == 1:
+                # Hiển thị biểu đồ nến
+                ticker = selected_stocks_2[0]
+                with st.spinner(f"Đang tải dữ liệu OHLC cho {ticker}..."):
+                    ohlc_data = fetch_ohlc_data(ticker, data_loader_module.ANALYSIS_START_DATE, data_loader_module.ANALYSIS_END_DATE)
+                    if not ohlc_data.empty:
+                        plot_candlestick_chart(ohlc_data, ticker)
+                    else:
+                        st.error("Không thể tải dữ liệu OHLC. Hiển thị biểu đồ đường thay thế.")
+                        plot_interactive_stock_chart(data, selected_stocks_2)
+            elif enable_forecast_2 and len(selected_stocks_2) == 1:
                 # Lấy dự báo
                 ticker = selected_stocks_2[0]
                 with st.spinner(f"Đang dự báo giá {ticker}..."):
@@ -421,23 +392,31 @@ def main_auto_selection():
                         method=forecast_method_2, 
                         forecast_periods=forecast_days_2
                     )
+                    
+                    # Thực hiện backtesting để tính các chỉ số đánh giá
+                    if forecast_result_2:
+                        with st.spinner("Đang tính toán các chỉ số đánh giá..."):
+                            backtest_result_2 = backtest_forecast(
+                                data,
+                                ticker,
+                                method=forecast_method_2,
+                                test_periods=min(30, len(data) // 3)  # Sử dụng 30 ngày hoặc 1/3 dữ liệu cho test
+                            )
+                            
+                            if backtest_result_2 and 'metrics' in backtest_result_2:
+                                # Thêm metrics vào forecast_result_2
+                                forecast_result_2['metrics'] = backtest_result_2['metrics']
                 
                 if forecast_result_2:
                     # Vẽ biểu đồ với dự báo
-                    plot_stock_chart_with_forecast(data, ticker, forecast_result_2, selected_indicators_2)
+                    plot_stock_chart_with_forecast(data, ticker, forecast_result_2, None)
                 else:
                     st.error("Không thể tạo dự báo. Vui lòng thử phương pháp khác hoặc tăng khoảng thời gian dữ liệu.")
                     # Vẽ biểu đồ bình thường
-                    if selected_indicators_2:
-                        plot_interactive_stock_chart_with_indicators(data, selected_stocks_2, selected_indicators_2)
-                    else:
-                        plot_interactive_stock_chart(data, selected_stocks_2)
+                    plot_interactive_stock_chart(data, selected_stocks_2)
             else:
                 # Vẽ biểu đồ bình thường
-                if selected_indicators_2:
-                    plot_interactive_stock_chart_with_indicators(data, selected_stocks_2, selected_indicators_2)
-                else:
-                    plot_interactive_stock_chart(data, selected_stocks_2)
+                plot_interactive_stock_chart(data, selected_stocks_2)
             
             # Chạy các mô hình
             run_models(data)
@@ -712,7 +691,7 @@ elif option == "Hệ thống đề xuất cổ phiếu tự động":
             fundamental_filters = {}
             if filter_method == "Phân tích cơ bản (Cổ phiếu giá trị)":
                 st.sidebar.markdown("---")
-                st.sidebar.subheader("📊 Tiêu chí phân tích cơ bản")
+                st.sidebar.subheader("Tiêu chí phân tích cơ bản")
                 
                 # Bộ lọc P/E
                 col1, col2 = st.sidebar.columns(2)

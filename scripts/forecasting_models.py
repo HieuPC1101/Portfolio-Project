@@ -343,25 +343,109 @@ def calculate_forecast_metrics(actual, forecast):
         forecast (pd.Series): Giá trị dự báo
         
     Returns:
-        dict: Các chỉ số RMSE, MAE, MAPE
+        dict: Các chỉ số MAE, MSE, RMSE, R², MAPE
     """
     if len(actual) != len(forecast):
         return None
     
     try:
-        # Root Mean Square Error
-        rmse = np.sqrt(np.mean((actual - forecast) ** 2))
-        
         # Mean Absolute Error
         mae = np.mean(np.abs(actual - forecast))
+        
+        # Mean Squared Error
+        mse = np.mean((actual - forecast) ** 2)
+        
+        # Root Mean Square Error
+        rmse = np.sqrt(mse)
+        
+        # R-squared (Coefficient of Determination)
+        ss_res = np.sum((actual - forecast) ** 2)  # Residual sum of squares
+        ss_tot = np.sum((actual - np.mean(actual)) ** 2)  # Total sum of squares
+        r2 = 1 - (ss_res / ss_tot) if ss_tot != 0 else 0
         
         # Mean Absolute Percentage Error
         mape = np.mean(np.abs((actual - forecast) / actual)) * 100
         
         return {
-            'RMSE': rmse,
             'MAE': mae,
+            'MSE': mse,
+            'RMSE': rmse,
+            'R2': r2,
             'MAPE': mape
         }
-    except:
+    except Exception as e:
+        print(f"Lỗi khi tính metrics: {str(e)}")
+        return None
+
+
+def backtest_forecast(data, ticker, method='auto', test_periods=30, **kwargs):
+    """
+    Kiểm tra độ chính xác của mô hình dự báo bằng cách dự báo trên dữ liệu lịch sử.
+    
+    Args:
+        data (pd.DataFrame): Dữ liệu giá cổ phiếu đầy đủ
+        ticker (str): Mã cổ phiếu
+        method (str): Phương pháp dự báo
+        test_periods (int): Số ngày để test (sử dụng làm tập test)
+        **kwargs: Tham số bổ sung cho phương pháp dự báo
+        
+    Returns:
+        dict: {
+            'metrics': dict - Các chỉ số đánh giá (MAE, MSE, RMSE, R², MAPE),
+            'actual': pd.Series - Giá trị thực tế trong tập test,
+            'predicted': pd.Series - Giá trị dự báo,
+            'train_data': pd.DataFrame - Dữ liệu huấn luyện
+        }
+    """
+    try:
+        if ticker not in data.columns:
+            return None
+        
+        # Chia dữ liệu thành train và test
+        prices = data[ticker].dropna()
+        if len(prices) < test_periods + 30:  # Cần ít nhất 30 ngày để train
+            return None
+        
+        # Tách dữ liệu
+        train_data = data.iloc[:-test_periods].copy()
+        actual_prices = prices.iloc[-test_periods:]
+        
+        # Thực hiện dự báo trên tập train
+        forecast_result = get_forecast(
+            train_data, 
+            ticker, 
+            method=method, 
+            forecast_periods=test_periods,
+            **kwargs
+        )
+        
+        if forecast_result is None:
+            return None
+        
+        forecast_values = forecast_result['forecast']
+        
+        # Căn chỉnh index để so sánh
+        # Lấy giá trị theo thứ tự thời gian
+        actual_values = actual_prices.values
+        predicted_values = forecast_values.values[:len(actual_values)]
+        
+        # Tính các chỉ số
+        metrics = calculate_forecast_metrics(
+            pd.Series(actual_values),
+            pd.Series(predicted_values)
+        )
+        
+        if metrics is None:
+            return None
+        
+        return {
+            'metrics': metrics,
+            'actual': pd.Series(actual_values, index=actual_prices.index),
+            'predicted': pd.Series(predicted_values, index=forecast_values.index[:len(actual_values)]),
+            'train_data': train_data,
+            'model_name': forecast_result.get('model_name', 'Unknown')
+        }
+        
+    except Exception as e:
+        print(f"Lỗi khi backtest cho {ticker}: {str(e)}")
         return None

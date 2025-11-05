@@ -380,6 +380,338 @@ def plot_interactive_stock_chart(data, tickers):
     st.plotly_chart(fig, use_container_width=True)
 
 
+def plot_candlestick_chart(ohlc_data, ticker):
+    """
+    Vẽ biểu đồ nến (Candlestick Chart) cho một cổ phiếu với các chỉ báo kỹ thuật.
+    
+    Args:
+        ohlc_data (pd.DataFrame): Dữ liệu OHLC với các cột time, open, high, low, close, volume
+        ticker (str): Mã cổ phiếu
+    """
+    if ohlc_data.empty:
+        st.warning("Không có dữ liệu OHLC để hiển thị biểu đồ nến.")
+        return
+    
+    # Tạo copy để tính toán chỉ báo
+    df = ohlc_data.copy()
+    
+    # Tính toán các chỉ báo kỹ thuật
+    # MA - Moving Average (20, 50)
+    df['MA20'] = df['close'].rolling(window=20).mean()
+    df['MA50'] = df['close'].rolling(window=50).mean()
+    
+    # EMA - Exponential Moving Average (12, 26)
+    df['EMA12'] = df['close'].ewm(span=12, adjust=False).mean()
+    df['EMA26'] = df['close'].ewm(span=26, adjust=False).mean()
+    
+    # Bollinger Bands (20, 2)
+    df['BB_middle'] = df['close'].rolling(window=20).mean()
+    df['BB_std'] = df['close'].rolling(window=20).std()
+    df['BB_upper'] = df['BB_middle'] + (df['BB_std'] * 2)
+    df['BB_lower'] = df['BB_middle'] - (df['BB_std'] * 2)
+    
+    # RSI - Relative Strength Index (14)
+    delta = df['close'].diff()
+    gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
+    rs = gain / loss
+    df['RSI'] = 100 - (100 / (1 + rs))
+    
+    # MACD - Moving Average Convergence Divergence
+    df['MACD'] = df['EMA12'] - df['EMA26']
+    df['MACD_signal'] = df['MACD'].ewm(span=9, adjust=False).mean()
+    df['MACD_hist'] = df['MACD'] - df['MACD_signal']
+    
+    # Tạo biểu đồ với 4 subplots
+    fig = make_subplots(
+        rows=4, cols=1,
+        shared_xaxes=True,
+        vertical_spacing=0.03,
+        row_heights=[0.5, 0.15, 0.15, 0.2],
+        subplot_titles=[
+            f'Biểu đồ nến - {ticker}',
+            'RSI (14)',
+            'MACD',
+            'Khối lượng giao dịch'
+        ]
+    )
+    
+    # Row 1: Biểu đồ nến với MA, EMA, Bollinger Bands
+    fig.add_trace(
+        go.Candlestick(
+            x=df['time'],
+            open=df['open'],
+            high=df['high'],
+            low=df['low'],
+            close=df['close'],
+            name=ticker,
+            increasing_line_color='#26a69a',
+            decreasing_line_color='#ef5350'
+        ),
+        row=1, col=1
+    )
+    
+    # Thêm MA20
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['MA20'],
+            name='MA(20)',
+            line=dict(color='#2962FF', width=1.5),
+            visible='legendonly'
+        ),
+        row=1, col=1
+    )
+    
+    # Thêm MA50
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['MA50'],
+            name='MA(50)',
+            line=dict(color='#FF6D00', width=1.5),
+            visible='legendonly'
+        ),
+        row=1, col=1
+    )
+    
+    # Thêm EMA12
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['EMA12'],
+            name='EMA(12)',
+            line=dict(color='#00897B', width=1.5, dash='dash'),
+            visible='legendonly'
+        ),
+        row=1, col=1
+    )
+    
+    # Thêm EMA26
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['EMA26'],
+            name='EMA(26)',
+            line=dict(color='#E91E63', width=1.5, dash='dash'),
+            visible='legendonly'
+        ),
+        row=1, col=1
+    )
+    
+    # Thêm Bollinger Bands
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['BB_upper'],
+            name='BB Upper',
+            line=dict(color='rgba(250, 128, 114, 0.5)', width=1),
+            visible='legendonly'
+        ),
+        row=1, col=1
+    )
+    
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['BB_middle'],
+            name='BB Middle',
+            line=dict(color='rgba(128, 128, 128, 0.5)', width=1),
+            fill=None,
+            visible='legendonly'
+        ),
+        row=1, col=1
+    )
+    
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['BB_lower'],
+            name='BB Lower',
+            line=dict(color='rgba(250, 128, 114, 0.5)', width=1),
+            fill='tonexty',
+            fillcolor='rgba(250, 128, 114, 0.1)',
+            visible='legendonly'
+        ),
+        row=1, col=1
+    )
+    
+    # Row 2: RSI
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['RSI'],
+            name='RSI',
+            line=dict(color='#9C27B0', width=2)
+        ),
+        row=2, col=1
+    )
+    
+    # Thêm ngưỡng RSI
+    fig.add_hline(y=70, line_dash="dash", line_color="red", opacity=0.5, row=2, col=1)
+    fig.add_hline(y=30, line_dash="dash", line_color="green", opacity=0.5, row=2, col=1)
+    
+    # Row 3: MACD
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['MACD'],
+            name='MACD',
+            line=dict(color='#2962FF', width=2)
+        ),
+        row=3, col=1
+    )
+    
+    fig.add_trace(
+        go.Scatter(
+            x=df['time'],
+            y=df['MACD_signal'],
+            name='Signal',
+            line=dict(color='#FF6D00', width=2)
+        ),
+        row=3, col=1
+    )
+    
+    # MACD Histogram
+    colors_macd = ['#26a69a' if val >= 0 else '#ef5350' for val in df['MACD_hist']]
+    fig.add_trace(
+        go.Bar(
+            x=df['time'],
+            y=df['MACD_hist'],
+            name='MACD Hist',
+            marker_color=colors_macd,
+            showlegend=False
+        ),
+        row=3, col=1
+    )
+    
+    # Row 4: Khối lượng
+    if 'volume' in df.columns:
+        colors = ['#26a69a' if df['close'].iloc[i] >= df['open'].iloc[i] 
+                  else '#ef5350' for i in range(len(df))]
+        
+        fig.add_trace(
+            go.Bar(
+                x=df['time'],
+                y=df['volume'],
+                name='Khối lượng',
+                marker_color=colors,
+                showlegend=False
+            ),
+            row=4, col=1
+        )
+    
+    # Cập nhật layout
+    fig.update_layout(
+        xaxis_rangeslider_visible=False,
+        height=1000,
+        hovermode='x unified',
+        template='plotly_white',
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        )
+    )
+    
+    fig.update_xaxes(title_text="Thời gian", row=4, col=1)
+    fig.update_yaxes(title_text="Giá (VND)", row=1, col=1)
+    fig.update_yaxes(title_text="RSI", row=2, col=1, range=[0, 100])
+    fig.update_yaxes(title_text="MACD", row=3, col=1)
+    fig.update_yaxes(title_text="Khối lượng", row=4, col=1)
+    
+    # Hiển thị biểu đồ
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Thêm hướng dẫn sử dụng
+    with st.expander("ℹ️ Hướng dẫn đọc chỉ báo kỹ thuật"):
+        st.markdown("""
+        **Các chỉ báo được hiển thị:**
+        
+        1. **MA (Moving Average)** - Đường trung bình động:
+           - MA(20): Xu hướng ngắn hạn (màu xanh dương)
+           - MA(50): Xu hướng trung hạn (màu cam)
+           - Khi giá > MA: Xu hướng tăng | Khi giá < MA: Xu hướng giảm
+        
+        2. **EMA (Exponential Moving Average)** - Đường trung bình động mũ:
+           - EMA(12): Phản ứng nhanh với giá (màu xanh lá, nét đứt)
+           - EMA(26): Phản ứng chậm hơn (màu hồng, nét đứt)
+           - Nhạy cảm hơn MA với thay đổi giá gần đây
+        
+        3. **Bollinger Bands** - Dải Bollinger:
+           - Dải trên & dải dưới: Đo biến động giá
+           - Khi giá chạm dải trên: Có thể quá mua
+           - Khi giá chạm dải dưới: Có thể quá bán
+        
+        4. **RSI (Relative Strength Index)** - Chỉ số sức mạnh tương đối:
+           - RSI > 70: Vùng quá mua (có thể điều chỉnh)
+           - RSI < 30: Vùng quá bán (có thể phục hồi)
+           - RSI = 50: Trạng thái trung lập
+        
+        5. **MACD (Moving Average Convergence Divergence)**:
+           - Đường MACD cắt lên Signal: Tín hiệu mua
+           - Đường MACD cắt xuống Signal: Tín hiệu bán
+           - Histogram dương/âm: Xu hướng tăng/giảm
+        
+        **Lưu ý:** Click vào tên chỉ báo trong legend để bật/tắt hiển thị.
+        """)
+    
+    # Hiển thị giá trị chỉ báo hiện tại
+    st.markdown("### Giá trị chỉ báo hiện tại")
+    col1, col2, col3, col4, col5 = st.columns(5)
+    
+    last_idx = df.index[-1]
+    with col1:
+        st.metric("MA(20)", f"{df['MA20'].iloc[-1]:,.0f}" if pd.notna(df['MA20'].iloc[-1]) else "N/A")
+        st.metric("MA(50)", f"{df['MA50'].iloc[-1]:,.0f}" if pd.notna(df['MA50'].iloc[-1]) else "N/A")
+    
+    with col2:
+        st.metric("EMA(12)", f"{df['EMA12'].iloc[-1]:,.0f}" if pd.notna(df['EMA12'].iloc[-1]) else "N/A")
+        st.metric("EMA(26)", f"{df['EMA26'].iloc[-1]:,.0f}" if pd.notna(df['EMA26'].iloc[-1]) else "N/A")
+    
+    with col3:
+        st.metric("BB Upper", f"{df['BB_upper'].iloc[-1]:,.0f}" if pd.notna(df['BB_upper'].iloc[-1]) else "N/A")
+        st.metric("BB Lower", f"{df['BB_lower'].iloc[-1]:,.0f}" if pd.notna(df['BB_lower'].iloc[-1]) else "N/A")
+    
+    with col4:
+        rsi_val = df['RSI'].iloc[-1]
+        if pd.notna(rsi_val):
+            if rsi_val > 70:
+                rsi_trend = "Quá mua"
+                rsi_color = "red"
+            elif rsi_val < 30:
+                rsi_trend = "Quá bán"
+                rsi_color = "green"
+            else:
+                rsi_trend = "Trung lập"
+                rsi_color = "gray"
+            st.markdown(f"<span style='font-size:20px'><b>RSI(14):</b> <span style='color:{rsi_color}'>{rsi_val:.2f} ({rsi_trend})</span></span>", unsafe_allow_html=True)
+        else:
+            st.metric("RSI(14)", "N/A")
+    
+    with col5:
+        macd_val = df['MACD'].iloc[-1]
+        signal_val = df['MACD_signal'].iloc[-1]
+        if pd.notna(macd_val) and pd.notna(signal_val):
+            if macd_val > signal_val:
+                macd_trend = "Tăng"
+                macd_color = "green"
+            elif macd_val < signal_val:
+                macd_trend = "Giảm"
+                macd_color = "red"
+            else:
+                macd_trend = "Trung lập"
+                macd_color = "gray"
+            st.markdown(f"<span style='font-size:20px'><b>MACD:</b> <span style='color:{macd_color}'>{macd_val:.2f} ({macd_trend})</span></span>", unsafe_allow_html=True)
+            st.metric("Signal", f"{signal_val:.2f}")
+        else:
+            st.metric("MACD", "N/A")
+            st.metric("Signal", "N/A")
+
+
 def plot_efficient_frontier(ret_arr, vol_arr, sharpe_arr, all_weights, tickers, max_sharpe_idx, optimal_weights):
     """
     Vẽ biểu đồ đường biên hiệu quả.
@@ -565,10 +897,86 @@ def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_
     # Tính toán chỉ số hiệu suất
     sharpe_ratio = portfolio_returns.mean() / portfolio_returns.std() * np.sqrt(252)
     max_drawdown = (cumulative_returns / cumulative_returns.cummax() - 1).min()
+    
+    # Tính toán các chỉ số bổ sung
+    # 1. Total Return (Lợi nhuận tổng)
+    total_return = (cumulative_returns.iloc[-1] - 1) * 100  # Phần trăm
+    
+    # 2. Annualized Return (Lợi nhuận hàng năm)
+    num_days = len(portfolio_returns)
+    num_years = num_days / 252
+    annualized_return = ((cumulative_returns.iloc[-1]) ** (1 / num_years) - 1) * 100 if num_years > 0 else 0
+    
+    # 3. Volatility (Độ biến động hàng năm)
+    volatility = portfolio_returns.std() * np.sqrt(252) * 100  # Phần trăm
+    
+    # 4. Sortino Ratio (chỉ xét độ lệch chuẩn của lợi nhuận âm)
+    negative_returns = portfolio_returns[portfolio_returns < 0]
+    downside_std = negative_returns.std() * np.sqrt(252)
+    sortino_ratio = (portfolio_returns.mean() * 252) / downside_std if downside_std > 0 else 0
+    
+    # 5. Alpha (so với benchmark đầu tiên nếu có)
+    alpha = 0
+    if benchmark_data:
+        first_benchmark = list(benchmark_data.keys())[0]
+        benchmark_returns = benchmark_data[first_benchmark].pct_change().dropna()
+        
+        # Đảm bảo cùng index
+        common_index = portfolio_returns.index.intersection(benchmark_returns.index)
+        portfolio_aligned = portfolio_returns.loc[common_index]
+        benchmark_aligned = benchmark_returns.loc[common_index]
+        
+        # Tính beta
+        covariance = np.cov(portfolio_aligned, benchmark_aligned)[0][1]
+        benchmark_variance = np.var(benchmark_aligned)
+        beta = covariance / benchmark_variance if benchmark_variance > 0 else 0
+        
+        # Tính alpha hàng năm
+        portfolio_annual_return = portfolio_aligned.mean() * 252
+        benchmark_annual_return = benchmark_aligned.mean() * 252
+        alpha = (portfolio_annual_return - benchmark_annual_return) * 100  # Phần trăm
+    
+    # 6. ROI (Return on Investment)
+    roi = total_return  # Giống Total Return cho backtesting
+    
+    # Tạo bảng thống kê tổng hợp
+    st.markdown("### Bảng Thống kê Tổng hợp")
+    
+    metrics_data = {
+        "Chỉ số": [
+            "Lợi nhuận tổng (Total Return)",
+            "Lợi nhuận hàng năm (Annualized Return)",
+            "ROI (Return on Investment)",
+            "Độ biến động (Volatility)",
+            "Sharpe Ratio",
+            "Sortino Ratio",
+            "Alpha",
+            "Maximum Drawdown"
+        ],
+        "Giá trị": [
+            f"{total_return:.2f}%",
+            f"{annualized_return:.2f}%",
+            f"{roi:.2f}%",
+            f"{volatility:.2f}%",
+            f"{sharpe_ratio:.4f}",
+            f"{sortino_ratio:.4f}",
+            f"{alpha:.2f}%",
+            f"{max_drawdown * 100:.2f}%"
+        ]
+    }
+    
+    metrics_df = pd.DataFrame(metrics_data)
+    st.table(metrics_df)
 
     return {
         "Sharpe Ratio": sharpe_ratio,
+        "Sortino Ratio": sortino_ratio,
         "Maximum Drawdown": max_drawdown,
+        "Total Return": total_return,
+        "Annualized Return": annualized_return,
+        "Volatility": volatility,
+        "Alpha": alpha,
+        "ROI": roi,
         "Cumulative Returns": cumulative_returns,
         "Skipped Tickers": skipped_tickers,
     }
@@ -886,3 +1294,64 @@ def plot_stock_chart_with_forecast(data, ticker, forecast_result=None, indicator
                             st.markdown(f"**Tham số ARIMA:** {params['order']}")
                         if 'aic' in params:
                             st.markdown(f"**AIC:** {params['aic']:.2f}")
+            
+            # Hiển thị các chỉ số đánh giá chất lượng dự báo nếu có
+            if 'metrics' in forecast_result and forecast_result['metrics'] is not None:
+                st.markdown("---")
+                st.markdown("**Chỉ số đánh giá chất lượng dự báo**")
+                
+                metrics = forecast_result['metrics']
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric("MAE", f"{metrics['MAE']:.4f}")
+                    st.caption("Mean Absolute Error")
+                    
+                with col2:
+                    st.metric("RMSE", f"{metrics['RMSE']:.4f}")
+                    st.caption("Root Mean Squared Error")
+                
+                with col3:
+                    st.metric("MAPE", f"{metrics['MAPE']:.2f}%")
+                    st.caption("Mean Absolute % Error")
+                
+                col4, col5 = st.columns(2)
+                with col4:
+                    st.metric("MSE", f"{metrics['MSE']:.4f}")
+                    st.caption("Mean Squared Error")
+                    
+                with col5:
+                    r2_value = metrics['R2']
+                    if r2_value > 0.9:
+                        r2_label = "Rất tốt"
+                    elif r2_value > 0.7:
+                        r2_label = "Tốt"
+                    elif r2_value > 0.5:
+                        r2_label = "Chấp nhận được"
+                    else:
+                        r2_label = "Kém"
+                    st.metric("R²", f"{r2_value:.4f}", delta=r2_label)
+                    st.caption("Coefficient of Determination")
+        
+        # Giải thích các chỉ số (expander riêng bên ngoài)
+        if forecast_result and 'metrics' in forecast_result and forecast_result['metrics'] is not None:
+            with st.expander("Giải thích các chỉ số đánh giá", expanded=False):
+                st.markdown("""
+                **MAE (Mean Absolute Error):** Sai số tuyệt đối trung bình. Giá trị càng nhỏ càng tốt.
+                
+                **MSE (Mean Squared Error):** Sai số bình phương trung bình. Giá trị càng nhỏ càng tốt.
+                
+                **RMSE (Root Mean Squared Error):** Căn bậc hai của MSE. Có cùng đơn vị với dữ liệu gốc, dễ diễn giải hơn.
+                
+                **R² (Hệ số xác định):** Đo lường mức độ phù hợp của mô hình. Giá trị từ 0 đến 1, càng gần 1 càng tốt.
+                - R² > 0.9: Rất tốt
+                - R² > 0.7: Tốt
+                - R² > 0.5: Chấp nhận được
+                - R² < 0.5: Kém
+                
+                **MAPE (Mean Absolute Percentage Error):** Sai số phần trăm tuyệt đối trung bình. Giá trị càng nhỏ càng tốt.
+                - MAPE < 10%: Rất tốt
+                - MAPE < 20%: Tốt
+                - MAPE < 50%: Chấp nhận được
+                - MAPE > 50%: Kém
+                """)
