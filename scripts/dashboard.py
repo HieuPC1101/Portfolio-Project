@@ -651,9 +651,9 @@ elif option == "Tự chọn mã cổ phiếu":
     if __name__ == "__main__":
         main_manual_selection()
 
-elif option == "Hệ thống đề xuất cổ phiếu tự động":
+elif option == "Hệ thống đề xuất mã cổ phiếu tự động":
     # Giao diện Streamlit
-    st.title("Hệ thống đề xuất cổ phiếu")
+    st.title("Hệ thống đề xuất mã cổ phiếu tự động")
     st.sidebar.title("Cấu hình đề xuất cổ phiếu")
 
     # Lấy trạng thái đã lưu
