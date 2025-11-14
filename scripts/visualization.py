@@ -1076,7 +1076,7 @@ def display_results(original_name, result):
 
 
 def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_func, 
-                       benchmark_symbols=["VNINDEX", "VN30"],
+                       benchmark_symbols=["VNINDEX", "VN30", "HNX30", "HNXINDEX"],
                        get_market_indices_func=None):
     """
     Hàm backtesting danh mục đầu tư.
@@ -1130,9 +1130,8 @@ def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_
                 benchmark_column_map = {
                     "VNINDEX": "vnindex",
                     "VN30": "vn30",
-                    "HNX30": "hnx_index",
+                    "HNX30": "hnx30",
                     "HNXINDEX": "hnx_index",
-                    "UPCOM": "upcom_index"
                 }
                 
                 for benchmark in benchmark_symbols:
@@ -1256,8 +1255,8 @@ def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_
         else:
             st.warning(f"Không có dữ liệu chung với benchmark {first_benchmark}")
 
-    # Tạo bảng thống kê tổng hợp
-    st.markdown("### Bảng Thống kê Tổng hợp")
+    # Tạo bảng thống kê tổng hợp 
+    st.markdown("### Bảng Thống kê Danh mục")
     
     metrics_data = {
         "Chỉ số": [
@@ -1266,7 +1265,6 @@ def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_
             "Độ biến động (Volatility)",
             "Sharpe Ratio",
             "Sortino Ratio",
-            "Alpha",
             "Maximum Drawdown"
         ],
         "Giá trị": [
@@ -1275,7 +1273,6 @@ def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_
             f"{volatility:.2f}%",
             f"{sharpe_ratio:.4f}",
             f"{sortino_ratio:.4f}",
-            f"{alpha:.2f}%",
             f"{max_drawdown * 100:.2f}%"
         ]
     }

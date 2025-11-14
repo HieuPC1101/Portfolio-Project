@@ -196,6 +196,8 @@ def create_database_schema(connection: psycopg2.extensions.connection) -> None:
             vnindex_change DECIMAL(10, 4),    -- % thay đổi VN-Index
             vn30 DECIMAL(15, 2),              -- Chỉ số VN30
             vn30_change DECIMAL(10, 4),       -- % thay đổi VN30
+            hnx30 DECIMAL(15, 2),             -- Chỉ số HNX30
+            hnx30_change DECIMAL(10, 4),      -- % thay đổi HNX30
             hnx_index DECIMAL(15, 2),         -- Chỉ số HNX-Index
             hnx_index_change DECIMAL(10, 4),  -- % thay đổi HNX-Index
             -- Thống kê giao dịch
@@ -209,6 +211,7 @@ def create_database_schema(connection: psycopg2.extensions.connection) -> None:
         
         CREATE INDEX IF NOT EXISTS idx_market_date ON market_summary(date DESC);
         CREATE INDEX IF NOT EXISTS idx_vnindex ON market_summary(vnindex);
+        CREATE INDEX IF NOT EXISTS idx_hnx30 ON market_summary(hnx30);
         """)
         logger.info("✓ Bảng 'market_summary' đã được tạo")
         
@@ -550,10 +553,10 @@ def load_market_summary_to_postgres(
                 row.get('vnindex_change'),
                 row.get('vn30'),
                 row.get('vn30_change'),
+                row.get('hnx30'),
+                row.get('hnx30_change'),
                 row.get('hnx_index'),
                 row.get('hnx_index_change'),
-                row.get('upcom_index'),
-                row.get('upcom_index_change'),
                 row.get('total_volume'),
                 row.get('total_value'),
                 row.get('advancing'),
@@ -564,7 +567,7 @@ def load_market_summary_to_postgres(
         insert_sql = """
         INSERT INTO market_summary 
             (date, vnindex, vnindex_change, vn30, vn30_change, 
-             hnx_index, hnx_index_change, upcom_index, upcom_index_change,
+             hnx30, hnx30_change, hnx_index, hnx_index_change,
              total_volume, total_value, advancing, declining, unchanged)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (date) 
@@ -573,10 +576,10 @@ def load_market_summary_to_postgres(
             vnindex_change = EXCLUDED.vnindex_change,
             vn30 = EXCLUDED.vn30,
             vn30_change = EXCLUDED.vn30_change,
+            hnx30 = EXCLUDED.hnx30,
+            hnx30_change = EXCLUDED.hnx30_change,
             hnx_index = EXCLUDED.hnx_index,
             hnx_index_change = EXCLUDED.hnx_index_change,
-            upcom_index = EXCLUDED.upcom_index,
-            upcom_index_change = EXCLUDED.upcom_index_change,
             total_volume = EXCLUDED.total_volume,
             total_value = EXCLUDED.total_value,
             advancing = EXCLUDED.advancing,

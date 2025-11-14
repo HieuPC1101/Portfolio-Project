@@ -401,10 +401,11 @@ def get_market_indices(start_date, end_date):
             vnindex_change,
             vn30,
             vn30_change,
+            hnx30,
+            hnx30_change,
             hnx_index,
-            hnx_index_change,
-            upcom_index,
-            upcom_index_change
+            hnx_index_change
+            
         FROM market_summary
         WHERE date BETWEEN %s AND %s
         ORDER BY date
