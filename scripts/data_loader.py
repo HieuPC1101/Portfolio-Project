@@ -419,7 +419,7 @@ def get_market_indices(start_date, end_date):
         
         if results:
             columns = ['date', 'vnindex', 'vnindex_change', 'vn30', 'vn30_change',
-                      'hnx_index', 'hnx_index_change', 'upcom_index', 'upcom_index_change']
+                      'hnx_index', 'hnx_index_change', 'hnx30', 'hnx30_change']
             df = pd.DataFrame(results, columns=columns)
             df['date'] = pd.to_datetime(df['date'])
             return df
