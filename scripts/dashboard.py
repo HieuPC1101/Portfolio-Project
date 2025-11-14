@@ -1,17 +1,17 @@
 """
 Dashboard chính - Ứng dụng Streamlit hỗ trợ tối ưu hóa danh mục đầu tư chứng khoán.
-File này import các module đã được tách riêng để dễ quản lý và bảo trì.
+Sử dụng dữ liệu từ PostgreSQL Database.
 """
 
+import streamlit as st
 import warnings
-# Tắt cảnh báo pkg_resources deprecated từ thư viện vnai
 warnings.filterwarnings('ignore', message='pkg_resources is deprecated')
 
 import pandas as pd
-import streamlit as st
-import datetime
-import sys
+import numpy as np
 import os
+import sys
+import datetime
 
 # Thêm đường dẫn để import các module
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -19,14 +19,18 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Import cấu hình
 from scripts.config import ANALYSIS_START_DATE, ANALYSIS_END_DATE, DEFAULT_MARKET, DEFAULT_INVESTMENT_AMOUNT
 
-# Import các module đã tách
+# Import data_loader_db thay vì data_loader
 from scripts.data_loader import (
     fetch_data_from_csv,
     fetch_stock_data2,
     get_latest_prices,
     calculate_metrics,
-    fetch_ohlc_data
+    fetch_ohlc_data,
+    fetch_fundamental_data_batch,
+    get_market_indices
 )
+
+# Import các module khác
 from scripts.portfolio_models import (
     markowitz_optimization,
     max_sharpe,
@@ -35,6 +39,7 @@ from scripts.portfolio_models import (
     min_cdar,
     hrp_model
 )
+# Sử dụng visualization_db thay vì visualization để hỗ trợ database
 from scripts.visualization import (
     plot_interactive_stock_chart,
     plot_interactive_stock_chart_with_indicators,
@@ -52,9 +57,6 @@ from scripts.ui_components import (
     display_selected_stocks,
     display_selected_stocks_2
 )
-from scripts.market_overview import (
-    show_sector_overview_page
-)
 from scripts.session_manager import (
     initialize_session_state,
     save_manual_filter_state,
@@ -68,6 +70,8 @@ from scripts.chatbot_ui import (
     render_chatbot_page,
     render_chat_controls
 )
+
+# Import market_overview_db
 import scripts.data_loader as data_loader_module
 
 # Đường dẫn đến file CSV
@@ -79,6 +83,9 @@ df = fetch_data_from_csv(file_path)
 
 # Khởi tạo session state khi ứng dụng khởi động
 initialize_session_state()
+
+# Thêm thông báo rằng đang sử dụng database
+st.sidebar.info("📊 Sử dụng dữ liệu từ PostgreSQL Database")
 
 
 def run_models(data):
@@ -222,14 +229,15 @@ def run_models(data):
                     st.subheader("Kết quả Backtesting")
                     with st.spinner("Đang chạy Backtesting..."):
                         # Sử dụng cấu hình từ config
-                        start_date = pd.to_datetime(ANALYSIS_START_DATE).date()
-                        end_date = pd.to_datetime(ANALYSIS_END_DATE).date()
+                        start_date = pd.to_datetime(ANALYSIS_START_DATE).strftime('%Y-%m-%d')
+                        end_date = pd.to_datetime(ANALYSIS_END_DATE).strftime('%Y-%m-%d')
                         backtest_result = backtest_portfolio(
                             symbols, 
                             weights, 
                             start_date, 
                             end_date,
-                            fetch_stock_data2
+                            fetch_stock_data2,
+                            get_market_indices_func=get_market_indices
                         )
 
                         # Hiển thị kết quả backtesting
@@ -258,44 +266,42 @@ def main_manual_selection():
         default_start = filter_state.get('start_date') or pd.to_datetime(ANALYSIS_START_DATE).date()
         default_end = filter_state.get('end_date') or pd.to_datetime(ANALYSIS_END_DATE).date()
         
-        # Lấy dữ liệu giá cổ phiếu (sử dụng start_date và end_date từ sidebar)
+        # Lấy dữ liệu giá cổ phiếu từ database
+        start_date = filter_state.get('start_date') or default_start
+        end_date = filter_state.get('end_date') or default_end
+        
         data, skipped_tickers = fetch_stock_data2(selected_stocks, start_date, end_date)
 
         if not data.empty:
             st.subheader("Giá cổ phiếu")
             
-            # === THÊM OPTION BIỂU ĐỒ NẾN ===
+            # Option biểu đồ nến
             show_candlestick = False
             if len(selected_stocks) == 1:
-                # Lấy trạng thái đã lưu
                 default_candlestick = st.session_state.manual_show_candlestick
                 show_candlestick = st.checkbox(
                     "Hiển thị biểu đồ nến (Candlestick)", 
                     value=default_candlestick, 
                     key="candlestick_1"
                 )
-                # Lưu trạng thái
                 st.session_state.manual_show_candlestick = show_candlestick
             
             # Vẽ biểu đồ giá cổ phiếu
             if show_candlestick and len(selected_stocks) == 1:
-                # Hiển thị biểu đồ nến
                 ticker = selected_stocks[0]
                 with st.spinner(f"Đang tải dữ liệu OHLC cho {ticker}..."):
-                    ohlc_data = fetch_ohlc_data(ticker, data_loader_module.ANALYSIS_START_DATE, data_loader_module.ANALYSIS_END_DATE)
+                    ohlc_data = fetch_ohlc_data(ticker, start_date, end_date)
                     if not ohlc_data.empty:
                         plot_candlestick_chart(ohlc_data, ticker)
                     else:
-                        st.error("Không thể tải dữ liệu OHLC. Hiển thị biểu đồ đường thay thế.")
-                        plot_interactive_stock_chart(data, selected_stocks)
+                        st.error(f"Không có dữ liệu OHLC cho {ticker}")
             else:
-                # Vẽ biểu đồ bình thường
                 plot_interactive_stock_chart(data, selected_stocks)
             
             # Chạy các mô hình
             run_models(data)
         else:
-            st.error("Dữ liệu cổ phiếu bị thiếu hoặc không có.")
+            st.error("Dữ liệu cổ phiếu bị thiếu hoặc không có trong database.")
     else:
         st.warning("Chưa có mã cổ phiếu nào trong danh mục. Vui lòng chọn mã cổ phiếu trước.")
 
@@ -314,21 +320,36 @@ def main_auto_selection():
         
         # Lấy trạng thái ngày đã lưu
         filter_state = get_auto_filter_state()
-        default_start_2 = filter_state.get('start_date') or pd.to_datetime(ANALYSIS_START_DATE).date()
-        default_end_2 = filter_state.get('end_date') or pd.to_datetime(ANALYSIS_END_DATE).date()
+        max_date_2 = pd.to_datetime(ANALYSIS_END_DATE).date()
+        min_date_2 = pd.to_datetime(ANALYSIS_START_DATE).date()
+        
+        default_start_2 = filter_state.get('start_date') or min_date_2
+        default_end_2 = filter_state.get('end_date') or max_date_2
+        
+        # Kiểm tra và thông báo nếu giá trị vượt quá giới hạn
+        adjusted_2 = False
+        if default_start_2 < min_date_2 or default_start_2 > max_date_2:
+            adjusted_2 = True
+            default_start_2 = max(min_date_2, min(default_start_2, max_date_2))
+        if default_end_2 < min_date_2 or default_end_2 > max_date_2:
+            adjusted_2 = True
+            default_end_2 = max(min_date_2, min(default_end_2, max_date_2))
+        
+        if adjusted_2:
+            st.sidebar.warning(f"⚠️ Ngày đã lưu không hợp lệ, đã tự động điều chỉnh về khoảng {min_date_2.strftime('%d/%m/%Y')} - {max_date_2.strftime('%d/%m/%Y')}")
         
         start_date_2 = st.sidebar.date_input(
             "Ngày bắt đầu", 
             value=default_start_2, 
-            min_value=pd.to_datetime(ANALYSIS_START_DATE).date(),
-            max_value=pd.to_datetime(ANALYSIS_END_DATE).date(),
+            min_value=min_date_2,
+            max_value=max_date_2,
             key="start_date_2"
         )
         end_date_2 = st.sidebar.date_input(
             "Ngày kết thúc", 
             value=default_end_2, 
-            min_value=pd.to_datetime(ANALYSIS_START_DATE).date(),
-            max_value=pd.to_datetime(ANALYSIS_END_DATE).date(),
+            min_value=min_date_2,
+            max_value=max_date_2,
             key="end_date_2"
         )
         
@@ -345,44 +366,39 @@ def main_auto_selection():
         else:
             st.sidebar.success("Ngày tháng hợp lệ.")
             
-        # Lấy dữ liệu giá cổ phiếu
+        # Lấy dữ liệu giá cổ phiếu từ database
         data, skipped_tickers = fetch_stock_data2(selected_stocks_2, start_date_2, end_date_2)
 
         if not data.empty:
             st.subheader("Giá cổ phiếu")
             
-            # === THÊM OPTION BIỂU ĐỒ NẾN ===
+            # Option biểu đồ nến
             show_candlestick_2 = False
             if len(selected_stocks_2) == 1:
-                # Lấy trạng thái đã lưu
                 default_candlestick_2 = st.session_state.auto_show_candlestick
                 show_candlestick_2 = st.checkbox(
                     "Hiển thị biểu đồ nến (Candlestick)", 
                     value=default_candlestick_2, 
                     key="candlestick_2"
                 )
-                # Lưu trạng thái
                 st.session_state.auto_show_candlestick = show_candlestick_2
             
-            # Vẽ biểu đồ giá cổ phiếu
+            # Vẽ biểu đồ
             if show_candlestick_2 and len(selected_stocks_2) == 1:
-                # Hiển thị biểu đồ nến
                 ticker = selected_stocks_2[0]
                 with st.spinner(f"Đang tải dữ liệu OHLC cho {ticker}..."):
-                    ohlc_data = fetch_ohlc_data(ticker, data_loader_module.ANALYSIS_START_DATE, data_loader_module.ANALYSIS_END_DATE)
+                    ohlc_data = fetch_ohlc_data(ticker, start_date_2, end_date_2)
                     if not ohlc_data.empty:
                         plot_candlestick_chart(ohlc_data, ticker)
                     else:
-                        st.error("Không thể tải dữ liệu OHLC. Hiển thị biểu đồ đường thay thế.")
-                        plot_interactive_stock_chart(data, selected_stocks_2)
+                        st.error(f"Không có dữ liệu OHLC cho {ticker}")
             else:
-                # Vẽ biểu đồ bình thường
                 plot_interactive_stock_chart(data, selected_stocks_2)
             
             # Chạy các mô hình
             run_models(data)
         else:
-            st.error("Dữ liệu cổ phiếu bị thiếu hoặc không có.")
+            st.error("Dữ liệu cổ phiếu bị thiếu hoặc không có trong database.")
     else:
         st.warning("Chưa có mã cổ phiếu nào trong danh mục. Vui lòng chọn mã cổ phiếu trước.")
 
@@ -414,7 +430,8 @@ if option == "Trợ lý AI":
         render_chat_controls(controls_container, key_prefix="main_sidebar")
 
 elif option == "Tổng quan Thị trường & Ngành":
-    # Hiển thị trang tổng quan ngành
+    # Import market_overview
+    from scripts.market_overview import show_sector_overview_page
     show_sector_overview_page(df, data_loader_module)
 
 elif option == "Tự chọn mã cổ phiếu":
@@ -473,8 +490,23 @@ elif option == "Tự chọn mã cổ phiếu":
     today = datetime.date.today()
     
     # Lấy giá trị ngày đã lưu
+    max_date = today
+    min_date = today - datetime.timedelta(days=365*3)  # 3 năm trước
+    
     default_start = filter_state.get('start_date') or pd.to_datetime(ANALYSIS_START_DATE).date()
     default_end = filter_state.get('end_date') or pd.to_datetime(ANALYSIS_END_DATE).date()
+    
+    # Kiểm tra và thông báo nếu giá trị vượt quá giới hạn
+    adjusted = False
+    if default_start < min_date or default_start > max_date:
+        adjusted = True
+        default_start = max(min_date, min(default_start, max_date))
+    if default_end < min_date or default_end > max_date:
+        adjusted = True
+        default_end = max(min_date, min(default_end, max_date))
+    
+    if adjusted:
+        st.sidebar.warning(f"⚠️ Ngày đã lưu không hợp lệ, đã tự động điều chỉnh về khoảng {min_date.strftime('%d/%m/%Y')} - {max_date.strftime('%d/%m/%Y')}")
     
     start_date = st.sidebar.date_input(
         "Ngày bắt đầu", 
@@ -539,16 +571,15 @@ elif option == "Hệ thống đề xuất mã cổ phiếu tự động":
             saved_stocks_per_sector = auto_state.get('stocks_per_sector', {})
             
             for sector in selected_sectors:
-                # Sử dụng giá trị đã lưu hoặc mặc định
-                default_num = saved_stocks_per_sector.get(sector, 3)
-                num_stocks = st.sidebar.number_input(
-                    f"Số cổ phiếu muốn đầu tư trong ngành '{sector}'", 
-                    min_value=1, 
-                    max_value=10, 
-                    value=default_num,
-                    key=f"num_stocks_{sector}"
+                sector_stock_count = len(sector_df[sector_df['icb_name'] == sector])
+                default_count = saved_stocks_per_sector.get(sector, min(5, sector_stock_count))
+                stocks_per_sector[sector] = st.sidebar.number_input(
+                    f"Số cổ phiếu cho {sector}",
+                    min_value=1,
+                    max_value=sector_stock_count,
+                    value=default_count,
+                    key=f"stocks_{sector}"
                 )
-                stocks_per_sector[sector] = num_stocks
 
             # Bước 4: Chọn cách lọc
             saved_filter_method = auto_state.get('filter_method', 'Lợi nhuận lớn nhất')
@@ -563,23 +594,29 @@ elif option == "Hệ thống đề xuất mã cổ phiếu tự động":
 
             # Lựa chọn thời gian lấy dữ liệu
             today = datetime.date.today()
+            max_date = pd.to_datetime(ANALYSIS_END_DATE).date()
+            min_date = pd.to_datetime(ANALYSIS_START_DATE).date()
             
             # Lấy giá trị ngày đã lưu
-            default_start_1 = auto_state.get('start_date') or pd.to_datetime(ANALYSIS_START_DATE).date()
-            default_end_1 = auto_state.get('end_date') or pd.to_datetime(ANALYSIS_END_DATE).date()
+            default_start_1 = auto_state.get('start_date') or min_date
+            default_end_1 = auto_state.get('end_date') or max_date
+            
+            # Đảm bảo giá trị mặc định nằm trong khoảng hợp lệ
+            default_start_1 = max(min_date, min(default_start_1, max_date))
+            default_end_1 = max(min_date, min(default_end_1, max_date))
             
             start_date = st.sidebar.date_input(
                 "Ngày bắt đầu", 
                 value=default_start_1,
-                min_value=pd.to_datetime(ANALYSIS_START_DATE).date(),
-                max_value=pd.to_datetime(ANALYSIS_END_DATE).date(),
+                min_value=min_date,
+                max_value=max_date,
                 key="start_date_1"
             )
             end_date = st.sidebar.date_input(
                 "Ngày kết thúc", 
                 value=default_end_1,
-                min_value=pd.to_datetime(ANALYSIS_START_DATE).date(),
-                max_value=pd.to_datetime(ANALYSIS_END_DATE).date(),
+                min_value=min_date,
+                max_value=max_date,
                 key="end_date_1"
             )
             
@@ -587,61 +624,45 @@ elif option == "Hệ thống đề xuất mã cổ phiếu tự động":
             save_auto_filter_state(selected_exchanges, selected_sectors, stocks_per_sector, 
                                   filter_method, start_date, end_date)
             
-            # Kiểm tra ngày bắt đầu và ngày kết thúc
-            if start_date > today or end_date > today:
-                st.sidebar.error("Ngày bắt đầu và ngày kết thúc không được vượt quá ngày hiện tại.")
+            if start_date > max_date or end_date > today:
+                st.sidebar.error("Ngày không hợp lệ.")
             elif start_date > end_date:
                 st.sidebar.error("Ngày bắt đầu không thể lớn hơn ngày kết thúc.")
             else:
                 st.sidebar.success("Ngày tháng hợp lệ.")
 
-            # Bộ lọc và xử lý nhiều sàn, nhiều ngành, và đề xuất cổ phiếu
             if st.sidebar.button("Đề xuất cổ phiếu"):
-                final_selected_stocks = {}
-
+                st.info("Đang tải dữ liệu từ database và đề xuất cổ phiếu...")
+                
+                final_selected = {}
                 for exchange in selected_exchanges:
-                    st.subheader(f"Sàn giao dịch: {exchange}")
-                    exchange_df = df[df['exchange'] == exchange]
+                    final_selected[exchange] = {}
+                    for sector in selected_sectors:
+                        sector_symbols = sector_df[
+                            (sector_df['exchange'] == exchange) & 
+                            (sector_df['icb_name'] == sector)
+                        ]['symbol'].tolist()
+                        
+                        if sector_symbols:
+                            data, _ = fetch_stock_data2(sector_symbols, start_date, end_date)
+                            if not data.empty:
+                                mean_returns, volatility = calculate_metrics(data)
+                                
+                                if filter_method == "Lợi nhuận lớn nhất":
+                                    top_stocks = mean_returns.nlargest(stocks_per_sector[sector])
+                                else:
+                                    top_stocks = volatility.nsmallest(stocks_per_sector[sector])
+                                
+                                final_selected[exchange][sector] = top_stocks.index.tolist()
+                
+                st.session_state.final_selected_stocks = final_selected
+                st.session_state.selected_stocks_2 = [
+                    stock for sectors in final_selected.values() 
+                    for stocks in sectors.values() 
+                    for stock in stocks
+                ]
+                st.success("✓ Đã đề xuất cổ phiếu thành công!")
 
-                    for sector, num_stocks in stocks_per_sector.items():
-                        # Lọc cổ phiếu theo ngành trong từng sàn
-                        sector_df = exchange_df[exchange_df['icb_name'] == sector]
-
-                        if sector_df.empty:
-                            st.warning(f"Không có cổ phiếu nào trong ngành '{sector}' của sàn '{exchange}' để phân tích.")
-                            continue
-
-                        symbols = sector_df['symbol'].tolist()
-
-                        # Kéo dữ liệu giá cổ phiếu
-                        data, skipped_tickers = fetch_stock_data2(symbols, start_date, end_date)
-
-                        if data.empty:
-                            st.warning(f"Không có dữ liệu giá cổ phiếu cho ngành '{sector}' của sàn '{exchange}'.")
-                            continue
-
-                        # Tính toán lợi nhuận kỳ vọng và phương sai
-                        mean_returns, volatility = calculate_metrics(data)
-
-                        # Tạo DataFrame kết quả
-                        stock_analysis = pd.DataFrame({
-                            "Mã cổ phiếu": mean_returns.index,
-                            "Lợi nhuận kỳ vọng (%)": mean_returns.values * 100,
-                            "Rủi ro (Phương sai)": volatility.values * 100
-                        })
-
-                        # Lọc cổ phiếu theo cách lọc và số lượng
-                        if filter_method == "Lợi nhuận lớn nhất":
-                            selected_stocks = stock_analysis.nlargest(num_stocks, "Lợi nhuận kỳ vọng (%)")["Mã cổ phiếu"].tolist()
-                        elif filter_method == "Rủi ro bé nhất":
-                                selected_stocks = stock_analysis.nsmallest(num_stocks, "Rủi ro (Phương sai)")["Mã cổ phiếu"].tolist()
-
-                        # Lưu cổ phiếu được chọn theo sàn và ngành vào session_state
-                        if exchange not in st.session_state.final_selected_stocks:
-                            st.session_state.final_selected_stocks[exchange] = {}
-                        st.session_state.final_selected_stocks[exchange][sector] = selected_stocks
-
-    # Hiển thị danh mục cổ phiếu được lọc
     if st.session_state.final_selected_stocks:
         st.subheader("Danh mục cổ phiếu được lọc theo sàn và ngành")
         if st.button("Xóa hết các cổ phiếu đã được đề xuất"):
@@ -651,22 +672,9 @@ elif option == "Hệ thống đề xuất mã cổ phiếu tự động":
         for exchange, sectors in st.session_state.final_selected_stocks.items():
             st.write(f"### Sàn: {exchange}")
             for sector, stocks in sectors.items():
-                st.write(f"#### Ngành: {sector}")
-                for stock in stocks:
-                    col1, col2 = st.columns([4, 1])
-                    with col1:
-                        st.write(f"- {stock}")
-                    with col2:
-                        if st.button("➕ Thêm", key=f"add_{exchange}_{sector}_{stock}"):
-                            if stock not in st.session_state.selected_stocks_2:
-                                st.session_state.selected_stocks_2.append(stock)
-                                st.success(f"Đã thêm mã cổ phiếu '{stock}' vào danh sách.")
-                            else:
-                                st.warning(f"Mã cổ phiếu '{stock}' đã tồn tại trong danh sách.")
+                st.write(f"**{sector}**: {', '.join(stocks)}")
 
-    # Hiển thị danh sách mã cổ phiếu đã chọn
     display_selected_stocks_2(df)
 
-    # Gọi hàm chính
     if __name__ == "__main__":
         main_auto_selection()

@@ -1075,17 +1075,21 @@ def display_results(original_name, result):
     st.write(f"- **Số tiền còn lại:** {round(result.get('Số tiền còn lại', 0))}")
 
 
-def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_func, benchmark_symbols=["VNINDEX", "VN30", "HNX30", "HNXINDEX"]):
+def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_func, 
+                       benchmark_symbols=["VNINDEX", "VN30"],
+                       get_market_indices_func=None):
     """
-    Hàm backtesting danh mục đầu tư, hỗ trợ nhiều chỉ số benchmark và hiển thị biểu đồ tương tác.
+    Hàm backtesting danh mục đầu tư.
+    Hỗ trợ lấy benchmark data từ market_summary table thông qua get_market_indices_func.
 
     Args:
-    symbols (list): Danh sách mã cổ phiếu trong danh mục
-    weights (list): Trọng số của mỗi mã cổ phiếu
+        symbols (list): Danh sách mã cổ phiếu trong danh mục
+        weights (list): Trọng số của mỗi mã cổ phiếu
         start_date (str): Ngày bắt đầu (định dạng 'YYYY-MM-DD')
         end_date (str): Ngày kết thúc (định dạng 'YYYY-MM-DD')
-    fetch_stock_data_func (function): Hàm lấy dữ liệu giá mã cổ phiếu
+        fetch_stock_data_func (function): Hàm lấy dữ liệu giá mã cổ phiếu
         benchmark_symbols (list): Danh sách các chỉ số benchmark
+        get_market_indices_func (function): Hàm lấy dữ liệu market indices từ database
 
     Returns:
         dict: Kết quả backtesting bao gồm Sharpe Ratio, Maximum Drawdown, và lợi suất tích lũy
@@ -1099,21 +1103,71 @@ def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_
         st.error("Không có dữ liệu để backtesting.")
         return
 
+    # Đảm bảo thứ tự trọng số khớp với thứ tự cột trong stock_data
+    # Tạo Series từ symbols và weights để map chính xác
+    weights_dict = dict(zip(symbols, weights))
+    # Sắp xếp lại weights theo thứ tự cột trong stock_data
+    aligned_weights = [weights_dict.get(col, 0) for col in stock_data.columns]
+    
     # Tính lợi suất hàng ngày của danh mục
     returns = stock_data.pct_change().dropna()
-    portfolio_returns = returns.dot(weights)  # Lợi suất danh mục đầu tư
+    portfolio_returns = returns.dot(aligned_weights)  # Lợi suất danh mục đầu tư
     cumulative_returns = (1 + portfolio_returns).cumprod()  # Lợi suất tích lũy
 
     # Lấy dữ liệu benchmark
     benchmark_data = {}
-    for benchmark in benchmark_symbols:
-        benchmark_df, _ = fetch_stock_data_func([benchmark], start_date, end_date)
-        if not benchmark_df.empty:
-            benchmark_returns = benchmark_df.pct_change().dropna()
-            benchmark_cumulative = (1 + benchmark_returns[benchmark]).cumprod()
-            benchmark_data[benchmark] = benchmark_cumulative
-        else:
-            st.warning(f"Không có dữ liệu benchmark cho {benchmark}.")
+    
+    if get_market_indices_func is not None:
+        # Sử dụng hàm lấy market indices từ database
+        try:
+            market_indices_df = get_market_indices_func(start_date, end_date)
+            
+            if not market_indices_df.empty:
+                # Set date làm index
+                market_indices_df = market_indices_df.set_index('date')
+                
+                # Map benchmark symbols to database columns
+                benchmark_column_map = {
+                    "VNINDEX": "vnindex",
+                    "VN30": "vn30",
+                    "HNX30": "hnx_index",
+                    "HNXINDEX": "hnx_index",
+                    "UPCOM": "upcom_index"
+                }
+                
+                for benchmark in benchmark_symbols:
+                    db_column = benchmark_column_map.get(benchmark)
+                    if db_column and db_column in market_indices_df.columns:
+                        # Chuyển đổi giá trị thành numeric và loại bỏ NaN
+                        benchmark_series = pd.to_numeric(market_indices_df[db_column], errors='coerce')
+                        benchmark_series = benchmark_series.dropna()
+                        
+                        if len(benchmark_series) > 0:
+                            # Tính lợi suất
+                            benchmark_returns = benchmark_series.pct_change().dropna()
+                            if len(benchmark_returns) > 0:
+                                benchmark_cumulative = (1 + benchmark_returns).cumprod()
+                                benchmark_data[benchmark] = benchmark_cumulative
+                            else:
+                                st.warning(f"Không đủ dữ liệu benchmark để tính lợi suất cho {benchmark}.")
+                        else:
+                            st.warning(f"Không có dữ liệu benchmark hợp lệ cho {benchmark}.")
+                    else:
+                        st.warning(f"Không tìm thấy cột dữ liệu cho benchmark {benchmark} trong database.")
+            else:
+                st.warning("Không có dữ liệu market indices từ database.")
+        except Exception as e:
+            st.error(f"Lỗi khi lấy dữ liệu market indices: {e}")
+    else:
+        # Fallback: Sử dụng fetch_stock_data_func (phương pháp cũ)
+        for benchmark in benchmark_symbols:
+            benchmark_df, _ = fetch_stock_data_func([benchmark], start_date, end_date)
+            if not benchmark_df.empty:
+                benchmark_returns = benchmark_df.pct_change().dropna()
+                benchmark_cumulative = (1 + benchmark_returns[benchmark]).cumprod()
+                benchmark_data[benchmark] = benchmark_cumulative
+            else:
+                st.warning(f"Không có dữ liệu benchmark cho {benchmark}.")
 
     # Gộp dữ liệu lợi suất tích lũy của danh mục và các benchmark
     results_df = pd.DataFrame({
@@ -1165,26 +1219,42 @@ def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_
     downside_std = negative_returns.std() * np.sqrt(252)
     sortino_ratio = (portfolio_returns.mean() * 252) / downside_std if downside_std > 0 else 0
     
-    # 5. Alpha (so với benchmark đầu tiên nếu có)
+    # 5. Alpha và Beta (so với benchmark đầu tiên nếu có)
     alpha = 0
+    beta = 0
     if benchmark_data:
         first_benchmark = list(benchmark_data.keys())[0]
-        benchmark_returns = benchmark_data[first_benchmark].pct_change().dropna()
+        benchmark_cumulative = benchmark_data[first_benchmark]
+        benchmark_returns = benchmark_cumulative.pct_change().dropna()
         
         # Đảm bảo cùng index
         common_index = portfolio_returns.index.intersection(benchmark_returns.index)
-        portfolio_aligned = portfolio_returns.loc[common_index]
-        benchmark_aligned = benchmark_returns.loc[common_index]
-        
-        # Tính beta
-        covariance = np.cov(portfolio_aligned, benchmark_aligned)[0][1]
-        benchmark_variance = np.var(benchmark_aligned)
-        beta = covariance / benchmark_variance if benchmark_variance > 0 else 0
-        
-        # Tính alpha hàng năm
-        portfolio_annual_return = portfolio_aligned.mean() * 252
-        benchmark_annual_return = benchmark_aligned.mean() * 252
-        alpha = (portfolio_annual_return - benchmark_annual_return) * 100  # Phần trăm
+        if len(common_index) > 1:
+            portfolio_aligned = portfolio_returns.loc[common_index]
+            benchmark_aligned = benchmark_returns.loc[common_index]
+            
+            # Chuyển Series thành numpy arrays
+            portfolio_array = np.array(portfolio_aligned)
+            benchmark_array = np.array(benchmark_aligned)
+            
+            # Validate có đủ dữ liệu không
+            if len(portfolio_array) > 1 and len(benchmark_array) > 1:
+                # Tính covariance matrix
+                cov_matrix = np.cov(portfolio_array, benchmark_array)
+                covariance = cov_matrix[0, 1]
+                benchmark_variance = np.var(benchmark_array)
+                
+                # Tính beta
+                beta = covariance / benchmark_variance if benchmark_variance > 0 else 0
+                
+                # Tính alpha hàng năm
+                portfolio_annual_return = portfolio_aligned.mean() * 252
+                benchmark_annual_return = benchmark_aligned.mean() * 252
+                alpha = (portfolio_annual_return - benchmark_annual_return) * 100  # Phần trăm
+            else:
+                st.warning(f"Không đủ dữ liệu để tính Alpha/Beta với benchmark {first_benchmark}")
+        else:
+            st.warning(f"Không có dữ liệu chung với benchmark {first_benchmark}")
 
     # Tạo bảng thống kê tổng hợp
     st.markdown("### Bảng Thống kê Tổng hợp")
@@ -1221,6 +1291,7 @@ def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_
         "Annualized Return": annualized_return,
         "Volatility": volatility,
         "Alpha": alpha,
+        "Beta": beta,
         "Cumulative Returns": cumulative_returns,
         "Skipped Tickers": skipped_tickers,
     }
