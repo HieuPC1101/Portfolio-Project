@@ -10,7 +10,7 @@ import pandas as pd
 import time
 import logging
 from typing import Dict, List, Tuple
-from vnstock import Vnstock
+from vnstock import Vnstock, Company
 import datetime
 from db_config import VNSTOCK_CONFIG, DATA_CONFIG
 
@@ -266,10 +266,10 @@ def fetch_financial_metrics(
         
         try:
             # Khởi tạo VNStock instance
-            stock_instance = Vnstock().stock(symbol=symbol, source='VCI')
+            company = Company(symbol=symbol, source='VCI')
             
             # Lấy financial ratio data (sử dụng tiếng Việt)
-            financial_ratios = stock_instance.finance.ratio(period='year', lang='vi')
+            financial_ratios = company.ratio_summary()
             
             if financial_ratios is not None and not financial_ratios.empty:
                 # Xử lý dữ liệu - lấy dữ liệu năm gần nhất
@@ -339,13 +339,15 @@ def process_financial_metrics(
         metrics_data = {
             'symbol': symbol,
             'date': date,
-            'pe_ratio': latest_data.get('priceToEarning', None),
-            'pb_ratio': latest_data.get('priceToBook', None),
-            'eps': latest_data.get('earningPerShare', None),
+            'pe_ratio': latest_data.get('pe', None),
+            'pb_ratio': latest_data.get('pb', None),
+            'eps': latest_data.get('eps', None),
             'roe': latest_data.get('roe', None),
             'roa': latest_data.get('roa', None),
-            'beta': latest_data.get('beta', None),
-            'market_cap': latest_data.get('marketCap', None)
+            'revenue': latest_data.get('revenue', None),
+            'revenue_growth': latest_data.get('revenueGrowth', None),
+            'net_profit': latest_data.get('netProfit', None),
+            'net_profit_growth': latest_data.get('netProfitGrowth', None),
         }
         
         # Tạo DataFrame với 1 row
@@ -386,6 +388,7 @@ def fetch_market_indices(
         'VN30': 'vn30',
         'HNX30': 'hnx30',
         'HNXINDEX': 'hnx_index'
+        
     }
     
     market_data = None
