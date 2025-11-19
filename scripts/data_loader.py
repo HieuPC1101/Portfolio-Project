@@ -1,18 +1,35 @@
 """
 Module data_loader.py
-Chứa các hàm liên quan đến việc đọc dữ liệu từ file CSV và lấy dữ liệu giá cổ phiếu từ API.
+Chứa các hàm lấy dữ liệu từ PostgreSQL database.
 """
 
 import warnings
-# Tắt cảnh báo pkg_resources deprecated từ thư viện vnai
 warnings.filterwarnings('ignore', message='pkg_resources is deprecated')
 
 import pandas as pd
 import os
+import sys
 import datetime
-from vnstock import Vnstock
-from concurrent.futures import ThreadPoolExecutor
-from scripts.config import ANALYSIS_START_DATE, ANALYSIS_END_DATE
+from typing import Dict, List, Tuple
+
+# Thêm path để import từ data_pipeline
+pipeline_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data_pipeline'))
+if pipeline_path not in sys.path:
+    sys.path.insert(0, pipeline_path)
+
+# Import postgres_connector
+from postgres_connector import setup_postgres_connection
+
+# Import config từ scripts (tránh xung đột với config.py trong data_pipeline)
+scripts_path = os.path.dirname(__file__)
+sys.path.insert(0, scripts_path)
+
+try:
+    from config import ANALYSIS_START_DATE, ANALYSIS_END_DATE
+except ImportError:
+    # Fallback nếu import thất bại
+    ANALYSIS_START_DATE = '2024-01-01'
+    ANALYSIS_END_DATE = '2024-12-31'
 
 
 def fetch_data_from_csv(file_path):
@@ -37,19 +54,9 @@ def fetch_data_from_csv(file_path):
         return pd.DataFrame()
 
 
-def create_vnstock_instance():
-    """
-    Tạo đối tượng Vnstock để lấy dữ liệu giá cổ phiếu.
-    
-    Returns:
-        Vnstock: Đối tượng Vnstock
-    """
-    return Vnstock().stock(symbol='VN30F1M', source='VCI')
-
-
 def fetch_stock_data2(symbols, start_date, end_date):
     """
-    Lấy dữ liệu giá lịch sử cho danh sách cổ phiếu từ Vnstock.
+    Lấy dữ liệu giá lịch sử cho danh sách cổ phiếu từ PostgreSQL.
     
     Args:
         symbols (list): Danh sách mã cổ phiếu
@@ -59,63 +66,74 @@ def fetch_stock_data2(symbols, start_date, end_date):
     Returns:
         tuple: (data, skipped_tickers)
             - data (pd.DataFrame): Dữ liệu giá lịch sử, mỗi cổ phiếu là một cột
-            - skipped_tickers (list): Danh sách cổ phiếu không tải được dữ liệu
+            - skipped_tickers (list): Danh sách cổ phiếu không có dữ liệu
     """
     data = pd.DataFrame()
     skipped_tickers = []
-
-    def fetch_single_stock(ticker):
-        """
-        Lấy dữ liệu cho một cổ phiếu với xử lý lỗi cải tiến.
-        """
-        try:
-            stock = Vnstock().stock(symbol=ticker, source='VCI')
-            stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
-            if stock_data is not None and not stock_data.empty:
-                stock_data = stock_data[['time', 'close']].rename(columns={'close': ticker})
-                stock_data['time'] = pd.to_datetime(stock_data['time'])
-                return ticker, stock_data.set_index('time'), None
-            else:
-                return ticker, pd.DataFrame(), f"Không có dữ liệu"
-        except Exception as e:
-            error_msg = str(e)
-            # Lọc các loại lỗi phổ biến
-            if "RetryError" in error_msg:
-                error_msg = "Không thể kết nối đến server"
-            elif "ValueError" in error_msg:
-                error_msg = "Dữ liệu không hợp lệ"
-            print(f"Lỗi khi lấy dữ liệu {ticker}: {error_msg}")
-            return ticker, pd.DataFrame(), error_msg
-
-    # Tải dữ liệu tuần tự thay vì song song để tránh quá tải
-    print(f"Đang tải dữ liệu cho {len(symbols)} cổ phiếu...")
-    for i, ticker in enumerate(symbols, 1):
-        print(f"[{i}/{len(symbols)}] Đang tải {ticker}...", end=" ")
-        ticker_name, result, error = fetch_single_stock(ticker)
+    
+    try:
+        # Kết nối database
+        connection = setup_postgres_connection()
+        cursor = connection.cursor()
         
-        if not result.empty:
-            print("✓ Thành công")
-            if data.empty:
-                data = result
+        print(f"Đang tải dữ liệu cho {len(symbols)} cổ phiếu từ database...")
+        
+        for i, symbol in enumerate(symbols, 1):
+            print(f"[{i}/{len(symbols)}] Đang tải {symbol}...", end=" ")
+            
+            # Query dữ liệu từ stock_prices_daily
+            query = """
+            SELECT date, close
+            FROM stock_prices_daily
+            WHERE symbol = %s
+                AND date BETWEEN %s AND %s
+            ORDER BY date
+            """
+            
+            cursor.execute(query, (symbol, start_date, end_date))
+            results = cursor.fetchall()
+            
+            if results:
+                # Tạo DataFrame cho symbol này
+                symbol_df = pd.DataFrame(results, columns=['time', symbol])
+                symbol_df['time'] = pd.to_datetime(symbol_df['time'])
+                symbol_df[symbol] = pd.to_numeric(symbol_df[symbol], errors='coerce')  # Convert sang numeric
+                symbol_df.set_index('time', inplace=True)
+                
+                # Merge vào data chính
+                if data.empty:
+                    data = symbol_df
+                else:
+                    data = pd.merge(data, symbol_df, how='outer', left_index=True, right_index=True)
+                
+                print(f"✓ Thành công ({len(results)} rows)")
             else:
-                data = pd.merge(data, result, how='outer', on='time')
+                print("✗ Không có dữ liệu")
+                skipped_tickers.append(symbol)
+        
+        cursor.close()
+        connection.close()
+        
+        # Xử lý giá trị bị thiếu bằng nội suy
+        if not data.empty:
+            # Đảm bảo tất cả các cột là numeric
+            for col in data.columns:
+                data[col] = pd.to_numeric(data[col], errors='coerce')
+            data = data.interpolate(method='linear', limit_direction='both')
+            print(f"\n✓ Hoàn thành! Tải thành công {len(data.columns)}/{len(symbols)} cổ phiếu")
         else:
-            print(f"✗ Bỏ qua ({error})")
-            skipped_tickers.append(ticker)
-
-    # Xử lý giá trị bị thiếu bằng nội suy
-    if not data.empty:
-        data = data.interpolate(method='linear', limit_direction='both')
-        print(f"\n✓ Hoàn thành! Tải thành công {len(data.columns)}/{len(symbols)} cổ phiếu")
-    else:
-        print(f"\n✗ Không thể tải dữ liệu cho bất kỳ cổ phiếu nào")
-
-    return data, skipped_tickers
+            print(f"\n✗ Không có dữ liệu trong database")
+        
+        return data, skipped_tickers
+        
+    except Exception as e:
+        print(f"Lỗi khi lấy dữ liệu từ database: {e}")
+        return pd.DataFrame(), symbols
 
 
 def get_latest_prices(tickers):
     """
-    Lấy giá cổ phiếu mới nhất từ vnstock3.
+    Lấy giá cổ phiếu mới nhất từ PostgreSQL.
     
     Args:
         tickers (list): Danh sách mã cổ phiếu
@@ -124,30 +142,42 @@ def get_latest_prices(tickers):
         dict: Dictionary chứa giá cổ phiếu mới nhất {ticker: price}
     """
     latest_prices = {}
-    end_date = datetime.date.today()
-    start_date = end_date - datetime.timedelta(days=7)
-
-    print(f"\nĐang lấy giá mới nhất cho {len(tickers)} cổ phiếu...")
-    for i, ticker in enumerate(tickers, 1):
-        try:
-            stock = Vnstock().stock(symbol=ticker, source='VCI')
-            stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
-            if stock_data is not None and not stock_data.empty:
-                # Lấy giá đóng cửa (close) của ngày cuối cùng trong dữ liệu
-                latest_price = stock_data['close'].iloc[-1] * 1000
+    
+    try:
+        # Kết nối database
+        connection = setup_postgres_connection()
+        cursor = connection.cursor()
+        
+        print(f"\nĐang lấy giá mới nhất cho {len(tickers)} cổ phiếu từ database...")
+        
+        for i, ticker in enumerate(tickers, 1):
+            # Query giá mới nhất
+            query = """
+            SELECT close, date
+            FROM stock_prices_daily
+            WHERE symbol = %s
+            ORDER BY date DESC
+            LIMIT 1
+            """
+            
+            cursor.execute(query, (ticker,))
+            result = cursor.fetchone()
+            
+            if result:
+                latest_price = float(result[0]) * 1000  # Chuyển sang VND
                 latest_prices[ticker] = latest_price
                 print(f"[{i}/{len(tickers)}] {ticker}: {latest_price:,.0f} VND ✓")
             else:
                 print(f"[{i}/{len(tickers)}] {ticker}: Không có dữ liệu ✗")
-        except Exception as e:
-            error_msg = str(e)
-            if "RetryError" in error_msg:
-                error_msg = "Không thể kết nối"
-            elif "ValueError" in error_msg:
-                error_msg = "Dữ liệu không hợp lệ"
-            print(f"[{i}/{len(tickers)}] {ticker}: Lỗi - {error_msg} ✗")
+        
+        cursor.close()
+        connection.close()
+        
+        print(f"✓ Hoàn thành! Lấy giá thành công cho {len(latest_prices)}/{len(tickers)} cổ phiếu\n")
+        
+    except Exception as e:
+        print(f"Lỗi khi lấy giá từ database: {e}")
     
-    print(f"✓ Hoàn thành! Lấy giá thành công cho {len(latest_prices)}/{len(tickers)} cổ phiếu\n")
     return latest_prices
 
 
@@ -169,55 +199,59 @@ def calculate_metrics(data):
 
 def fetch_fundamental_data(symbol):
     """
-    Lấy dữ liệu phân tích cơ bản của một cổ phiếu từ vnstock.
+    Lấy dữ liệu phân tích cơ bản của một cổ phiếu từ PostgreSQL.
     
     Args:
         symbol (str): Mã cổ phiếu
         
     Returns:
         dict: Dictionary chứa các chỉ số phân tích cơ bản
-            {
-                'symbol': str,
-                'pe': float,      # P/E ratio
-                'pb': float,      # P/B ratio  
-                'eps': float,     # EPS (Thu nhập trên mỗi cổ phiếu)
-                'roe': float,     # ROE (%) 
-                'roa': float,     # ROA (%)
-                'profit_margin': float,  # Biên lợi nhuận (%)
-                'revenue': float, # Doanh thu (tỷ VND)
-                'profit': float   # Lợi nhuận (tỷ VND)
-            }
     """
     try:
-        stock = Vnstock().stock(symbol=symbol, source='VCI')
+        # Kết nối database
+        connection = setup_postgres_connection()
+        cursor = connection.cursor()
         
-        # Lấy dữ liệu tài chính
-        financial_ratio = stock.finance.ratio(period='year', lang='vi')
+        # Query dữ liệu từ stock_metrics (lấy dữ liệu mới nhất)
+        query = """
+        SELECT 
+            symbol,
+            pe_ratio,
+            pb_ratio,
+            eps,
+            roe,
+            roa,
+            market_cap,
+            date
+        FROM stock_metrics
+        WHERE symbol = %s
+        ORDER BY date DESC
+        LIMIT 1
+        """
         
-        if financial_ratio is None or financial_ratio.empty:
+        cursor.execute(query, (symbol,))
+        result = cursor.fetchone()
+        
+        cursor.close()
+        connection.close()
+        
+        if result:
+            fundamental_data = {
+                'symbol': result[0],
+                'pe': result[1],
+                'pb': result[2],
+                'eps': result[3],
+                'roe': result[4],
+                'roa': result[5],
+                'profit_margin': None,  # Không có trong database
+                'revenue': None,  # Không có trong database
+                'profit': None,  # Không có trong database
+                'market_cap': result[6]
+            }
+            return fundamental_data
+        else:
             print(f"Không có dữ liệu phân tích cơ bản cho {symbol}")
             return None
-        
-        # Lấy dữ liệu hàng mới nhất (năm gần nhất)
-        latest_data = financial_ratio.iloc[0] if not financial_ratio.empty else None
-        
-        if latest_data is None:
-            return None
-        
-        # Trích xuất các chỉ số quan trọng
-        fundamental_data = {
-            'symbol': symbol,
-            'pe': latest_data.get('priceToEarning', None),
-            'pb': latest_data.get('priceToBook', None),
-            'eps': latest_data.get('earningPerShare', None),
-            'roe': latest_data.get('roe', None),
-            'roa': latest_data.get('roa', None),
-            'profit_margin': latest_data.get('netProfitMargin', None),
-            'revenue': latest_data.get('revenue', None),
-            'profit': latest_data.get('postTaxProfit', None)
-        }
-        
-        return fundamental_data
         
     except Exception as e:
         print(f"Lỗi khi lấy dữ liệu phân tích cơ bản cho {symbol}: {str(e)}")
@@ -226,7 +260,7 @@ def fetch_fundamental_data(symbol):
 
 def fetch_fundamental_data_batch(symbols):
     """
-    Lấy dữ liệu phân tích cơ bản cho nhiều mã cổ phiếu.
+    Lấy dữ liệu phân tích cơ bản cho nhiều mã cổ phiếu từ PostgreSQL.
     
     Args:
         symbols (list): Danh sách mã cổ phiếu
@@ -235,28 +269,72 @@ def fetch_fundamental_data_batch(symbols):
     """
     fundamental_list = []
     
-    print(f"\nĐang lấy dữ liệu phân tích cơ bản cho {len(symbols)} mã cổ phiếu...")
-    for i, symbol in enumerate(symbols, 1):
-        print(f"[{i}/{len(symbols)}] Đang xử lý {symbol}...", end=" ")
-        data = fetch_fundamental_data(symbol)
-        if data:
-            fundamental_list.append(data)
-            print("✓ Thành công")
+    try:
+        # Kết nối database
+        connection = setup_postgres_connection()
+        cursor = connection.cursor()
+        
+        print(f"\nĐang lấy dữ liệu phân tích cơ bản cho {len(symbols)} mã cổ phiếu từ database...")
+        
+        for i, symbol in enumerate(symbols, 1):
+            print(f"[{i}/{len(symbols)}] Đang xử lý {symbol}...", end=" ")
+            
+            # Query dữ liệu từ stock_metrics
+            query = """
+            SELECT 
+                symbol,
+                pe_ratio,
+                pb_ratio,
+                eps,
+                roe,
+                roa,
+                market_cap
+            FROM stock_metrics
+            WHERE symbol = %s
+            ORDER BY date DESC
+            LIMIT 1
+            """
+            
+            cursor.execute(query, (symbol,))
+            result = cursor.fetchone()
+            
+            if result:
+                data = {
+                    'symbol': result[0],
+                    'pe': result[1],
+                    'pb': result[2],
+                    'eps': result[3],
+                    'roe': result[4],
+                    'roa': result[5],
+                    'profit_margin': None,
+                    'revenue': None,
+                    'profit': None,
+                    'market_cap': result[6]
+                }
+                fundamental_list.append(data)
+                print("✓ Thành công")
+            else:
+                print("✗ Không có dữ liệu")
+        
+        cursor.close()
+        connection.close()
+        
+        if fundamental_list:
+            df = pd.DataFrame(fundamental_list)
+            print(f"\n✓ Hoàn thành! Lấy dữ liệu thành công cho {len(df)}/{len(symbols)} mã cổ phiếu")
+            return df
         else:
-            print("✗ Không có dữ liệu")
-    
-    if fundamental_list:
-        df = pd.DataFrame(fundamental_list)
-        print(f"\n✓ Hoàn thành! Lấy dữ liệu thành công cho {len(df)}/{len(symbols)} mã cổ phiếu")
-        return df
-    else:
-        print(f"\n✗ Không thể lấy dữ liệu phân tích cơ bản cho bất kỳ mã cổ phiếu nào")
+            print(f"\n✗ Không có dữ liệu trong database")
+            return pd.DataFrame()
+            
+    except Exception as e:
+        print(f"Lỗi khi lấy dữ liệu từ database: {e}")
         return pd.DataFrame()
 
 
 def fetch_ohlc_data(ticker, start_date, end_date):
     """
-    Lấy dữ liệu OHLC (Open, High, Low, Close) cho một mã cổ phiếu.
+    Lấy dữ liệu OHLC (Open, High, Low, Close) cho một mã cổ phiếu từ PostgreSQL.
     
     Args:
         ticker (str): Mã cổ phiếu
@@ -266,21 +344,88 @@ def fetch_ohlc_data(ticker, start_date, end_date):
         pd.DataFrame: DataFrame chứa dữ liệu OHLC với các cột time, open, high, low, close, volume
     """
     try:
-        stock = Vnstock().stock(symbol=ticker, source='VCI')
-        stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
+        # Kết nối database
+        connection = setup_postgres_connection()
+        cursor = connection.cursor()
         
-        if stock_data is not None and not stock_data.empty:
-            # Lấy các cột cần thiết cho biểu đồ nến
-            required_columns = ['time', 'open', 'high', 'low', 'close', 'volume']
-            available_columns = [col for col in required_columns if col in stock_data.columns]
-            
-            ohlc_data = stock_data[available_columns].copy()
+        # Query dữ liệu OHLC
+        query = """
+        SELECT date, open, high, low, close, volume
+        FROM stock_prices_daily
+        WHERE symbol = %s
+            AND date BETWEEN %s AND %s
+        ORDER BY date
+        """
+        
+        cursor.execute(query, (ticker, start_date, end_date))
+        results = cursor.fetchall()
+        
+        cursor.close()
+        connection.close()
+        
+        if results:
+            ohlc_data = pd.DataFrame(
+                results,
+                columns=['time', 'open', 'high', 'low', 'close', 'volume']
+            )
             ohlc_data['time'] = pd.to_datetime(ohlc_data['time'])
-            
             return ohlc_data
         else:
             print(f"Không có dữ liệu OHLC cho {ticker}")
             return pd.DataFrame()
+            
     except Exception as e:
         print(f"Lỗi khi lấy dữ liệu OHLC cho {ticker}: {str(e)}")
+        return pd.DataFrame()
+
+
+def get_market_indices(start_date, end_date):
+    """
+    Lấy dữ liệu chỉ số thị trường từ PostgreSQL.
+    
+    Args:
+        start_date (str): Ngày bắt đầu
+        end_date (str): Ngày kết thúc
+        
+    Returns:
+        pd.DataFrame: DataFrame chứa các chỉ số thị trường
+    """
+    try:
+        connection = setup_postgres_connection()
+        cursor = connection.cursor()
+        
+        query = """
+        SELECT 
+            date,
+            vnindex,
+            vnindex_change,
+            vn30,
+            vn30_change,
+            hnx30,
+            hnx30_change,
+            hnx_index,
+            hnx_index_change
+            
+        FROM market_summary
+        WHERE date BETWEEN %s AND %s
+        ORDER BY date
+        """
+        
+        cursor.execute(query, (start_date, end_date))
+        results = cursor.fetchall()
+        
+        cursor.close()
+        connection.close()
+        
+        if results:
+            columns = ['date', 'vnindex', 'vnindex_change', 'vn30', 'vn30_change',
+                      'hnx_index', 'hnx_index_change', 'hnx30', 'hnx30_change']
+            df = pd.DataFrame(results, columns=columns)
+            df['date'] = pd.to_datetime(df['date'])
+            return df
+        else:
+            return pd.DataFrame()
+            
+    except Exception as e:
+        print(f"Lỗi khi lấy market indices: {e}")
         return pd.DataFrame()

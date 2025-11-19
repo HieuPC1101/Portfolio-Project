@@ -538,8 +538,10 @@ def min_cvar(data, total_investment, get_latest_prices_func, beta=0.95):
             cleaned_weights = {k: v / total_weight for k, v in cleaned_weights.items()}
             logger.info(f"[MIN_CVAR] Da chuan hoa lai trong so. Tong moi: {sum(cleaned_weights.values())}")
         
-        # Tính ma trận hiệp phương sai
-        cov_matrix = risk_models.sample_cov(data)
+        # Lọc dữ liệu và ma trận hiệp phương sai theo các cổ phiếu trong cleaned_weights
+        selected_tickers = list(cleaned_weights.keys())
+        filtered_data = data[selected_tickers]
+        cov_matrix = risk_models.sample_cov(filtered_data)
 
         # Tính độ lệch chuẩn của danh mục
         weights_array = np.array(list(cleaned_weights.values()))
@@ -547,8 +549,8 @@ def min_cvar(data, total_investment, get_latest_prices_func, beta=0.95):
         rf = 0.02
         sharpe_ratio = (performance[0] - rf) / portfolio_std
 
-        tickers = data.columns.tolist()
-        latest_prices = get_latest_prices_func(tickers)
+        # Lấy giá chỉ cho các cổ phiếu trong cleaned_weights
+        latest_prices = get_latest_prices_func(selected_tickers)
         latest_prices_series = pd.Series(latest_prices)
         total_portfolio_value = total_investment
         
@@ -609,14 +611,17 @@ def min_cdar(data, total_investment, get_latest_prices_func, beta=0.95):
             cleaned_weights = {k: v / total_weight for k, v in cleaned_weights.items()}
             logger.info(f"[MIN_CDAR] Da chuan hoa lai trong so. Tong moi: {sum(cleaned_weights.values())}")
 
-        cov_matrix = risk_models.sample_cov(data)
+        # Lọc dữ liệu và ma trận hiệp phương sai theo các cổ phiếu trong cleaned_weights
+        selected_tickers = list(cleaned_weights.keys())
+        filtered_data = data[selected_tickers]
+        cov_matrix = risk_models.sample_cov(filtered_data)
         weights_array = np.array(list(cleaned_weights.values()))
         portfolio_std = np.sqrt(np.dot(weights_array.T, np.dot(cov_matrix, weights_array)))
         rf = 0.02
         sharpe_ratio = (performance[0] - rf) / portfolio_std
 
-        tickers = data.columns.tolist()
-        latest_prices = get_latest_prices_func(tickers)
+        # Lấy giá chỉ cho các cổ phiếu trong cleaned_weights
+        latest_prices = get_latest_prices_func(selected_tickers)
         latest_prices_series = pd.Series(latest_prices)
         total_portfolio_value = total_investment
         

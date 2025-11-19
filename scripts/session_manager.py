@@ -34,26 +34,6 @@ def initialize_session_state():
             'enable_fundamental_filter': False,
         }
     
-    # Trạng thái bộ lọc phân tích cơ bản (chế độ tự chọn)
-    if 'manual_fundamental_filters' not in st.session_state:
-        st.session_state.manual_fundamental_filters = {
-            'pe_min': 0.0,
-            'pe_max': 30.0,
-            'pb_min': 0.0,
-            'pb_max': 3.0,
-            'roe_min': 10.0,
-            'roe_max': 100.0,
-            'roa_min': 5.0,
-            'roa_max': 100.0,
-            'margin_min': 5.0,
-            'margin_max': 100.0,
-            'eps_min': 1000.0,
-        }
-    
-    # Kết quả lọc phân tích cơ bản
-    if 'filtered_fundamental' not in st.session_state:
-        st.session_state.filtered_fundamental = None
-    
     # Trạng thái biểu đồ
     if 'manual_show_candlestick' not in st.session_state:
         st.session_state.manual_show_candlestick = False
@@ -84,19 +64,6 @@ def initialize_session_state():
             'filter_method': 'Lợi nhuận lớn nhất',
             'start_date': None,
             'end_date': None,
-        }
-    
-    # Trạng thái bộ lọc phân tích cơ bản (chế độ đề xuất)
-    if 'auto_fundamental_filters' not in st.session_state:
-        st.session_state.auto_fundamental_filters = {
-            'pe_min': 0.0,
-            'pe_max': 20.0,
-            'pb_min': 0.0,
-            'pb_max': 2.0,
-            'roe_min': 15.0,
-            'roa_min': 8.0,
-            'margin_min': 10.0,
-            'eps_min': 1000.0,
         }
     
     # Trạng thái biểu đồ
@@ -140,26 +107,6 @@ def save_manual_filter_state(exchange, icb_name, start_date, end_date, enable_fu
     }
 
 
-def save_manual_fundamental_filters(pe_min, pe_max, pb_min, pb_max, roe_min, roe_max, 
-                                   roa_min, roa_max, margin_min, margin_max, eps_min):
-    """
-    Lưu trạng thái bộ lọc phân tích cơ bản cho chế độ tự chọn.
-    """
-    st.session_state.manual_fundamental_filters = {
-        'pe_min': pe_min,
-        'pe_max': pe_max,
-        'pb_min': pb_min,
-        'pb_max': pb_max,
-        'roe_min': roe_min,
-        'roe_max': roe_max,
-        'roa_min': roa_min,
-        'roa_max': roa_max,
-        'margin_min': margin_min,
-        'margin_max': margin_max,
-        'eps_min': eps_min,
-    }
-
-
 def save_auto_filter_state(exchanges, sectors, stocks_per_sector, filter_method, start_date, end_date):
     """
     Lưu trạng thái bộ lọc cho chế độ đề xuất tự động.
@@ -182,22 +129,6 @@ def save_auto_filter_state(exchanges, sectors, stocks_per_sector, filter_method,
     }
 
 
-def save_auto_fundamental_filters(pe_min, pe_max, pb_min, pb_max, roe_min, roa_min, margin_min, eps_min):
-    """
-    Lưu trạng thái bộ lọc phân tích cơ bản cho chế độ đề xuất tự động.
-    """
-    st.session_state.auto_fundamental_filters = {
-        'pe_min': pe_min,
-        'pe_max': pe_max,
-        'pb_min': pb_min,
-        'pb_max': pb_max,
-        'roe_min': roe_min,
-        'roa_min': roa_min,
-        'margin_min': margin_min,
-        'eps_min': eps_min,
-    }
-
-
 def get_manual_filter_state():
     """
     Lấy trạng thái bộ lọc đã lưu cho chế độ tự chọn.
@@ -208,16 +139,6 @@ def get_manual_filter_state():
     return st.session_state.manual_filter_state
 
 
-def get_manual_fundamental_filters():
-    """
-    Lấy trạng thái bộ lọc phân tích cơ bản cho chế độ tự chọn.
-    
-    Returns:
-        dict: Trạng thái bộ lọc phân tích cơ bản
-    """
-    return st.session_state.manual_fundamental_filters
-
-
 def get_auto_filter_state():
     """
     Lấy trạng thái bộ lọc đã lưu cho chế độ đề xuất tự động.
@@ -226,16 +147,6 @@ def get_auto_filter_state():
         dict: Trạng thái bộ lọc
     """
     return st.session_state.auto_filter_state
-
-
-def get_auto_fundamental_filters():
-    """
-    Lấy trạng thái bộ lọc phân tích cơ bản cho chế độ đề xuất tự động.
-    
-    Returns:
-        dict: Trạng thái bộ lọc phân tích cơ bản
-    """
-    return st.session_state.auto_fundamental_filters
 
 
 def save_market_overview_state(selected_exchange, view_mode):
@@ -267,7 +178,6 @@ def clear_manual_selection():
     Xóa toàn bộ trạng thái chế độ tự chọn.
     """
     st.session_state.selected_stocks = []
-    st.session_state.filtered_fundamental = None
 
 
 def clear_auto_selection():

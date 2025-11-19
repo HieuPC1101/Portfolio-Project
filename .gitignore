@@ -1,2 +1,5 @@
 scripts/secret_config.py
+<<<<<<< HEAD
 .env
+=======
+>>>>>>> data-pipeline
