@@ -1,29 +1,88 @@
 # Portfolio-v1
 
-Ứng dụng tối ưu hóa danh mục đầu tư chứng khoán Việt Nam sử dụng Streamlit.
+Ứng dụng tối ưu hóa danh mục đầu tư chứng khoán Việt Nam với Data Pipeline tự động và Dashboard phân tích.
 
-## Giới thiệu
-Portfolio-v1 là một hệ thống hỗ trợ nhà đầu tư phân tích, tối ưu hóa và quản lý danh mục đầu tư chứng khoán. Ứng dụng tích hợp các mô hình toán học, phân tích kỹ thuật, và giao diện trực quan để giúp người dùng ra quyết định đầu tư hiệu quả.
+## 🎯 Giới thiệu
+Portfolio-v1 là một hệ thống hoàn chỉnh hỗ trợ nhà đầu tư phân tích, tối ưu hóa và quản lý danh mục đầu tư chứng khoán. Ứng dụng tích hợp:
+- **Data Pipeline tự động**: CSV → VNStock API → PostgreSQL → Dashboard
+- **Mô hình toán học**: Tối ưu hóa danh mục theo các tiêu chí khác nhau
+- **Phân tích kỹ thuật**: Các chỉ báo và patterns
+- **AI Chatbot**: Tư vấn đầu tư thông minh
+- **Giao diện trực quan**: Dashboard tương tác với Streamlit
 
-## Tính năng chính
-- **Thu thập dữ liệu**: Tự động lấy thông tin công ty, ngành, giá cổ phiếu từ các nguồn dữ liệu Việt Nam.
-- **Phân tích thị trường & ngành**: Hiển thị tổng quan thị trường, heatmap, drill-down theo ngành/sàn.
-- **Tối ưu hóa danh mục**: Hỗ trợ các mô hình Markowitz, Max Sharpe, Min Volatility, Min CVaR, Min CDaR, HRP.
-- **Phân tích kỹ thuật**: Tính toán các chỉ báo như SMA, EMA, RSI, MACD, Bollinger Bands.
-- **Backtesting**: Kiểm tra hiệu quả danh mục đầu tư qua các giai đoạn lịch sử.
-- **Quản lý phiên làm việc**: Lưu trữ trạng thái, bộ lọc, danh sách cổ phiếu đã chọn.
-- **Giao diện trực quan**: Streamlit + Plotly, dễ sử dụng, thao tác nhanh.
+## ✨ Tính năng chính
 
-## Cài đặt
-1. Clone dự án:
-	```powershell
-	git clone https://github.com/HieuPC1101/Portfolio-v1.git
-	```
-2. Cài đặt các thư viện Python:
-	```powershell
-	pip install -r requirements.txt
-	```
-3. Chạy ứng dụng:
+### 📊 Data Pipeline (MỚI!)
+- **Tự động hóa hoàn toàn**: Thu thập và xử lý dữ liệu từ CSV → API → Database
+- **VNStock API Integration**: Lấy dữ liệu giá lịch sử cho 500+ cổ phiếu
+- **PostgreSQL Database**: Lưu trữ dữ liệu có cấu trúc, tối ưu cho queries
+- **Error Handling**: Retry logic, rate limiting, validation
+- **Performance**: Batch processing, indexing, caching
+
+### 📈 Phân tích & Tối ưu hóa
+- **Thu thập dữ liệu**: Tự động từ VNStock API
+- **Phân tích thị trường & ngành**: Tổng quan, heatmap, drill-down
+- **Tối ưu hóa danh mục**: Markowitz, Max Sharpe, Min Volatility, Min CVaR, Min CDaR, HRP
+- **Phân tích kỹ thuật**: SMA, EMA, RSI, MACD, Bollinger Bands
+- **Backtesting**: Kiểm tra hiệu quả chiến lược
+
+### 🤖 AI & Automation
+- **Chatbot AI**: Tư vấn đầu tư, giải thích chỉ số
+- **Session Management**: Lưu trữ trạng thái làm việc
+- **Scheduled Updates**: Cập nhật dữ liệu tự động (coming soon)
+
+## 🚀 Quick Start
+
+### Cách 1: Setup tự động (Khuyến nghị)
+
+```powershell
+# 1. Clone project
+git clone https://github.com/HieuPC1101/Portfolio-v1.git
+cd Portfolio-v1
+
+# 2. Chạy setup (cài packages + PostgreSQL)
+.\setup.ps1
+
+# 3. Chạy pipeline (interactive)
+python scripts/data_pipeline/run_quick.py
+# Chọn mode 1 (TEST) cho lần đầu
+
+# 4. Chạy dashboard
+streamlit run scripts/dashboard.py
+```
+
+### Cách 2: Manual setup
+
+```powershell
+# 1. Clone và install
+git clone https://github.com/HieuPC1101/Portfolio-v1.git
+cd Portfolio-v1
+pip install -r requirements.txt
+
+# 2. Setup PostgreSQL (Docker)
+docker run --name portfolio-postgres `
+  -e POSTGRES_DB=portfolio_db `
+  -e POSTGRES_USER=postgres `
+  -e POSTGRES_PASSWORD=postgres `
+  -p 5432:5432 `
+  -d postgres:14
+
+# 3. Copy và config .env
+cp .env.example .env
+# Edit .env với thông tin database
+
+# 4. Run pipeline test
+python data_pipeline/pipeline_orchestrator.py --test --num-stocks 10
+
+# 5. Run dashboard
+streamlit run scripts/dashboard.py
+```
+
+### 📖 Chi tiết hơn
+- **Quick Guide**: [QUICKSTART.md](QUICKSTART.md)
+- **Pipeline Docs**: [scripts/data_pipeline/README.md](scripts/data_pipeline/README.md)
+- **Implementation**: [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
+4. Chạy ứng dụng:
 	```powershell
 	streamlit run scripts/dashboard.py
 
