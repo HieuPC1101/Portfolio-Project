@@ -91,12 +91,37 @@ def get_market_indices_metrics(symbols: Iterable[str] = DEFAULT_INDEX_SYMBOLS,
     return metrics
 
 
-def summarize_sector_performance(snapshot: pd.DataFrame, top_n: int = 8) -> pd.DataFrame:
+def summarize_sector_performance(snapshot: pd.DataFrame, top_n: Optional[int] = None) -> pd.DataFrame:
     """Aggregate sector-level growth and liquidity stats."""
     if snapshot is None or snapshot.empty:
-        return pd.DataFrame(columns=['industry', 'avg_growth_1w', 'avg_growth_1m', 'avg_liquidity', 'market_cap'])
+        return pd.DataFrame(columns=[
+            'industry', 'avg_growth_1w', 'avg_growth_1m', 'avg_liquidity', 'market_cap',
+            'delta_growth_1w', 'delta_growth_1m', 'market_avg_1w', 'market_avg_1m'
+        ])
 
-    group = snapshot.groupby('industry').agg({
+    required_columns = {
+        'price_growth_1w': pd.NA,
+        'price_growth_1m': pd.NA,
+        'avg_trading_value_20d': pd.NA,
+        'market_cap': pd.NA,
+    }
+
+    # Guard against upstream collectors missing the derived growth columns.
+    working = snapshot.copy()
+    for column, default_value in required_columns.items():
+        if column not in working.columns:
+            working[column] = default_value
+
+    numeric_growth_cols = ['price_growth_1w', 'price_growth_1m']
+    for column in numeric_growth_cols:
+        working[column] = pd.to_numeric(working[column], errors='coerce')
+
+    market_avg_1w = working['price_growth_1w'].mean(skipna=True)
+    market_avg_1m = working['price_growth_1m'].mean(skipna=True)
+    market_avg_1w = float(market_avg_1w) if pd.notna(market_avg_1w) else 0.0
+    market_avg_1m = float(market_avg_1m) if pd.notna(market_avg_1m) else 0.0
+
+    group = working.groupby('industry').agg({
         'price_growth_1w': 'mean',
         'price_growth_1m': 'mean',
         'avg_trading_value_20d': 'mean',
@@ -109,8 +134,21 @@ def summarize_sector_performance(snapshot: pd.DataFrame, top_n: int = 8) -> pd.D
         'avg_trading_value_20d': 'avg_liquidity'
     })
 
-    group = group.sort_values('avg_growth_1m', ascending=False)
-    return group.head(max(top_n, 1))
+    group['avg_growth_1w'] = pd.to_numeric(group['avg_growth_1w'], errors='coerce')
+    group['avg_growth_1m'] = pd.to_numeric(group['avg_growth_1m'], errors='coerce')
+
+    group['delta_growth_1w'] = group['avg_growth_1w'] - market_avg_1w
+    group['delta_growth_1m'] = group['avg_growth_1m'] - market_avg_1m
+    group['market_avg_1w'] = market_avg_1w
+    group['market_avg_1m'] = market_avg_1m
+
+    group = group.sort_values('avg_growth_1m', ascending=True)
+
+    if top_n is None:
+        return group
+
+    limit = max(top_n, 1)
+    return group.head(limit)
 
 
 def summarize_market_cap_distribution(snapshot: pd.DataFrame, top_n: int = 8) -> pd.DataFrame:

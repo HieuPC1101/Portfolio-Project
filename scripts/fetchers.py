@@ -9,6 +9,8 @@ import datetime
 import os
 from functools import lru_cache
 from typing import Iterable, List, Optional, Tuple, Dict
+
+import numpy as np
 import pandas as pd
 import pytz  # Recommended for timezone handling
 from vnstock import Vnstock
@@ -295,6 +297,93 @@ def _get_sector_snapshot_cached(exchange: str, size: int, source: str) -> pd.Dat
     except Exception:
         return pd.DataFrame()
 
+
+GROWTH_CONFIG = {
+    'price_growth_1w': {
+        'aliases': ['1w', '1wk', '1week', 'week1', 'w1', 'one_week', 'weekly'],
+        'exclude': ['52w']
+    },
+    'price_growth_1m': {
+        'aliases': ['1m', '1mo', '1month', 'month1', 'm1', 'one_month', 'monthly', '30d', '30day'],
+        'exclude': []
+    }
+}
+PCT_KEYWORDS = ['pct', 'percent', 'percentage', 'ratio', 'rate']
+CHANGE_KEYWORDS = ['change', 'chg', 'growth', 'return', 'perf', 'delta']
+PRICE_KEYWORDS = ['price', 'close', 'match', 'last']
+
+
+def _prioritize_price_column(columns: List[str]) -> Optional[str]:
+    if not columns:
+        return None
+    ordered = sorted(columns)
+    for keyword in ['close', 'price', 'match', 'last']:
+        for col in ordered:
+            if keyword in col.lower():
+                return col
+    return ordered[0]
+
+
+def _select_column_by_keywords(columns: List[str], aliases: List[str], exclude: List[str], candidates: List[str]) -> Optional[str]:
+    for col in columns:
+        lowered = col.lower()
+        if not any(alias in lowered for alias in aliases):
+            continue
+        if any(ex in lowered for ex in exclude):
+            continue
+        if any(keyword in lowered for keyword in candidates):
+            return col
+    return None
+
+
+def _compute_growth_from_levels(df: pd.DataFrame, aliases: List[str], exclude: List[str]) -> Optional[pd.Series]:
+    price_like = [col for col in df.columns if any(key in col.lower() for key in PRICE_KEYWORDS)]
+    if not price_like:
+        return None
+
+    past_cols = [col for col in price_like if any(alias in col.lower() for alias in aliases)
+                 and not any(ex in col.lower() for ex in exclude)]
+    current_cols = [col for col in price_like if col not in past_cols]
+
+    past_column = _prioritize_price_column(past_cols)
+    current_column = _prioritize_price_column(current_cols)
+
+    if not past_column or not current_column or past_column == current_column:
+        return None
+
+    previous = pd.to_numeric(df[past_column], errors='coerce')
+    current = pd.to_numeric(df[current_column], errors='coerce')
+    denominator = previous.replace({0: np.nan})
+    with np.errstate(divide='ignore', invalid='ignore'):
+        growth = (current - denominator) / denominator * 100
+    growth = growth.replace([np.inf, -np.inf], np.nan)
+    return growth
+
+
+def _infer_growth_column(df: pd.DataFrame, target: str) -> None:
+    if target in df.columns:
+        return
+
+    config = GROWTH_CONFIG.get(target)
+    if not config:
+        df[target] = pd.NA
+        return
+
+    aliases = config['aliases']
+    exclude = config.get('exclude', [])
+    columns = list(df.columns)
+
+    candidate = _select_column_by_keywords(columns, aliases, exclude, PCT_KEYWORDS)
+    if candidate is None:
+        candidate = _select_column_by_keywords(columns, aliases, exclude, CHANGE_KEYWORDS)
+
+    if candidate is not None:
+        df[target] = pd.to_numeric(df[candidate], errors='coerce')
+        return
+
+    computed = _compute_growth_from_levels(df, aliases, exclude)
+    df[target] = computed if computed is not None else pd.NA
+
 def get_sector_snapshot(exchange: str = "HOSE,HNX,UPCOM", size: int = 400,
                         source: str = "TCBS", columns: Optional[List[str]] = None) -> pd.DataFrame:
     """Fetch the latest screener snapshot."""
@@ -304,9 +393,14 @@ def get_sector_snapshot(exchange: str = "HOSE,HNX,UPCOM", size: int = 400,
         return pd.DataFrame()
 
     df = snapshot.copy() # Copy từ cache
+    if 'ticker' not in df.columns and 'symbol' in df.columns:
+        df['ticker'] = df['symbol']
     
     if 'industry' in df.columns:
         df['industry'] = df['industry'].fillna('Ngành khác')
+
+    for growth_col in GROWTH_CONFIG.keys():
+        _infer_growth_column(df, growth_col)
 
     numeric_columns = [
         'market_cap', 'price_growth_1w', 'price_growth_1m', 
