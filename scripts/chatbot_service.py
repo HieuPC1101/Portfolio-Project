@@ -6,8 +6,7 @@ Sử dụng Google Gemini API (miễn phí)
 import os
 from datetime import datetime
 import google.generativeai as genai
-import pandas as pd
-import streamlit as st
+from scripts.market_data_adapter import get_market_data_adapter
 
 
 def load_gemini_api_key() -> str:
@@ -63,6 +62,9 @@ class PortfolioChatbot:
             safety_settings=self.safety_settings
         )
         self.conversation_history = []
+        
+        # Sử dụng MarketDataAdapter để lấy dữ liệu thị trường
+        self.market_data = get_market_data_adapter()
         
     def get_system_prompt(self, portfolio_data=None):
         """
@@ -128,8 +130,15 @@ class PortfolioChatbot:
             # Thêm tin nhắn của user vào lịch sử
             self.add_message_to_history("user", user_message)
             
+            # Lấy market data context từ adapter
+            market_context = self.market_data.get_context_from_query(user_message)
+            
             # Tạo prompt đầy đủ với system prompt và context
             full_prompt = self.get_system_prompt(portfolio_context) + "\n\n"
+            
+            # Thêm market data context nếu có
+            if market_context:
+                full_prompt += f"\n{market_context}\n\n"
             
             # Thêm lịch sử hội thoại
             for msg in self.conversation_history[-6:]:  # Chỉ lấy 6 tin nhắn gần nhất
@@ -239,9 +248,11 @@ def create_quick_question_buttons():
         list: Danh sách các câu hỏi nhanh
     """
     quick_questions = [
+        "Phân tích mã VCB",
+        "Chỉ số thị trường hôm nay",
         "Giải thích mô hình Markowitz",
+        "So sánh VNM và MSN",
         "Làm sao để giảm rủi ro?",
-        "Các chỉ số tài chính quan trọng",
-        "Nên đa dạng hóa bao nhiêu cổ phiếu?",
+        "Tỷ lệ Sharpe là gì?"
     ]
     return quick_questions
