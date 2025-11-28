@@ -544,41 +544,53 @@ def min_cvar(data, total_investment, get_latest_prices_func, beta=0.95):
         cvar_optimizer = EfficientCVaR(mean_returns, returns, beta=beta)
         weights = cvar_optimizer.min_cvar()
         performance = cvar_optimizer.portfolio_performance()
-        
-        # Làm sạch và chuẩn hóa trọng số
-        cleaned_weights = {k: v for k, v in weights.items() if v > 1e-5}
-        total_weight = sum(cleaned_weights.values())
-        if abs(total_weight - 1.0) > 1e-5:
-            logger.warning(f"[MIN_CVAR] Tong trong so truoc khi chuan hoa: {total_weight}")
-            cleaned_weights = {k: v / total_weight for k, v in cleaned_weights.items()}
-            logger.info(f"[MIN_CVAR] Da chuan hoa lai trong so. Tong moi: {sum(cleaned_weights.values())}")
-        
-        # Tính ma trận hiệp phương sai
-        cov_matrix = risk_models.sample_cov(data)
 
-        # Tính độ lệch chuẩn của danh mục
-        weights_array = np.array(list(cleaned_weights.values()))
-        portfolio_std = np.sqrt(np.dot(weights_array.T, np.dot(cov_matrix, weights_array)))
+        # Loại bỏ trọng số cực nhỏ nhưng vẫn giữ đủ cấu trúc cho các hàm khác
+        positive_weights = {k: v for k, v in weights.items() if v > 1e-5}
+        total_weight = sum(positive_weights.values())
+        if total_weight <= 0:
+            logger.error("[MIN_CVAR] Khong co trong so hop le sau khi toi uu hoa")
+            return None
+
+        # Chuẩn hóa lại trọng số tích cực
+        positive_weights = {k: v / total_weight for k, v in positive_weights.items()}
+
+        # Bổ sung các mã có trọng số 0 để phù hợp với giá/DiscreteAllocation
+        tickers = data.columns.tolist()
+        full_weights = {ticker: positive_weights.get(ticker, 0.0) for ticker in tickers}
+
+        active_tickers = [ticker for ticker, weight in full_weights.items() if weight > 0]
+        if not active_tickers:
+            logger.error("[MIN_CVAR] Khong co trong so hop le sau khi toi uu hoa")
+            return None
+
+        # Tính ma trận hiệp phương sai chỉ với các mã có trọng số
+        cov_matrix = risk_models.sample_cov(data[active_tickers])
+        cov_subset = cov_matrix.values
+
+        # Tính độ lệch chuẩn danh mục với ma trận đã căn chỉnh
+        weights_array = np.array([full_weights[ticker] for ticker in active_tickers])
+        portfolio_var = float(np.dot(weights_array.T, np.dot(cov_subset, weights_array)))
+        portfolio_std = np.sqrt(max(portfolio_var, 0))
         rf = 0.02
         sharpe_ratio = (performance[0] - rf) / portfolio_std
 
-        tickers = data.columns.tolist()
         latest_prices = get_latest_prices_func(tickers)
         latest_prices_series = pd.Series(latest_prices)
         total_portfolio_value = total_investment
         
         logger.info(f"[MIN_CVAR] Truoc khi goi run_integer_programming:")
         logger.info(f"  - total_portfolio_value: {total_portfolio_value:,.0f} VND")
-        logger.info(f"  - Tong trong so: {sum(cleaned_weights.values()):.6f}")
+        logger.info(f"  - Tong trong so: {sum(full_weights.values()):.6f}")
         
         allocation_lp, leftover_lp = run_integer_programming(
-            cleaned_weights, 
+            full_weights, 
             latest_prices_series, 
             total_portfolio_value
         )
 
         return {
-            "Trọng số danh mục": cleaned_weights,
+            "Trọng số danh mục": full_weights,
             "Lợi nhuận kỳ vọng": performance[0],
             "Rủi ro CVaR": performance[1],
             "Số mã cổ phiếu cần mua": allocation_lp,
@@ -615,38 +627,47 @@ def min_cdar(data, total_investment, get_latest_prices_func, beta=0.95):
         cdar_optimizer = EfficientCDaR(mean_returns, returns, beta=beta)
         weights = cdar_optimizer.min_cdar()
         performance = cdar_optimizer.portfolio_performance()
-        
-        # Làm sạch và chuẩn hóa trọng số
-        cleaned_weights = {k: v for k, v in weights.items() if v > 1e-5}
-        total_weight = sum(cleaned_weights.values())
-        if abs(total_weight - 1.0) > 1e-5:
-            logger.warning(f"[MIN_CDAR] Tong trong so truoc khi chuan hoa: {total_weight}")
-            cleaned_weights = {k: v / total_weight for k, v in cleaned_weights.items()}
-            logger.info(f"[MIN_CDAR] Da chuan hoa lai trong so. Tong moi: {sum(cleaned_weights.values())}")
 
-        cov_matrix = risk_models.sample_cov(data)
-        weights_array = np.array(list(cleaned_weights.values()))
-        portfolio_std = np.sqrt(np.dot(weights_array.T, np.dot(cov_matrix, weights_array)))
+        positive_weights = {k: v for k, v in weights.items() if v > 1e-5}
+        total_weight = sum(positive_weights.values())
+        if total_weight <= 0:
+            logger.error("[MIN_CDAR] Khong co trong so hop le sau khi toi uu hoa")
+            return None
+
+        positive_weights = {k: v / total_weight for k, v in positive_weights.items()}
+
+        tickers = data.columns.tolist()
+        full_weights = {ticker: positive_weights.get(ticker, 0.0) for ticker in tickers}
+        active_tickers = [ticker for ticker, weight in full_weights.items() if weight > 0]
+
+        if not active_tickers:
+            logger.error("[MIN_CDAR] Khong co trong so hop le sau khi toi uu hoa")
+            return None
+
+        cov_matrix = risk_models.sample_cov(data[active_tickers])
+        cov_subset = cov_matrix.values
+        weights_array = np.array([full_weights[ticker] for ticker in active_tickers])
+        portfolio_var = float(np.dot(weights_array.T, np.dot(cov_subset, weights_array)))
+        portfolio_std = np.sqrt(max(portfolio_var, 0))
         rf = 0.02
         sharpe_ratio = (performance[0] - rf) / portfolio_std
 
-        tickers = data.columns.tolist()
         latest_prices = get_latest_prices_func(tickers)
         latest_prices_series = pd.Series(latest_prices)
         total_portfolio_value = total_investment
         
         logger.info(f"[MIN_CDAR] Truoc khi goi run_integer_programming:")
         logger.info(f"  - total_portfolio_value: {total_portfolio_value:,.0f} VND")
-        logger.info(f"  - Tong trong so: {sum(cleaned_weights.values()):.6f}")
+        logger.info(f"  - Tong trong so: {sum(full_weights.values()):.6f}")
         
         allocation_lp, leftover_lp = run_integer_programming(
-            cleaned_weights, 
+            full_weights, 
             latest_prices_series, 
             total_portfolio_value
         )
 
         return {
-            "Trọng số danh mục": cleaned_weights,
+            "Trọng số danh mục": full_weights,
             "Lợi nhuận kỳ vọng": performance[0],
             "Rủi ro CDaR": performance[1],
             "Số mã cổ phiếu cần mua": allocation_lp,
