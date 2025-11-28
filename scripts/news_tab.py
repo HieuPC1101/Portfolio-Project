@@ -501,5 +501,5 @@ def render(ticker: str = None):
         - **VnExpress**: Tin kinh doanh từ VnExpress.net
         - **CafeF**: Tin thị trường chứng khoán từ CafeF.vn
         - **VietStock**: Tin tức từ VietStock.vn
-        - **VnEconomy**: Tin kinh tế từ VnEconomy.vn (sử dụng web scraping)
+        - **VnEconomy**: Tin kinh tế từ VnEconomy.vn
         """)
