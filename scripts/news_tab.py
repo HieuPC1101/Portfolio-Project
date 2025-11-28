@@ -7,7 +7,60 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import feedparser
 import json
+import time
+import math
+import numbers
+import re
+from email.utils import parsedate_to_datetime
 
+VN_STOCK_KEYWORDS = [
+    "chứng khoán",
+    "thị trường việt nam",
+    "thị trường chứng khoán",
+    "vn-index",
+    "vnindex",
+    "vn30",
+    "vni",
+    "hose",
+    "hnx",
+    "upcom",
+    "vietstock",
+    "doanh nghiệp niêm yết",
+    "cổ phiếu",
+    "ssi",
+    "vcb",
+    "vic",
+    "vnm"
+]
+
+EXCLUDED_TOPIC_KEYWORDS = [
+    "crypto",
+    "bitcoin",
+    "ethereum",
+    "blockchain",
+    "forex",
+    "fed",
+    "nasdaq",
+    "dow jones",
+    "s&p",
+    "us market",
+    "wall street",
+    "goldman sachs",
+    "chứng khoán mỹ",
+    "trái phiếu mỹ",
+    "tiền ảo",
+    "tiền điện tử"
+]
+
+VIETSTOCK_RSS_FEEDS = [
+    "https://vietstock.vn/830/chung-khoan/co-phieu.rss",
+    "https://vietstock.vn/739/chung-khoan/giao-dich-noi-bo.rss",
+    "https://vietstock.vn/741/chung-khoan/niem-yet.rss"
+]
+
+VNECONOMY_ARTICLE_SLUG = re.compile(r"^/[\w\-/]+-e\d+\.htm$")
+POSITIVE_NEWS_KEYWORDS = ["tăng", "hồi phục", "lãi", "tang", "hoi phuc", "lai"]
+NEGATIVE_NEWS_KEYWORDS = ["giảm", "bán tháo", "lỗ", "giam", "ban thao", "lo"]
 
 # ======================================================
 # 🔧 HÀM PHỤ TRỢ
@@ -31,6 +84,78 @@ def convert_relative_date(relative_date):
         return datetime.now()
 
 
+def is_vietnam_stock_article(title: str, content: str) -> bool:
+    """Kiểm tra bài viết có liên quan đến thị trường chứng khoán Việt Nam."""
+    combined_text = f"{title or ''} {content or ''}".lower()
+    if any(excluded in combined_text for excluded in EXCLUDED_TOPIC_KEYWORDS):
+        return False
+    return any(keyword in combined_text for keyword in VN_STOCK_KEYWORDS)
+
+
+def format_display_date(date_value):
+    """Định dạng thời gian thành chuỗi thân thiện DD/MM/YYYY - HH:MM"""
+    try:
+        if isinstance(date_value, datetime):
+            dt = date_value
+        elif isinstance(date_value, numbers.Number):
+            timestamp = float(date_value)
+            if timestamp > 1e12:
+                timestamp /= 1000  # vnstock trả về millisecond
+            dt = datetime.fromtimestamp(timestamp)
+        elif isinstance(date_value, time.struct_time):
+            dt = datetime.fromtimestamp(time.mktime(date_value))
+        elif isinstance(date_value, str):
+            stripped_value = date_value.strip()
+            if stripped_value.isdigit():
+                timestamp = float(stripped_value)
+                if timestamp > 1e12:
+                    timestamp /= 1000
+                dt = datetime.fromtimestamp(timestamp)
+            else:
+                dt = parsedate_to_datetime(stripped_value)
+        else:
+            dt = datetime.now()
+
+        if dt.tzinfo is not None:
+            dt = dt.astimezone().replace(tzinfo=None)
+
+        return dt.strftime("%d/%m/%Y - %H:%M")
+    except Exception:
+        if isinstance(date_value, str) and date_value:
+            return date_value
+        return datetime.now().strftime("%d/%m/%Y - %H:%M")
+
+
+def get_news_sentiment_styles(title: str, content: str):
+    """Determine sentiment style configuration based on simple keyword scan."""
+    text = f"{title or ''} {content or ''}".lower()
+    sentiment = "neutral"
+
+    if any(keyword in text for keyword in POSITIVE_NEWS_KEYWORDS):
+        sentiment = "positive"
+    elif any(keyword in text for keyword in NEGATIVE_NEWS_KEYWORDS):
+        sentiment = "negative"
+
+    styles = {
+        "positive": {
+            "border": "#22c55e",
+            "background": "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)",
+            "label": "Tin tích cực"
+        },
+        "negative": {
+            "border": "#ef4444",
+            "background": "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)",
+            "label": "Tin tiêu cực"
+        },
+        "neutral": {
+            "border": "#d97706",
+            "background": "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)",
+            "label": "Tin trung lập"
+        }
+    }
+    return styles[sentiment]
+
+
 @st.cache_data(ttl=300, show_spinner=False)
 def fetch_rss_news(source="vnexpress", max_articles=5):
     """Lấy tin từ RSS Feed - Phương pháp đáng tin cậy hơn"""
@@ -42,18 +167,20 @@ def fetch_rss_news(source="vnexpress", max_articles=5):
     rss_urls = {
         "vnexpress": "https://vnexpress.net/rss/kinh-doanh.rss",
         "cafef": "https://cafef.vn/thi-truong-chung-khoan.rss",
-        "vietstock": "https://vietstock.vn/rss/tintuc.rss"
+        "vietstock": VIETSTOCK_RSS_FEEDS
     }
     
     if source not in rss_urls:
         return []
     
-    # Get URL(s) for the source
     urls = rss_urls[source]
     if not isinstance(urls, list):
         urls = [urls]
-    
-    # Try each URL until one works
+
+    aggregated_news = []
+    last_warning = None
+
+    # Try each URL and accumulate until we have enough articles
     for url_index, url in enumerate(urls):
         try:
             # Enhanced headers to avoid blocking
@@ -76,25 +203,29 @@ def fetch_rss_news(source="vnexpress", max_articles=5):
             
             # Check if feed has entries
             if not feed.entries:
-                if url_index < len(urls) - 1:
-                    continue  # Try next URL
-                else:
-                    st.warning(f"⚠️ Không tìm thấy bài viết từ {source}")
-                    return []
+                last_warning = f"⚠️ Không tìm thấy bài viết từ {source}"
+                continue
             
-            news_data = []
-            for entry in feed.entries[:max_articles]:
+            for entry in feed.entries:
+                if len(aggregated_news) >= max_articles:
+                    break
                 try:
                     title = entry.title if hasattr(entry, 'title') else "No Title"
                     link = entry.link if hasattr(entry, 'link') else ""
                     
                     # Parse date
-                    if hasattr(entry, 'published'):
-                        date = entry.published
+                    published_struct = getattr(entry, 'published_parsed', None)
+                    updated_struct = getattr(entry, 'updated_parsed', None)
+                    if published_struct:
+                        date = format_display_date(published_struct)
+                    elif updated_struct:
+                        date = format_display_date(updated_struct)
+                    elif hasattr(entry, 'published'):
+                        date = format_display_date(entry.published)
                     elif hasattr(entry, 'updated'):
-                        date = entry.updated
+                        date = format_display_date(entry.updated)
                     else:
-                        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        date = format_display_date(datetime.now())
                     
                     # Get content
                     content = ""
@@ -105,39 +236,44 @@ def fetch_rss_news(source="vnexpress", max_articles=5):
                     else:
                         content = "Nội dung đang được cập nhật..."
                     
-                    news_data.append({
+                    normalized_content = content[:500] + "..." if len(content) > 500 else content
+                    if not is_vietnam_stock_article(title, normalized_content):
+                        continue
+
+                    aggregated_news.append({
                         "title": title,
                         "date": date,
-                        "content": content[:500] + "..." if len(content) > 500 else content,
+                        "content": normalized_content,
                         "link": link,
                         "source": source.upper()
                     })
                 except Exception:
                     continue
             
-            if news_data:
-                return news_data
-            elif url_index < len(urls) - 1:
-                continue  # Try next URL
+            if len(aggregated_news) >= max_articles:
+                break
                 
         except requests.exceptions.HTTPError as e:
             error_msg = f"HTTP {e.response.status_code}"
-            if url_index < len(urls) - 1:
-                continue  # Try next URL
-            st.warning(f"⚠️ Không thể tải RSS từ {source}: {error_msg}")
+            last_warning = f"⚠️ Không thể tải RSS từ {source}: {error_msg}"
+            continue
         except requests.exceptions.Timeout:
-            if url_index < len(urls) - 1:
-                continue  # Try next URL
-            st.warning(f"⚠️ Timeout khi tải RSS từ {source}")
+            last_warning = f"⚠️ Timeout khi tải RSS từ {source}"
+            continue
         except requests.exceptions.ConnectionError:
-            if url_index < len(urls) - 1:
-                continue  # Try next URL
-            st.warning(f"⚠️ Lỗi kết nối đến {source}")
+            last_warning = f"⚠️ Lỗi kết nối đến {source}"
+            continue
         except Exception as e:
-            if url_index < len(urls) - 1:
-                continue  # Try next URL
-            st.warning(f"⚠️ Không thể tải RSS từ {source}: {str(e)[:80]}")
-    
+            last_warning = f"⚠️ Không thể tải RSS từ {source}: {str(e)[:80]}"
+            continue
+
+    if aggregated_news:
+        return aggregated_news[:max_articles]
+
+    if last_warning:
+        st.warning(last_warning)
+    else:
+        st.warning(f"⚠️ Không thể tải RSS từ {source}")
     return []
 
 
@@ -154,20 +290,32 @@ def scrape_vneconomy_news(max_articles=5):
             'Connection': 'keep-alive'
         }
         
-        # Try different sections
-        urls_to_try = [
+        base_section = "https://vneconomy.vn/chung-khoan.htm"
+        max_section_pages = 5  # crawl deeper pages to get đủ bài liên quan chứng khoán
+        urls_to_try = []
+
+        for page in range(1, max_section_pages + 1):
+            if page == 1:
+                urls_to_try.append(base_section)
+            else:
+                urls_to_try.append(f"{base_section}?p={page}")
+
+        # Fallback pages bổ sung thêm bối cảnh kinh tế Việt Nam nếu trang chính thiếu bài
+        urls_to_try.extend([
             "https://vneconomy.vn/kinh-te.htm",
-            "https://vneconomy.vn/chung-khoan.htm",
             "https://vneconomy.vn"
-        ]
+        ])
         
+        collected_news = []
+        seen_links = set()
+
         for base_url in urls_to_try:
             try:
                 response = requests.get(base_url, headers=headers, timeout=15)
                 response.raise_for_status()
                 soup = BeautifulSoup(response.content, 'html.parser')
                 
-                news_data = []
+                page_news = []
                 
                 # Find article containers - vnEconomy uses different classes
                 # Try multiple possible selectors
@@ -190,8 +338,8 @@ def scrape_vneconomy_news(max_articles=5):
                     articles = soup.find_all('a', href=True)
                     articles = [a for a in articles if '/tin-tuc/' in a.get('href', '') or '/kinh-te/' in a.get('href', '')][:max_articles * 2]
                 
-                for article in articles[:max_articles * 2]:
-                    if len(news_data) >= max_articles:
+                for article in articles[:max_articles * 3]:
+                    if len(collected_news) >= max_articles:
                         break
                     
                     try:
@@ -212,7 +360,8 @@ def scrape_vneconomy_news(max_articles=5):
                         
                         # Extract date
                         time_elem = article.find('time') or article.find('span', class_=['time', 'date', 'published'])
-                        date = time_elem.get_text(strip=True) if time_elem else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        raw_date = time_elem.get_text(strip=True) if time_elem else datetime.now()
+                        date = format_display_date(raw_date) if raw_date else format_display_date(datetime.now())
                         
                         # Extract description
                         desc_elem = article.find('p') or article.find('div', class_=['description', 'desc', 'summary'])
@@ -221,23 +370,74 @@ def scrape_vneconomy_news(max_articles=5):
                         if len(content) < 20:
                             content = f"{title[:100]}... Đọc thêm tại vneconomy.vn"
                         
-                        news_data.append({
+                        normalized_content = content[:500] + "..." if len(content) > 500 else content
+
+                        passes_filter = is_vietnam_stock_article(title, normalized_content)
+                        lower_text = f"{title} {normalized_content}".lower()
+                        if not passes_filter:
+                            if (link.startswith("https://vneconomy.vn/chung-khoan") or link.startswith("/chung-khoan") or "chung-khoan" in base_url.lower()) and not any(excluded in lower_text for excluded in EXCLUDED_TOPIC_KEYWORDS):
+                                passes_filter = True
+                        if not passes_filter:
+                            continue
+
+                        unique_key = link or title
+                        if unique_key in seen_links:
+                            continue
+                        seen_links.add(unique_key)
+
+                        page_news.append({
                             "title": title,
                             "date": date,
-                            "content": content[:500] + "..." if len(content) > 500 else content,
+                            "content": normalized_content,
                             "link": link,
                             "source": "VNECONOMY "
                         })
                     except Exception:
                         continue
                 
-                if news_data:
-                    return news_data
+                if len(collected_news) + len(page_news) < max_articles:
+                    for anchor in soup.find_all('a', href=True):
+                        if len(collected_news) + len(page_news) >= max_articles:
+                            break
+                        raw_href = anchor.get('href', '')
+                        if not raw_href or raw_href.startswith('javascript') or raw_href.startswith('#'):
+                            continue
+                        if not VNECONOMY_ARTICLE_SLUG.match(raw_href):
+                            continue
+                        anchor_title = anchor.get_text(strip=True)
+                        if not anchor_title or len(anchor_title) < 10:
+                            continue
+                        link = raw_href if raw_href.startswith('http') else f"https://vneconomy.vn{raw_href}"
+                        if link in seen_links:
+                            continue
+
+                        placeholder_content = f"Tin nhanh VnEconomy: {anchor_title}. Đọc nội dung chi tiết trên trang gốc."
+                        passes_filter = is_vietnam_stock_article(anchor_title, placeholder_content)
+                        if not passes_filter:
+                            lower_text = anchor_title.lower()
+                            if (link.startswith("https://vneconomy.vn/chung-khoan") or raw_href.startswith("/chung-khoan") or "chung-khoan" in base_url.lower()) and not any(excluded in lower_text for excluded in EXCLUDED_TOPIC_KEYWORDS):
+                                passes_filter = True
+                        if not passes_filter:
+                            continue
+
+                        seen_links.add(link)
+                        page_news.append({
+                            "title": anchor_title,
+                            "date": format_display_date(datetime.now()),
+                            "content": placeholder_content,
+                            "link": link,
+                            "source": "VNECONOMY "
+                        })
+
+                if page_news:
+                    collected_news.extend(page_news)
+                    if len(collected_news) >= max_articles:
+                        return collected_news[:max_articles]
                     
             except Exception:
                 continue
         
-        return []
+        return collected_news
         
     except Exception as e:
         st.warning(f"⚠️ Không thể scrape vnEconomy: {str(e)[:80]}")
@@ -306,11 +506,11 @@ def scrape_investing_news(page_num, max_articles=5):
             if time_elem:
                 date_text = time_elem.get_text(strip=True)
                 if "ago" in date_text:
-                    date = convert_relative_date(date_text).strftime("%Y-%m-%d %H:%M:%S")
+                    date = format_display_date(convert_relative_date(date_text))
                 else:
-                    date = date_text
+                    date = format_display_date(date_text)
             else:
-                date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                date = format_display_date(datetime.now())
 
             # Lấy liên kết bài viết chi tiết
             link = title_elem.get('href', '')
@@ -330,6 +530,9 @@ def scrape_investing_news(page_num, max_articles=5):
             except requests.exceptions.RequestException as e:
                 content = f"Error retrieving content: {e}"
 
+            if not is_vietnam_stock_article(title, content):
+                continue
+
             news_data.append({
                 "title": title,
                 "date": date,
@@ -344,13 +547,38 @@ def scrape_investing_news(page_num, max_articles=5):
     return news_data
 
 
+def render_pagination_controls(total_pages):
+    """Hiển thị điều hướng trang ở cuối tab"""
+    st.divider()
+    spacer_left, control_col, spacer_right = st.columns([1, 2, 1])
+
+    with control_col:
+        prev_col, info_col, next_col = st.columns([1, 1, 1], gap="small")
+
+        prev_disabled = st.session_state.news_current_page <= 1
+        next_disabled = st.session_state.news_current_page >= total_pages
+
+        if prev_col.button("⬅️", use_container_width=True, disabled=prev_disabled, key="news_prev_btn"):
+            st.session_state.news_current_page -= 1
+            st.rerun()
+
+        info_col.markdown(
+            f"<div style='text-align:center; font-size:16px; font-weight:600;'>Trang {st.session_state.news_current_page} / {total_pages}</div>",
+            unsafe_allow_html=True
+        )
+
+        if next_col.button("➡️", use_container_width=True, disabled=next_disabled, key="news_next_btn"):
+            st.session_state.news_current_page += 1
+            st.rerun()
+
+
 # ======================================================
 # 📰 RENDER TAB NEWS
 # ======================================================
 def render(ticker: str = None):
     """Hiển thị tab tin tức từ nhiều nguồn"""
     
-    st.header("📰 Tin tức Thị trường Chứng khoán")
+    st.header("📰 Tin tức Thị trường Chứng khoán Việt Nam")
     
     # Chọn nguồn tin
     col1, col2 = st.columns([3, 1])
@@ -377,59 +605,14 @@ def render(ticker: str = None):
     if 'news_current_page' not in st.session_state:
         st.session_state.news_current_page = 1
     
-    # Tổng số trang
-    total_pages = 10
-    
-    # ======================================================
-    # 🎛️ ĐIỀU HƯỚNG TRANG
-    # ======================================================
-    st.divider()
-    
-    # Layout điều hướng
-    col1, col2, col3 = st.columns([1, 7, 1])
-    
-    # Nút Previous
-    with col1:
-        if st.button("⬅️ Previous", use_container_width=True) and st.session_state.news_current_page > 1:
-            st.session_state.news_current_page -= 1
-            st.rerun()
-    
-    # Chọn trang
-    with col2:
-        st.markdown(
-            "<div style='text-align: center; font-size: 16px; margin-bottom: 5px;'><b>📄 Go to page:</b></div>",
-            unsafe_allow_html=True,
-        )
-        selected_page = st.number_input(
-            "",
-            min_value=1,
-            max_value=total_pages,
-            value=st.session_state.news_current_page,
-            step=1,
-            label_visibility="collapsed",
-            key="news_page_selector"
-        )
-        if selected_page != st.session_state.news_current_page:
-            st.session_state.news_current_page = selected_page
-            st.rerun()
-    
-    # Nút Next
-    with col3:
-        if st.button("Next ➡️", use_container_width=True) and st.session_state.news_current_page < total_pages:
-            st.session_state.news_current_page += 1
-            st.rerun()
-    
-    # Hiển thị số trang hiện tại
-    st.info(f"📖 **Trang {st.session_state.news_current_page}** / {total_pages}")
+    per_page = 5
     
     # ======================================================
     # 📊 LẤY VÀ HIỂN THỊ TIN TỨC
     # ======================================================
-    page = st.session_state.news_current_page
-    
-    # Lấy tin tức dựa trên nguồn được chọn
+    # Lấy nhiều tin tức để phân trang
     with st.spinner(f"🔍 Đang tải tin tức từ {news_source.upper()}..."):
-        news = fetch_rss_news(news_source, max_articles=5)
+        news = fetch_rss_news(news_source, max_articles=50)
     
     if not news:
         st.error(f"❌ Không thể tải tin tức từ nguồn {news_source.upper()}")
@@ -452,54 +635,47 @@ def render(ticker: str = None):
         
         return  # Dừng execution nếu không có tin tức
     else:
+        total_pages = max(1, math.ceil(len(news) / per_page))
+        current_page = min(st.session_state.news_current_page, total_pages)
+        if current_page != st.session_state.news_current_page:
+            st.session_state.news_current_page = current_page
+            st.rerun()
+        start_idx = (current_page - 1) * per_page
+        page_news = news[start_idx:start_idx + per_page]
+        if not page_news and current_page > 1:
+            st.session_state.news_current_page = 1
+            st.rerun()
+
         # Hiển thị từng bài viết
-        for index, item in enumerate(news, start=1):
+        for index, item in enumerate(page_news, start=start_idx + 1):
+            sentiment_styles = get_news_sentiment_styles(item['title'], item['content'])
+            border_color = sentiment_styles['border']
+            background_style = sentiment_styles['background']
+            sentiment_label = sentiment_styles['label']
+            title_link = f"<a href='{item['link']}' target='_blank' style='color:#0f172a; text-decoration:none;'>{item['title']}</a>"
+
             with st.container():
-                # Card-style container
-                # Display source badge
-                source_badge = item.get('source', 'UNKNOWN')
                 st.markdown(f"""
                 <div style='
-                    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-                    border-left: 4px solid #22c55e;
+                    background: {background_style};
+                    border-left: 4px solid {border_color};
                     padding: 15px;
                     border-radius: 8px;
                     margin-bottom: 15px;
                 '>
-                    <div style='display: flex; justify-content: space-between; align-items: center;'>
-                        <h4 style='color: #166534; margin: 0 0 10px 0; flex: 1;'>📰 Bài {index}: {item['title']}</h4>
-                        <span style='background: #22c55e; color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;'>{source_badge}</span>
+                    <div style='display: flex; justify-content: space-between; align-items: center; gap: 16px;'>
+                        <h4 style='color: #0f172a; margin: 0 0 10px 0; flex: 1;'>📰 {title_link}</h4>
+                        <span style='font-size:12px; font-weight:600; color:{border_color}; padding:4px 10px; border:1px solid {border_color}; border-radius:999px;'>
+                            {sentiment_label}
+                        </span>
                     </div>
                     <p style='color: #6b7280; font-size: 14px; margin: 0;'>
                         📅 <b>Đăng lúc:</b> {item['date']}
                     </p>
                 </div>
                 """, unsafe_allow_html=True)
-                
-                # Nút đọc thêm
-                with st.expander("📖 Đọc nội dung đầy đủ"):
-                    st.markdown(f"**🔗 Link:** [{item['link']}]({item['link']})")
-                    st.markdown("---")
-                    st.write(item['content'])
-                
+
+                st.write(item['content'])
                 st.markdown("<br>", unsafe_allow_html=True)
     
-    # ======================================================
-    # 💡 HƯỚNG DẪN
-    # ======================================================
-    st.divider()
-    with st.expander("💡 Hướng dẫn sử dụng"):
-        st.markdown("""
-        ### Cách sử dụng tab News:
-        
-        1. **Chọn nguồn tin**: Dropdown ở trên cùng để chọn nguồn (VnExpress, CafeF, v.v.)
-        2. **Đọc nội dung**: Click vào "Đọc nội dung đầy đủ" để xem chi tiết bài viết
-        3. **Cache**: Dữ liệu được cache 5 phút để tăng tốc độ load
-        4. **Refresh**: Đợi 5 phút hoặc reload trang (Ctrl+R) để cập nhật tin mới
-        
-        ### Nguồn tin khả dụng:
-        - **VnExpress**: Tin kinh doanh từ VnExpress.net
-        - **CafeF**: Tin thị trường chứng khoán từ CafeF.vn
-        - **VietStock**: Tin tức từ VietStock.vn
-        - **VnEconomy**: Tin kinh tế từ VnEconomy.vn
-        """)
+    render_pagination_controls(total_pages if 'total_pages' in locals() else 1)

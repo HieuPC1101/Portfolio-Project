@@ -59,7 +59,7 @@ from ui.ui_components import (
     display_selected_stocks_2
 )
 from ui.market_overview import render_bang_dieu_hanh
-from news_tab import render
+from news_tab import render as render_news_tab
 from utils.session_manager import (
     initialize_session_state,
     save_manual_filter_state,
@@ -462,21 +462,20 @@ if st.sidebar.button("🤖 Hệ thống đề xuất mã cổ phiếu tự độ
     update_current_tab(option)
     st.rerun()
 
-if st.sidebar.button("💬 Trợ lý AI", use_container_width=True, type="primary" if default_option == "Trợ lý AI" else "secondary"):
-    option = "Trợ lý AI"
-    update_current_tab(option)
-    st.rerun()
-
 if st.sidebar.button("📊 Tổng hợp Kết quả Tối ưu hóa", use_container_width=True, type="primary" if default_option == "Tổng hợp Kết quả Tối ưu hóa" else "secondary"):
     option = "Tổng hợp Kết quả Tối ưu hóa"
     update_current_tab(option)
     st.rerun()
-# if st.sidebar.button("📰 Tin tức Thị trường & Phân tích", use_container_width=True, type="primary" if default_option == "Tin tức Thị trường & Phân tích" else "secondary"):
-#     option = "Tin tức Thị trường & Phân tích"
-#     update_current_tab(option)
-#     st.rerun()
-# if option == "Tin tức Thị trường & Phân tích":
-#     render()
+
+if st.sidebar.button("📰 Tin tức Thị trường & Phân tích", use_container_width=True, type="primary" if default_option == "Tin tức Thị trường & Phân tích" else "secondary"):
+    option = "Tin tức Thị trường & Phân tích"
+    update_current_tab(option)
+    st.rerun()
+
+if st.sidebar.button("💬 Trợ lý AI", use_container_width=True, type="primary" if default_option == "Trợ lý AI" else "secondary"):
+    option = "Trợ lý AI"
+    update_current_tab(option)
+    st.rerun()
 if option == "Trợ lý AI":
     # Hiển thị trang chatbot
     render_chatbot_page()
@@ -568,7 +567,7 @@ elif option == "Tự chọn mã cổ phiếu":
     filtered_df = filtered_df[filtered_df['icb_name'] == selected_icb_name]
     
     st.sidebar.markdown("---")
-    
+
     # Bộ lọc theo mã chứng khoán (symbol)
     selected_symbols = st.sidebar.multiselect('Chọn mã chứng khoán', filtered_df['symbol'])
 
@@ -614,6 +613,9 @@ elif option == "Tự chọn mã cổ phiếu":
     # Gọi hàm chính
     if __name__ == "__main__":
         main_manual_selection()
+
+elif option == "Tin tức Thị trường & Phân tích":
+    render_news_tab()
 
 elif option == "Hệ thống đề xuất mã cổ phiếu tự động":
     # Giao diện Streamlit
