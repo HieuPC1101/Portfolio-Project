@@ -93,10 +93,14 @@ def render_chatbot_sidebar(portfolio_context=None):
     Render giao diện chatbot trong sidebar
     
     Args:
-        portfolio_context (dict): Context về danh mục đầu tư hiện tại
+        portfolio_context (dict): Context về danh mục đầu tư hiện tại (tùy chọn, tự động lấy nếu không có)
     """
     # Khởi tạo chatbot session
     initialize_chatbot_session()
+    
+    # Tự động lấy portfolio context từ session state nếu không được truyền vào
+    if portfolio_context is None:
+        portfolio_context = get_current_portfolio_context()
     
     # Kiểm tra lỗi cấu hình - hiển thị trước expander
     if st.session_state.chatbot is None:
@@ -227,14 +231,13 @@ def get_current_portfolio_context():
     """
     context = {}
     
-    # Lấy danh sách cổ phiếu đã chọn
-    if 'manual_selected_stocks' in st.session_state and st.session_state.manual_selected_stocks:
-        context['selected_stocks'] = st.session_state.manual_selected_stocks
-    elif 'auto_selected_stocks' in st.session_state and st.session_state.auto_selected_stocks:
-        context['selected_stocks'] = st.session_state.auto_selected_stocks
+    # Lấy danh sách cổ phiếu đã chọn từ dashboard
+    if 'selected_stocks' in st.session_state and st.session_state.selected_stocks:
+        context['selected_stocks'] = st.session_state.selected_stocks
     
-    # Có thể thêm optimization result nếu có trong session
-    # context['optimization_result'] = st.session_state.get('last_optimization_result')
+    # Lấy kết quả tối ưu hóa nếu có
+    if 'optimization_result' in st.session_state and st.session_state.optimization_result:
+        context['optimization_result'] = st.session_state.optimization_result
     
     return context if context else None
 
