@@ -146,7 +146,7 @@ def run_models(data):
                 st.error("❌ Không thể chạy bất kỳ mô hình nào. Vui lòng kiểm tra dữ liệu.")
     
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### 📊 Hoặc chọn từng mô hình")
+    st.sidebar.markdown("### Chạy từng mô hình tối ưu hóa")
 
     models = {
         "Tối ưu hóa giữa lợi nhuận và rủi ro": {

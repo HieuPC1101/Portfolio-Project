@@ -85,6 +85,31 @@ def convert_relative_date(relative_date):
         return datetime.now()
 
 
+def parse_cafebiz_datetime(raw_text: str) -> datetime:
+    """Parse CafeBiz timestamp strings like '07:57 23/11/2025'."""
+    if not raw_text:
+        return datetime.now()
+
+    cleaned = raw_text.replace("|", " ").strip()
+    cleaned = re.sub(r"\s+", " ", cleaned)
+    patterns = [
+        "%H:%M %d/%m/%Y",
+        "%H:%M %d-%m-%Y",
+        "%d/%m/%Y %H:%M",
+        "%d-%m-%Y %H:%M",
+        "%I:%M %p %d/%m/%Y",
+        "%d/%m/%Y %I:%M %p",
+    ]
+
+    for pattern in patterns:
+        try:
+            return datetime.strptime(cleaned, pattern)
+        except ValueError:
+            continue
+
+    return datetime.now()
+
+
 def is_vietnam_stock_article(title: str, content: str) -> bool:
     """Kiểm tra bài viết có liên quan đến thị trường chứng khoán Việt Nam."""
     combined_text = f"{title or ''} {content or ''}".lower()
@@ -164,6 +189,8 @@ def fetch_rss_news(source="vnexpress", max_articles=5):
     # Special handling for vnEconomy - use web scraping instead
     if source == "vnEconomy":
         return scrape_vneconomy_news(max_articles)
+    if source == "cafebiz":
+        return scrape_cafebiz_news(max_articles)
     
     rss_urls = {
         "vnexpress": "https://vnexpress.net/rss/kinh-doanh.rss",
@@ -445,6 +472,98 @@ def scrape_vneconomy_news(max_articles=5):
         return []
 
 
+@st.cache_data(ttl=300, show_spinner=False)
+def scrape_cafebiz_news(max_articles=5):
+    """Scrape CafeBiz category page to avoid dead RSS feed."""
+    section_url = "https://cafebiz.vn/cau-chuyen-kinh-doanh/chung-khoan.chn"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Connection': 'keep-alive'
+    }
+
+    def fetch_article_body(url: str) -> str:
+        try:
+            detail_response = requests.get(url, headers=headers, timeout=15)
+            detail_response.raise_for_status()
+            detail_soup = BeautifulSoup(detail_response.content, 'html.parser')
+            content_div = detail_soup.find('div', class_='newscontent')
+            if content_div:
+                return content_div.get_text(separator=' ', strip=True)
+        except Exception:
+            return ""
+        return ""
+
+    try:
+        response = requests.get(section_url, headers=headers, timeout=15)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as exc:
+        st.warning(f"⚠️ Không thể tải CafeBiz: {str(exc)[:80]}")
+        return []
+
+    soup = BeautifulSoup(response.content, 'html.parser')
+    article_boxes = soup.select('div.cfbiznews_box')
+    if not article_boxes:
+        st.warning("⚠️ Không tìm thấy bài viết CafeBiz phù hợp")
+        return []
+
+    collected_news = []
+    seen_links = set()
+
+    for box in article_boxes:
+        if len(collected_news) >= max_articles:
+            break
+
+        title_elem = box.select_one('.cfbiznews_title')
+        if not title_elem:
+            continue
+        title = title_elem.get_text(strip=True)
+        if not title or len(title) < 10:
+            continue
+
+        link = title_elem.get('href') or ''
+        if not link:
+            continue
+        if link.startswith('//'):
+            link = f"https:{link}"
+        elif link.startswith('/'):
+            link = f"https://cafebiz.vn{link}"
+        if link in seen_links:
+            continue
+        seen_links.add(link)
+
+        timestamp_elem = box.select_one('.cfbiznews_tt')
+        raw_timestamp = timestamp_elem.get_text(strip=True) if timestamp_elem else ''
+        published_dt = parse_cafebiz_datetime(raw_timestamp)
+        display_date = format_display_date(published_dt)
+
+        summary_elem = box.select_one('.cfbiznews_des') or box.select_one('.cfbiznews_sapo')
+        summary_text = summary_elem.get_text(strip=True) if summary_elem else ''
+
+        article_text = summary_text
+        if len(article_text) < 120:
+            detailed = fetch_article_body(link)
+            article_text = detailed or summary_text or "Đọc thêm trên CafeBiz.vn"
+
+        normalized_content = article_text[:500] + "..." if len(article_text) > 500 else article_text
+        if not is_vietnam_stock_article(title, normalized_content):
+            continue
+
+        collected_news.append({
+            "title": title,
+            "date": display_date,
+            "content": normalized_content,
+            "link": link,
+            "source": "CAFEBIZ"
+        })
+
+    if not collected_news:
+        st.warning("⚠️ CafeBiz không có bài viết phù hợp trong thời điểm này")
+
+    return collected_news[:max_articles]
+
+
 @st.cache_data(ttl=300, show_spinner=False)  # Cache 5 phút
 def scrape_investing_news(page_num, max_articles=5):
     """
@@ -593,10 +712,11 @@ def render(ticker: str = None):
     with col2:
         news_source = st.selectbox(
             "📡 Chọn nguồn:",
-            ["vnexpress", "cafef", "vietstock", "vnEconomy"],
+            ["vnexpress", "cafef", "cafebiz", "vietstock", "vnEconomy"],
             format_func=lambda x: {
                 "vnexpress": "VnExpress",
                 "cafef": "CafeF", 
+                "cafebiz": "CafeBiz",
                 "vietstock": "VietStock",
                 "vnEconomy": "VnEconomy"
             }.get(x, x)
