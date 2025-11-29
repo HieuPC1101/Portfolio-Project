@@ -27,6 +27,60 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _prepare_latest_price_series(tickers, latest_prices_dict, reference_prices=None):
+    """Đảm bảo có giá mới nhất cho mọi mã để tránh lỗi shape mismatch."""
+    if not tickers:
+        return pd.Series(dtype=float)
+
+    price_series = pd.Series(latest_prices_dict or {}, dtype=float)
+    fallback_series = pd.Series(dtype=float)
+
+    if reference_prices is not None:
+        try:
+            if isinstance(reference_prices, pd.DataFrame) and not reference_prices.empty:
+                fallback_series = reference_prices.ffill().bfill().iloc[-1]
+            elif isinstance(reference_prices, pd.Series):
+                fallback_series = reference_prices.ffill().bfill()
+            fallback_series = pd.to_numeric(fallback_series, errors='coerce')
+        except Exception as exc:  # pragma: no cover - chỉ log khi có sự cố dữ liệu bất thường
+            logger.warning(f"Khong the tao fallback price series: {exc}")
+            fallback_series = pd.Series(dtype=float)
+
+    overlap = [t for t in tickers if t in price_series.index and t in fallback_series.index]
+    ratios = []
+    for ticker in overlap:
+        latest_val = price_series.get(ticker)
+        fallback_val = fallback_series.get(ticker)
+        if pd.notna(latest_val) and pd.notna(fallback_val) and fallback_val != 0:
+            ratios.append(latest_val / fallback_val)
+
+    scale_factor = float(np.median(ratios)) if ratios else None
+
+    def _needs_fill(val):
+        return pd.isna(val) or val <= 0
+
+    for ticker in tickers:
+        current_val = price_series.get(ticker)
+        if not _needs_fill(current_val):
+            continue
+        fallback_val = fallback_series.get(ticker) if not fallback_series.empty else None
+        if pd.notna(fallback_val) and fallback_val > 0:
+            adjusted = float(fallback_val)
+            if scale_factor:
+                adjusted *= scale_factor
+            elif adjusted < 1000:
+                adjusted *= 1000  # dữ liệu lịch sử thường ở đơn vị nghìn đồng
+            price_series.loc[ticker] = adjusted
+
+    remaining_missing = [t for t in tickers if _needs_fill(price_series.get(t))]
+    if remaining_missing:
+        message = f"Không thể lấy giá hợp lệ cho các mã: {', '.join(remaining_missing)}"
+        logger.error(message)
+        raise ValueError(message)
+
+    return price_series.reindex(tickers)
+
+
 def optimize_hrp_allocation(target_weights, prices, total_investment):
     """
     Tối ưu hóa phân bổ cổ phiếu cho HRP bằng cách tối thiểu hóa
@@ -294,7 +348,7 @@ def markowitz_optimization(price_data, total_investment, get_latest_prices_func)
 
     weight2 = dict(zip(tickers, optimal_weights))
     latest_prices = get_latest_prices_func(tickers)
-    latest_prices_series = pd.Series(latest_prices)
+    latest_prices_series = _prepare_latest_price_series(tickers, latest_prices, cleaned_prices)
     
     logger.info(f"[MARKOWITZ] Truoc khi gan total_portfolio_value: {total_investment:,.0f} VND")
     total_portfolio_value = total_investment
@@ -313,7 +367,7 @@ def markowitz_optimization(price_data, total_investment, get_latest_prices_func)
         "Tỷ lệ Sharpe": sharpe_arr[max_sharpe_idx],
         "Số mã cổ phiếu cần mua": allocation_lp,
         "Số tiền còn lại": leftover_lp,
-        "Giá mã cổ phiếu": latest_prices,
+        "Giá mã cổ phiếu": latest_prices_series.to_dict(),
         # Thêm dữ liệu cho biểu đồ
         "ret_arr": ret_arr,
         "vol_arr": vol_arr,
@@ -383,8 +437,10 @@ def max_sharpe(data, total_investment, get_latest_prices_func):
             vol_arr[i] = np.sqrt(np.dot(w.T, np.dot(cov_matrix_annual, w)))
             sharpe_arr[i] = (ret_arr[i] - rf) / vol_arr[i]
 
-        latest_prices = get_latest_prices_func(tickers)
-        latest_prices_series = pd.Series(latest_prices)
+        latest_prices_raw = get_latest_prices_func(tickers)
+        latest_prices_series = _prepare_latest_price_series(tickers, latest_prices_raw, data)
+        latest_prices = latest_prices_series.to_dict()
+        latest_prices_series = _prepare_latest_price_series(tickers, latest_prices, data)
         total_portfolio_value = total_investment
         
         logger.info(f"[MAX_SHARPE] Truoc khi goi run_integer_programming:")
@@ -404,7 +460,7 @@ def max_sharpe(data, total_investment, get_latest_prices_func):
             "Tỷ lệ Sharpe": performance[2],
             "Số mã cổ phiếu cần mua": allocation_lp,
             "Số tiền còn lại": leftover_lp,
-            "Giá mã cổ phiếu": latest_prices,
+            "Giá mã cổ phiếu": latest_prices_series.to_dict(),
             # Thêm dữ liệu cho biểu đồ Max Sharpe
             "ret_arr": ret_arr,
             "vol_arr": vol_arr,
@@ -482,7 +538,7 @@ def min_volatility(data, total_investment, get_latest_prices_func):
             sharpe_arr[i] = (ret_arr[i] - rf) / vol_arr[i]
 
         latest_prices = get_latest_prices_func(tickers)
-        latest_prices_series = pd.Series(latest_prices)
+        latest_prices_series = _prepare_latest_price_series(tickers, latest_prices, data)
         total_portfolio_value = total_investment
         
         logger.info(f"[MIN_VOLATILITY] Truoc khi goi run_integer_programming:")
@@ -502,7 +558,7 @@ def min_volatility(data, total_investment, get_latest_prices_func):
             "Tỷ lệ Sharpe": performance[2],
             "Số mã cổ phiếu cần mua": allocation_lp,
             "Số tiền còn lại": leftover_lp,
-            "Giá mã cổ phiếu": latest_prices,
+            "Giá mã cổ phiếu": latest_prices_series.to_dict(),
             # Thêm dữ liệu cho biểu đồ Min Volatility
             "ret_arr": ret_arr,
             "vol_arr": vol_arr,
@@ -576,7 +632,7 @@ def min_cvar(data, total_investment, get_latest_prices_func, beta=0.95):
         sharpe_ratio = (performance[0] - rf) / portfolio_std
 
         latest_prices = get_latest_prices_func(tickers)
-        latest_prices_series = pd.Series(latest_prices)
+        latest_prices_series = _prepare_latest_price_series(tickers, latest_prices, data)
         total_portfolio_value = total_investment
         
         logger.info(f"[MIN_CVAR] Truoc khi goi run_integer_programming:")
@@ -595,7 +651,7 @@ def min_cvar(data, total_investment, get_latest_prices_func, beta=0.95):
             "Rủi ro CVaR": performance[1],
             "Số mã cổ phiếu cần mua": allocation_lp,
             "Số tiền còn lại": leftover_lp,
-            "Giá mã cổ phiếu": latest_prices,
+            "Giá mã cổ phiếu": latest_prices_series.to_dict(),
             "Rủi ro (Độ lệch chuẩn)": portfolio_std,
             "Tỷ lệ Sharpe": sharpe_ratio
         }
@@ -653,7 +709,7 @@ def min_cdar(data, total_investment, get_latest_prices_func, beta=0.95):
         sharpe_ratio = (performance[0] - rf) / portfolio_std
 
         latest_prices = get_latest_prices_func(tickers)
-        latest_prices_series = pd.Series(latest_prices)
+        latest_prices_series = _prepare_latest_price_series(tickers, latest_prices, data)
         total_portfolio_value = total_investment
         
         logger.info(f"[MIN_CDAR] Truoc khi goi run_integer_programming:")
@@ -672,7 +728,7 @@ def min_cdar(data, total_investment, get_latest_prices_func, beta=0.95):
             "Rủi ro CDaR": performance[1],
             "Số mã cổ phiếu cần mua": allocation_lp,
             "Số tiền còn lại": leftover_lp,
-            "Giá mã cổ phiếu": latest_prices,
+            "Giá mã cổ phiếu": latest_prices_series.to_dict(),
             "Rủi ro (Độ lệch chuẩn)": portfolio_std,
             "Tỷ lệ Sharpe": sharpe_ratio
         }

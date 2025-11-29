@@ -16,7 +16,7 @@ def load_gemini_api_key() -> str:
         return env_key
 
     try:
-        from utils.secret_config import GEMINI_API_KEY as secret_key  # type: ignore
+        from scripts.utils.secret_config import GEMINI_API_KEY as secret_key  # type: ignore
 
         return secret_key
     except ImportError:

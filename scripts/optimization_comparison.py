@@ -97,7 +97,7 @@ def create_comparison_table(results_dict):
             'Tỷ lệ Sharpe': f"{metrics['sharpe_ratio']:.4f}",
             'Return/Risk': f"{metrics['return_risk_ratio']:.4f}",
             'Số mã CP': metrics['num_stocks'],
-            'Tổng số cổ phiếu': int(metrics['total_shares']),
+            'Tổng số cổ phiếu đầu tư': int(metrics['total_shares']),
             'Vốn sử dụng (VND)': f"{metrics['total_invested']:,.0f}",
             'Vốn còn lại (VND)': f"{metrics['leftover']:,.0f}",
             'Tỷ lệ sử dụng vốn (%)': f"{metrics['capital_utilization']:.2f}",
@@ -686,7 +686,7 @@ def render_optimization_comparison_tab(results_dict):
         st.download_button(
             label="📥 Tải xuống bảng so sánh (CSV)",
             data=csv,
-            file_name="portfolio_comparison.csv",
+            file_name="so_sanh_toi_uu.csv",
             mime="text/csv"
         )
     
