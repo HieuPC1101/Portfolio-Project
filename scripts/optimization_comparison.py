@@ -836,7 +836,7 @@ def render_optimization_comparison_tab(results_dict):
         
         # Chi tiết phân bổ
         st.markdown("---")
-        with st.expander("📋 Xem Chi tiết Trọng số & Số lượng Cổ phiếu"):
+        with st.expander("Xem Chi tiết Trọng số & Số lượng Cổ phiếu"):
             col_a, col_b = st.columns(2)
             with col_a:
                 display_weight_comparison(valid_results)
