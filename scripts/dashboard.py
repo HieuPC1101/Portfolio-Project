@@ -142,6 +142,10 @@ def run_models(data):
             if results:
                 st.success(f"✅ Hoàn thành! Đã chạy {len(results)}/6 mô hình thành công.")
                 st.info("💡 Vào tab **'Tổng hợp Kết quả Tối ưu hóa'** để xem so sánh chi tiết!")
+                # Chuyển sang tab so sánh
+                st.session_state.previous_tab = get_current_tab()
+                update_current_tab("Tổng hợp Kết quả Tối ưu hóa")
+                st.rerun()
             else:
                 st.error("❌ Không thể chạy bất kỳ mô hình nào. Vui lòng kiểm tra dữ liệu.")
     
