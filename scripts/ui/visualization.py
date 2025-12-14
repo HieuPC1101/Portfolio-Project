@@ -330,7 +330,7 @@ def plot_interactive_stock_chart_with_indicators(data, tickers, indicators=None)
     if has_macd:
         fig.update_yaxes(title_text="MACD", row=macd_row, col=1)
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def plot_interactive_stock_chart(data, tickers):
@@ -389,7 +389,7 @@ def plot_interactive_stock_chart(data, tickers):
     )
 
     # Hiển thị biểu đồ trên Streamlit
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def plot_candlestick_chart(ohlc_data, ticker):
@@ -636,7 +636,7 @@ def plot_candlestick_chart(ohlc_data, ticker):
     fig.update_yaxes(title_text="Khối lượng", row=4, col=1)
     
     # Hiển thị biểu đồ
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Thêm hướng dẫn sử dụng
     with st.expander("ℹ️ Hướng dẫn đọc chỉ báo kỹ thuật"):
@@ -884,7 +884,7 @@ def plot_max_sharpe_with_cal(ret_arr, vol_arr, sharpe_arr, all_weights, tickers,
         height=600
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Thêm chú thích về ý nghĩa của CAL với khả năng đóng/mở
     with st.expander("Giải thích về Đường CAL (Capital Allocation Line)"):
@@ -988,7 +988,7 @@ def plot_min_volatility_scatter(ret_arr, vol_arr, sharpe_arr, all_weights, ticke
         height=600
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Thêm chú thích về ý nghĩa của Min Volatility
     with st.expander("Giải thích về Mô hình Min Volatility"):
@@ -1154,7 +1154,7 @@ def backtest_portfolio(symbols, weights, start_date, end_date, fetch_stock_data_
         yaxis_title="Lợi suất tích lũy",
         hovermode="x unified"
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     # Tính toán chỉ số hiệu suất
     sharpe_ratio = portfolio_returns.mean() / portfolio_returns.std() * np.sqrt(252)
@@ -1314,7 +1314,7 @@ def plot_min_cvar_analysis(result):
         )
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Thông tin bổ sung về mô hình
     st.subheader("Thông Tin Mô Hình Min CVaR")
@@ -1538,7 +1538,7 @@ def plot_min_cdar_analysis(min_cdar_result, max_sharpe_result, returns_data):
             align="center"
         )
         
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
         
         # Tính toán và hiển thị các chỉ số so sánh
         st.subheader("So sánh Chỉ số Drawdown")
@@ -1677,7 +1677,7 @@ def plot_hrp_dendrogram(data, weights):
         margin=dict(b=150)
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     
     # Thêm giải thích ý nghĩa
     with st.expander("Ý nghĩa của Biểu đồ Dendrogram"):
@@ -1737,7 +1737,7 @@ def plot_hrp_dendrogram(data, weights):
         plot_bgcolor='white'
     )
     
-    st.plotly_chart(fig_corr, use_container_width=True)
+    st.plotly_chart(fig_corr, width='stretch')
     
     # Phân tích các nhóm
     st.subheader("Phân Tích Nhóm Tương Quan")
@@ -1757,7 +1757,7 @@ def plot_hrp_dendrogram(data, weights):
     if high_corr_pairs:
         st.write("**Các cặp cổ phiếu có tương quan cao (> 0.5):**")
         df_corr = pd.DataFrame(high_corr_pairs)
-        st.dataframe(df_corr, use_container_width=True)
+        st.dataframe(df_corr, width='stretch')
         st.info("⚠️ Các cặp cổ phiếu này có xu hướng biến động cùng chiều. "
                 "Đầu tư vào nhiều cổ phiếu trong cùng nhóm có thể không mang lại hiệu quả đa dạng hóa.")
     else:

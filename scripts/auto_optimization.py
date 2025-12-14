@@ -110,14 +110,14 @@ def show_auto_optimization_results(data, total_investment, get_latest_prices_fun
         run_button = st.button(
             "▶️ Chạy Tất cả Mô hình",
             type="primary",
-            use_container_width=True,
+            width='stretch',
             help="Chạy 6 mô hình tối ưu hóa một lượt"
         )
     
     with col_btn2:
         clear_button = st.button(
             "🗑️ Xóa Kết quả Cũ",
-            use_container_width=True,
+            width='stretch',
             help="Xóa tất cả kết quả đã lưu"
         )
     

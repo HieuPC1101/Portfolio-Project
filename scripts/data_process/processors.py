@@ -27,7 +27,7 @@ def _safe_pct_change(current: float, previous: float) -> float:
 
 
 def get_indices_history(symbols: Iterable[str] = DEFAULT_INDEX_SYMBOLS, months: int = 6,
-                        source: str = "VCI", start_date: Optional[str] = None,
+                        source: str = "MSN", start_date: Optional[str] = None,
                         end_date: Optional[str] = None) -> pd.DataFrame:
     """Return long-format historical quotes for a list of indices."""
     frames = []
@@ -50,7 +50,7 @@ def get_indices_history(symbols: Iterable[str] = DEFAULT_INDEX_SYMBOLS, months: 
 
 
 def get_market_indices_metrics(symbols: Iterable[str] = DEFAULT_INDEX_SYMBOLS,
-                               source: str = "VCI") -> List[dict]:
+                               source: str = "MSN") -> List[dict]:
     """Prepare KPI cards for headline indices."""
     metrics: List[dict] = []
     for symbol in symbols:

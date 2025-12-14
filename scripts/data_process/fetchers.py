@@ -31,7 +31,7 @@ def fetch_data_from_csv(file_path: str) -> pd.DataFrame:
 
 def create_vnstock_instance():
     """Return a default Vnstock instance."""
-    return Vnstock().stock(symbol='VN30F1M', source='VCI')
+    return Vnstock().stock(symbol='VNINDEX', source='MSN')
 
 def _normalize_symbols(symbols: Iterable[str]) -> Tuple[List[str], List[str]]:
     """Return uppercase symbols without duplicates and list of discarded ones."""
@@ -55,28 +55,34 @@ def _fetch_single_stock_cached(ticker: str, start_date: str, end_date: str) -> p
     Fetch a single ticker history and cache the response.
     Returns a DataFrame with DatetimeIndex.
     """
-    try:
-        stock = Vnstock().stock(symbol=ticker, source='VCI')
-        stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
-    except Exception as exc:
-        error_msg = str(exc)
-        if "RetryError" in error_msg:
-            error_msg = "Không thể kết nối đến server"
-        elif "ValueError" in error_msg:
-            error_msg = "Dữ liệu không hợp lệ"
-        raise RuntimeError(error_msg) from exc
-
-    if stock_data is None or stock_data.empty:
-        raise ValueError("Không có dữ liệu")
-
-    # Giữ lại time và close
-    df = stock_data[['time', 'close']].copy()
-    df['time'] = pd.to_datetime(df['time'])
-    df = df.set_index('time')
+    # Try MSN first, fallback to VCI if needed
+    sources = ['MSN', 'VCI']
+    last_error = None
     
-    # Quan trọng: Rename cột ngay tại đây hoặc bên ngoài đều được, 
-    # nhưng để cache hiệu quả thì nên giữ nguyên raw rồi rename sau.
-    return df
+    for source in sources:
+        try:
+            stock = Vnstock().stock(symbol=ticker, source=source)
+            stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
+            
+            if stock_data is not None and not stock_data.empty:
+                # Giữ lại time và close
+                df = stock_data[['time', 'close']].copy()
+                df['time'] = pd.to_datetime(df['time'])
+                df = df.set_index('time')
+                return df
+        except Exception as exc:
+            last_error = exc
+            continue
+    
+    # If all sources failed
+    error_msg = str(last_error) if last_error else "Không có dữ liệu"
+    if "404" in error_msg or "Not Found" in error_msg:
+        error_msg = "Mã không tồn tại hoặc đã hủy niêm yết"
+    elif "RetryError" in error_msg:
+        error_msg = "Không thể kết nối đến server"
+    elif "ValueError" in error_msg:
+        error_msg = "Dữ liệu không hợp lệ"
+    raise RuntimeError(error_msg) from last_error
 
 def fetch_stock_data2(symbols: List[str], start_date: str, end_date: str,
                       verbose: bool = True) -> Tuple[pd.DataFrame, List[str]]:
@@ -167,23 +173,21 @@ def fetch_stock_data2(symbols: List[str], start_date: str, end_date: str,
 @lru_cache(maxsize=256)
 def _fetch_latest_price_single(ticker: str, start_date: str, end_date: str) -> Tuple[Optional[float], Optional[str]]:
     """Return latest close price (in VND) for ticker."""
-    try:
-        stock = Vnstock().stock(symbol=ticker, source='VCI')
-        stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
-    except Exception as exc:
-        return None, str(exc)
-
-    if stock_data is None or stock_data.empty:
-        return None, "Không có dữ liệu"
-
-    # Lấy giá đóng cửa mới nhất
-    try:
-        # Giả sử dữ liệu API trả về đơn vị nghìn đồng (thường thấy ở VNStock/SSI/VCI)
-        # Cần kiểm tra kỹ nguồn dữ liệu. Code cũ nhân 1000.
-        latest_price = float(stock_data['close'].iloc[-1]) * 1000
-        return latest_price, None
-    except Exception as e:
-        return None, f"Lỗi parse giá: {e}"
+    sources = ['MSN', 'VCI']
+    
+    for source in sources:
+        try:
+            stock = Vnstock().stock(symbol=ticker, source=source)
+            stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
+            
+            if stock_data is not None and not stock_data.empty:
+                # Lấy giá đóng cửa mới nhất
+                latest_price = float(stock_data['close'].iloc[-1]) * 1000
+                return latest_price, None
+        except Exception:
+            continue
+    
+    return None, "Không lấy được giá (404 hoặc mã không tồn tại)"
 
 
 def get_latest_prices(tickers: List[str]) -> Dict[str, float]:
@@ -225,30 +229,35 @@ def get_latest_prices(tickers: List[str]) -> Dict[str, float]:
 
 def fetch_ohlc_data(ticker: str, start_date: str, end_date: str) -> pd.DataFrame:
     """Fetch OHLCV data for a single ticker."""
-    try:
-        stock = Vnstock().stock(symbol=ticker, source='VCI')
-        stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
-        
-        if stock_data is None or stock_data.empty:
-            print(f"Không có dữ liệu OHLC cho {ticker}")
-            return pd.DataFrame()
+    sources = ['MSN', 'VCI']
+    
+    for source in sources:
+        try:
+            stock = Vnstock().stock(symbol=ticker, source=source)
+            stock_data = stock.quote.history(start=str(start_date), end=str(end_date))
+            
+            if stock_data is None or stock_data.empty:
+                continue
 
-        required_columns = ['time', 'open', 'high', 'low', 'close', 'volume']
-        # Chuẩn hóa tên cột về chữ thường để tránh lỗi case-sensitive
-        stock_data.columns = [c.lower() for c in stock_data.columns]
-        
-        available = [col for col in required_columns if col in stock_data.columns]
-        ohlc_data = stock_data[available].copy()
-        ohlc_data['time'] = pd.to_datetime(ohlc_data['time'])
-        return ohlc_data
-    except Exception as exc:
-        print(f"Lỗi khi lấy dữ liệu OHLC cho {ticker}: {exc}")
-        return pd.DataFrame()
+            required_columns = ['time', 'open', 'high', 'low', 'close', 'volume']
+            # Chuẩn hóa tên cột về chữ thường để tránh lỗi case-sensitive
+            stock_data.columns = [c.lower() for c in stock_data.columns]
+            
+            available = [col for col in required_columns if col in stock_data.columns]
+            if available:
+                ohlc_data = stock_data[available].copy()
+                ohlc_data['time'] = pd.to_datetime(ohlc_data['time'])
+                return ohlc_data
+        except Exception:
+            continue
+    
+    print(f"Không thể lấy dữ liệu OHLC cho {ticker} (404 hoặc mã không tồn tại)")
+    return pd.DataFrame()
 
 
 def get_index_history(symbol: str = "VNINDEX", start_date: Optional[str] = None,
                       end_date: Optional[str] = None, months: int = 6,
-                      source: str = "VCI") -> pd.DataFrame:
+                      source: str = "MSN") -> pd.DataFrame:
     """Fetch historical quotes for a market index."""
     # Xử lý ngày tháng
     today = datetime.datetime.now(VN_TZ).date()
@@ -263,39 +272,74 @@ def get_index_history(symbol: str = "VNINDEX", start_date: Optional[str] = None,
     if s_date > e_date:
          s_date = e_date - datetime.timedelta(days=30)
 
-    try:
-        # Không dùng cache ở đây vì start/end date thay đổi liên tục theo ngày
-        # Nếu muốn cache, phải cache theo logic _fetch_single_stock_cached
-        stock = Vnstock().stock(symbol=symbol, source=source)
-        history = stock.quote.history(start=s_date.strftime("%Y-%m-%d"), 
-                                      end=e_date.strftime("%Y-%m-%d"))
-        
-        if history is None or history.empty:
-            return pd.DataFrame()
-
-        history = history.copy()
-        history['time'] = pd.to_datetime(history['time'])
-        history['symbol'] = symbol
-        
-        cols = ['time', 'close', 'volume', 'symbol']
-        return history[[c for c in cols if c in history.columns]]
-        
-    except Exception as exc:
-        print(f"Lỗi khi lấy dữ liệu chỉ số {symbol}: {exc}")
-        return pd.DataFrame()
+    sources = [source, 'MSN', 'VCI'] if source else ['MSN', 'VCI']
+    
+    for src in sources:
+        try:
+            stock = Vnstock().stock(symbol=symbol, source=src)
+            history = stock.quote.history(start=s_date.strftime("%Y-%m-%d"), 
+                                          end=e_date.strftime("%Y-%m-%d"))
+            
+            if history is not None and not history.empty:
+                history = history.copy()
+                history['time'] = pd.to_datetime(history['time'])
+                history['symbol'] = symbol
+                
+                cols = ['time', 'close', 'volume', 'symbol']
+                return history[[c for c in cols if c in history.columns]]
+        except Exception:
+            continue
+    
+    print(f"Không thể lấy dữ liệu chỉ số {symbol} (thử tất cả sources)")
+    return pd.DataFrame()
 
 
 @lru_cache(maxsize=4)
 def _get_sector_snapshot_cached(exchange: str, size: int, source: str) -> pd.DataFrame:
-    """Helper cached function for screener."""
-    try:
-        # Lưu ý: Vnstock screener API thay đổi thường xuyên
-        stock = Vnstock().stock(symbol='VNINDEX', source=source)
-        params = {"exchangeName": exchange, "size": size}
-        snapshot = stock.screener.stock(params=params)
-        return snapshot if snapshot is not None else pd.DataFrame()
-    except Exception:
-        return pd.DataFrame()
+    """Helper cached function for screener - using listing API as fallback."""
+    # Try listing API which is more stable than screener
+    sources_to_try = ['VCI', 'TCBS'] if not source else [source, 'VCI', 'TCBS']
+    
+    for src in sources_to_try:
+        # Try listing API first (more reliable)
+        try:
+            stock = Vnstock().stock(symbol='VNINDEX', source=src)
+            # Correct method name for listing
+            snapshot = stock.listing.symbols_by_exchange(exchange)
+            if snapshot is not None and not snapshot.empty:
+                print(f"✓ Lấy listing data thành công từ source: {src}")
+                # Ensure required columns exist
+                if 'symbol' in snapshot.columns and 'ticker' not in snapshot.columns:
+                    snapshot['ticker'] = snapshot['symbol']
+                # Add default industry if missing
+                if 'industry' not in snapshot.columns:
+                    snapshot['industry'] = 'Ngành khác'
+                # Limit size
+                if len(snapshot) > size:
+                    snapshot = snapshot.head(size)
+                return snapshot
+        except Exception as e:
+            print(f"✗ Listing from {src} failed: {str(e)[:50]}")
+            
+        # Fallback to screener (may not work with current version)
+        try:
+            stock = Vnstock().stock(symbol='VNINDEX', source=src)
+            params = {"exchangeName": exchange, "size": size}
+            snapshot = stock.screener.stock(params=params)
+            if snapshot is not None and not snapshot.empty:
+                print(f"✓ Lấy screener data thành công từ source: {src}")
+                # Ensure required columns
+                if 'symbol' in snapshot.columns and 'ticker' not in snapshot.columns:
+                    snapshot['ticker'] = snapshot['symbol']
+                if 'industry' not in snapshot.columns:
+                    snapshot['industry'] = 'Ngành khác'
+                return snapshot
+        except Exception as e:
+            print(f"✗ Screener from {src} failed: {str(e)[:50]}")
+            continue
+    
+    print(f"✗ Không thể lấy dữ liệu từ tất cả sources: {sources_to_try}")
+    return pd.DataFrame()
 
 
 GROWTH_CONFIG = {
@@ -385,7 +429,7 @@ def _infer_growth_column(df: pd.DataFrame, target: str) -> None:
     df[target] = computed if computed is not None else pd.NA
 
 def get_sector_snapshot(exchange: str = "HOSE,HNX,UPCOM", size: int = 400,
-                        source: str = "TCBS", columns: Optional[List[str]] = None) -> pd.DataFrame:
+                        source: str = "VCI", columns: Optional[List[str]] = None) -> pd.DataFrame:
     """Fetch the latest screener snapshot."""
     snapshot = _get_sector_snapshot_cached(exchange, size, source)
     
@@ -396,7 +440,10 @@ def get_sector_snapshot(exchange: str = "HOSE,HNX,UPCOM", size: int = 400,
     if 'ticker' not in df.columns and 'symbol' in df.columns:
         df['ticker'] = df['symbol']
     
-    if 'industry' in df.columns:
+    # Ensure industry column always exists
+    if 'industry' not in df.columns:
+        df['industry'] = 'Ngành khác'
+    else:
         df['industry'] = df['industry'].fillna('Ngành khác')
 
     for growth_col in GROWTH_CONFIG.keys():
@@ -424,12 +471,19 @@ def get_realtime_index_board(symbols: List[str]) -> pd.DataFrame:
     if not symbols:
         return pd.DataFrame()
 
-    try:
-        # price_board source VCI thường ổn định
-        stock = Vnstock().stock(symbol='VNINDEX', source='VCI') 
-        board = stock.trading.price_board(symbols)
-    except Exception as exc:
-        print(f"Không thể tải price_board: {exc}")
+    sources = ['MSN', 'VCI']
+    board = None
+    
+    for source in sources:
+        try:
+            stock = Vnstock().stock(symbol='VNINDEX', source=source) 
+            board = stock.trading.price_board(symbols)
+            if board is not None and not board.empty:
+                break
+        except Exception:
+            continue
+    
+    if board is None or board.empty:
         return pd.DataFrame()
 
     if board is None or board.empty:

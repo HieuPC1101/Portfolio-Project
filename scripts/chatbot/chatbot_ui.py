@@ -73,7 +73,7 @@ def render_chat_controls(container, key_prefix="sidebar"):
     if col1.button(
         "Xóa lịch sử",
         key=f"{key_prefix}_clear_btn",
-        use_container_width=True,
+        width='stretch',
         disabled=is_thinking
     ):
         _clear_chat_history()
@@ -82,7 +82,7 @@ def render_chat_controls(container, key_prefix="sidebar"):
     if col2.button(
         "Cuộc trò chuyện mới",
         key=f"{key_prefix}_new_btn",
-        use_container_width=True,
+        width='stretch',
         disabled=is_thinking
     ):
         reset_chat_with_welcome()
@@ -146,7 +146,7 @@ def render_chatbot_sidebar(portfolio_context=None):
                             if st.button(
                                 question,
                                 key=f"quick_q_{idx + col_idx}",
-                                use_container_width=True,
+                                width='stretch',
                                 disabled=st.session_state.is_thinking,
                                 type="secondary"
                             ):
@@ -384,7 +384,7 @@ def render_chatbot_page():
                         if st.button(
                             question,
                             key=f"page_quick_q_{idx + col_idx}",
-                            use_container_width=True,
+                            width='stretch',
                             disabled=st.session_state.is_thinking,
                             type="secondary"
                         ):
