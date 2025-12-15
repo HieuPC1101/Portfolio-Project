@@ -65,6 +65,24 @@ SNAPSHOT_COLUMNS = [
 COMPANY_INFO_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'company_info.csv')
 
 
+def _get_scale_and_suffix(values, base_unit='VND'):
+    """Return a compact scaling factor and Vietnamese suffix for large numbers."""
+    series = pd.to_numeric(pd.Series(values), errors='coerce').dropna().abs()
+    if series.empty:
+        return 1, base_unit
+
+    max_val = series.max()
+    if max_val >= 1e12:
+        return 1e12, f"nghìn tỷ {base_unit}"
+    if max_val >= 1e9:
+        return 1e9, f"tỷ {base_unit}"
+    if max_val >= 1e6:
+        return 1e6, f"triệu {base_unit}"
+    if max_val >= 1e3:
+        return 1e3, f"nghìn {base_unit}"
+    return 1, base_unit
+
+
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_company_industries():
     """Load level-1 industry classification from local CSV once."""
@@ -268,32 +286,10 @@ CHART_GAP_DIV = "<div class='chart-gap'></div>"
 # ==================== MÔ-ĐUN 4: DANH MỤC ĐẦU TƯ HIỆN TẠI ====================
 def render_current_portfolio():
     """Hiển thị tổng quan danh mục đầu tư."""
-    from utils.session_manager import update_current_tab
-    
     # Lấy danh sách cổ phiếu đã chọn từ session state
     selected_stocks = st.session_state.get('selected_stocks', [])
     
     if not selected_stocks:
-        # Nếu chưa có danh mục, hiển thị thông báo và nút điều hướng
-        st.markdown("""
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                    border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; 
-                    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);">
-            <h3 style="color: white; margin: 0 0 1rem 0; font-size: 1.5rem;">
-                 Chưa có Danh Mục Đầu Tư
-            </h3>
-            <p style="color: rgba(255, 255, 255, 0.9); margin: 0; font-size: 1rem; line-height: 1.6;">
-                Bạn chưa chọn cổ phiếu nào cho danh mục đầu tư. 
-                Hãy bắt đầu bằng cách chọn các mã cổ phiếu để phân tích và tối ưu hóa!
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            if st.button(" Đi đến Chọn Cổ Phiếu", use_container_width=True, type="primary"):
-                update_current_tab("Tự chọn mã cổ phiếu")
-                st.rerun()
         return
     
     
@@ -635,6 +631,8 @@ def generate_index_comparison_chart(index_history: pd.DataFrame):
         margin=dict(l=40, r=40, t=50, b=40)
     )
 
+    fig.update_yaxes(tickformat='+.0f')
+
     if len(pct_change_df) > 30:
         anchor_idx = pct_change_df.index[int(len(pct_change_df) * 0.7)]
         anchor_symbol = 'HNX-Index' if 'HNX-Index' in pct_change_df.columns else pct_change_df.columns[0]
@@ -870,6 +868,8 @@ def generate_market_cap_treemap(market_cap_df: pd.DataFrame):
         return go.Figure()
 
     top_sectors = market_cap_df
+    scale, unit_label = _get_scale_and_suffix(top_sectors['market_cap'], base_unit='VND')
+    scaled_values = top_sectors['market_cap'] / scale
     palette = ['#48bb78', '#f6ad55', '#63b3ed', '#fc8181', '#dd6b20', '#9f7aea', '#38b2ac', '#ed8936']
     colors = [palette[i % len(palette)] for i in range(len(top_sectors))]
 
@@ -877,11 +877,11 @@ def generate_market_cap_treemap(market_cap_df: pd.DataFrame):
         go.Treemap(
             labels=top_sectors['industry'],
             parents=[''] * len(top_sectors),
-            values=top_sectors['market_cap'],
+            values=scaled_values,
             marker=dict(colors=colors, line=dict(color='#f5f7fb', width=2)),
-            texttemplate='<b>%{label}</b><br>%{value:.0f} tỷ',
+            texttemplate=f'<b>%{{label}}</b><br>%{{value:,.1f}} {unit_label}',
             textfont=dict(size=13, color='#1a202c', family='Inter, "Be VietNam Pro", "Segoe UI", sans-serif'),
-            hovertemplate='<b>%{label}</b><br>Vốn hóa: %{value:,.0f} tỷ<extra></extra>'
+            hovertemplate=f'<b>%{{label}}</b><br>Vốn hóa: %{{value:,.2f}} {unit_label}<extra></extra>'
         )
     )
 
@@ -915,6 +915,8 @@ def generate_net_foreign_buying(foreign_flow_df: pd.DataFrame):
     df = foreign_flow_df.copy()
     buys = df[df['foreign_buysell_20s'] > 0].nlargest(5, 'foreign_buysell_20s')
     sells = df[df['foreign_buysell_20s'] < 0].nsmallest(5, 'foreign_buysell_20s')
+    all_values = pd.concat([buys['foreign_buysell_20s'], sells['foreign_buysell_20s']]).abs()
+    scale, unit_label = _get_scale_and_suffix(all_values, base_unit='VND')
 
     fig = make_subplots(
         rows=1,
@@ -924,16 +926,17 @@ def generate_net_foreign_buying(foreign_flow_df: pd.DataFrame):
     )
 
     if not buys.empty:
-        buy_custom = np.column_stack((buys['industry'], buys['foreign_buysell_20s'])).tolist()
+        buy_scaled = buys['foreign_buysell_20s'] / scale
+        buy_custom = np.column_stack((buys['industry'], buy_scaled)).tolist()
         fig.add_trace(
             go.Bar(
-                x=buys['foreign_buysell_20s'],
+                x=buy_scaled,
                 y=buys['ticker'],
                 orientation='h',
                 marker_color=POSITIVE_COLOR,
-                text=[f"{val:,.0f}" for val in buys['foreign_buysell_20s']],
+                text=[f"{val:,.1f}" for val in buy_scaled],
                 textposition='outside',
-                hovertemplate='%{y} · %{customdata[0]}<br>Mua ròng: %{customdata[1]:,.0f} tỷ<extra></extra>',
+                hovertemplate=f'%{{y}} · %{{customdata[0]}}<br>Mua ròng: %{{x:,.2f}} {unit_label}<extra></extra>',
                 customdata=buy_custom,
                 name='Top Mua'
             ),
@@ -942,7 +945,7 @@ def generate_net_foreign_buying(foreign_flow_df: pd.DataFrame):
         )
 
     if not sells.empty:
-        sell_values = np.abs(sells['foreign_buysell_20s'])
+        sell_values = np.abs(sells['foreign_buysell_20s']) / scale
         sell_custom = np.column_stack((sells['industry'], sell_values)).tolist()
         fig.add_trace(
             go.Bar(
@@ -950,9 +953,9 @@ def generate_net_foreign_buying(foreign_flow_df: pd.DataFrame):
                 y=sells['ticker'],
                 orientation='h',
                 marker_color=NEGATIVE_COLOR,
-                text=[f"{val:,.0f}" for val in sell_values],
+                text=[f"{val:,.1f}" for val in sell_values],
                 textposition='outside',
-                hovertemplate='%{y} · %{customdata[0]}<br>Bán ròng: %{customdata[1]:,.0f} tỷ<extra></extra>',
+                hovertemplate=f'%{{y}} · %{{customdata[0]}}<br>Bán ròng: %{{x:,.2f}} {unit_label}<extra></extra>',
                 customdata=sell_custom,
                 name='Top Bán'
             ),
@@ -976,8 +979,9 @@ def generate_net_foreign_buying(foreign_flow_df: pd.DataFrame):
     )
     
     # Update axes titles
-    fig.update_xaxes(row=1, col=1, title_text='Giá trị mua ròng (VND)')
-    fig.update_xaxes(row=1, col=2, title_text='Giá trị bán ròng (VND)')
+    fig.update_xaxes(row=1, col=1, title_text=f'Giá trị mua ròng ({unit_label})')
+    fig.update_xaxes(row=1, col=2, title_text=f'Giá trị bán ròng ({unit_label})')
+    fig.update_xaxes(tickformat=',.0f')
 
     return fig
 
@@ -1009,10 +1013,12 @@ def generate_inflation_correlation(liquidity_df: pd.DataFrame):
     size_base = df['market_cap'].replace({0: np.nan}).max()
     if pd.isna(size_base) or size_base == 0:
         size_base = 1
+    scale_x, unit_label = _get_scale_and_suffix(df['avg_trading_value_20d'], base_unit='VND')
+    df['avg_trading_value_scaled'] = df['avg_trading_value_20d'] / scale_x
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
-        x=df['avg_trading_value_20d'],
+        x=df['avg_trading_value_scaled'],
         y=df['price_growth_1m'],
         mode='markers',
         marker=dict(
@@ -1021,7 +1027,7 @@ def generate_inflation_correlation(liquidity_df: pd.DataFrame):
             line=dict(color='#ffffff', width=0.5)
         ),
         text=df['ticker'],
-        hovertemplate='%{text} · %{customdata}<br>Tăng trưởng: %{y:.2f}%<br>Thanh khoản: %{x:,.1f} tỷ<extra></extra>',
+        hovertemplate=f'%{{text}} · %{{customdata}}<br>Tăng trưởng: %{{y:.2f}}%<br>Thanh khoản: %{{x:,.2f}} {unit_label}<extra></extra>',
         customdata=df['industry']
     ))
 
@@ -1039,7 +1045,7 @@ def generate_inflation_correlation(liquidity_df: pd.DataFrame):
             gridcolor=GRID_COLOR,
             showgrid=True,
             zeroline=False,
-            title='Thanh khoản (VND)'
+            title=f'Thanh khoản ({unit_label})'
         ),
         yaxis=dict(
             gridcolor=GRID_COLOR,
@@ -1050,6 +1056,7 @@ def generate_inflation_correlation(liquidity_df: pd.DataFrame):
         height=350,
         margin=dict(l=40, r=40, t=50, b=40)
     )
+    fig.update_xaxes(tickformat=',.0f')
     
     return fig
 
