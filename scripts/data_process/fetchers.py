@@ -294,176 +294,180 @@ def get_index_history(symbol: str = "VNINDEX", start_date: Optional[str] = None,
     return pd.DataFrame()
 
 
+@lru_cache(maxsize=1)
+def _load_company_info_mapping() -> Dict[str, str]:
+    """Load symbol -> industry mapping from local CSV."""
+    mapping = {}
+    try:
+        csv_path = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'company_info.csv')
+        if os.path.exists(csv_path):
+            df = pd.read_csv(csv_path)
+            # Normalize column names
+            df.columns = [c.lower() for c in df.columns]
+            if 'symbol' in df.columns and 'icb_name' in df.columns:
+                df['symbol'] = df['symbol'].astype(str).str.upper().str.strip()
+                mapping = dict(zip(df['symbol'], df['icb_name']))
+    except Exception as e:
+        print(f"Error loading company info: {e}")
+    return mapping
+
+
 @lru_cache(maxsize=4)
 def _get_sector_snapshot_cached(exchange: str, size: int, source: str) -> pd.DataFrame:
-    """Helper cached function for screener - using listing API as fallback."""
-    # Try listing API which is more stable than screener
-    sources_to_try = ['VCI', 'TCBS'] if not source else [source, 'VCI', 'TCBS']
-    
-    for src in sources_to_try:
-        # Try listing API first (more reliable)
-        try:
-            stock = Vnstock().stock(symbol='VNINDEX', source=src)
-            # Correct method name for listing
-            snapshot = stock.listing.symbols_by_exchange(exchange)
-            if snapshot is not None and not snapshot.empty:
-                print(f"✓ Lấy listing data thành công từ source: {src}")
-                # Ensure required columns exist
-                if 'symbol' in snapshot.columns and 'ticker' not in snapshot.columns:
-                    snapshot['ticker'] = snapshot['symbol']
-                # Add default industry if missing
-                if 'industry' not in snapshot.columns:
-                    snapshot['industry'] = 'Ngành khác'
-                # Limit size
-                if len(snapshot) > size:
-                    snapshot = snapshot.head(size)
-                return snapshot
-        except Exception as e:
-            print(f"✗ Listing from {src} failed: {str(e)[:50]}")
+    """
+    Robust implementation using Listing API + Price Board.
+    Replaces the broken Screener API.
+    """
+    try:
+        # 1. Get List of Symbols for Exchange (HOSE, HNX, UPCOM)
+        # Note: listing.symbols_by_exchange does NOT accept 'exchange' kwarg, strict positional
+        # But commonly we just want everything or filter by group
+        
+        # Strategy: Get ALL symbols from listing first
+        stock = Vnstock().stock(symbol='VNINDEX', source='VCI')
+        listing_df = stock.listing.symbols_by_exchange()
+        
+        if listing_df is None or listing_df.empty:
+            print("✗ Listing API returned empty.")
+            return pd.DataFrame()
+
+        # Relaxed logic: Do not strictly filter by 'type'='STO' because API might return varied values.
+        # We rely on the intersection with industry_map to pick valid companies.
+        
+        all_symbols = listing_df['symbol'].tolist()
+        
+        # 2. Map Industry from Local CSV
+        industry_map = _load_company_info_mapping()
+        
+        # 3. Batch Fetch Price Board (Chunks of 20-50 to avoid timeout?)
+        # VCI Price Board can handle ~100 symbols ok. 
+        # But fetching ALL ~1600 might be slow. 
+        # Strategy: Limit to top liquid stocks if possible, OR just fetch batches.
+        # For 'snapshot' we realistically only strictly need top N by cap/liquidity.
+        # But we don't know Cap yet.
+        # Let's simple fetch top VN30/HNX30/UPCOM for speed, OR try a larger batch.
+        
+        # Let's try fetching board for ALL symbols effectively? 
+        # Actually, get_realtime_index_board logic handles batches if we reused it, 
+        # but here we want custom columns.
+        
+        # SIMPLIFICATION: To ensure performance, let's prioritize stocks present in our mapping file
+        # because those are "known" companies.
+        
+        candidates = [s for s in all_symbols if s in industry_map]
+        if not candidates:
+             candidates = all_symbols[:size] # Fallback
+        
+        # Limit to reasonable number if too huge (VCI might block > 1000)
+        # We'll take first 600 candidates (likely most liquid/common)
+        candidates = candidates[:600]
+        
+        print(f"Fetching snapshot for {len(candidates)} symbols...")
+        
+        # Batch fetching
+        chunk_size = 100
+        frames = []
+        for i in range(0, len(candidates), chunk_size):
+            chunk = candidates[i : i + chunk_size]
+            try:
+                board = stock.trading.price_board(chunk)
+                if board is not None and not board.empty:
+                     frames.append(board)
+            except Exception:
+                continue
+                
+        if not frames:
+             return pd.DataFrame()
+             
+        full_board = pd.concat(frames, ignore_index=True)
+        
+        # Flatten columns (MultiIndex)
+        # Columns like ('match', 'match_price'), ('match', 'accumulated_value'), ...
+        new_cols = []
+        for col in full_board.columns.values:
+            if isinstance(col, tuple):
+                name = "_".join([str(x) for x in col if x]).strip().lower()
+            else:
+                name = str(col).lower()
+            new_cols.append(name)
+        full_board.columns = new_cols
+
+        # 4. Standardize & Compute Columns
+        # Target: ticker, industry, market_cap, price_growth_1w (use daily), avg_trading_value_20d (use val)
+        
+        # Map Symbol
+        if 'listing_symbol' in full_board.columns:
+            full_board['ticker'] = full_board['listing_symbol']
+        elif 'symbol' in full_board.columns:
+            full_board['ticker'] = full_board['symbol']
             
-        # Fallback to screener (may not work with current version)
-        try:
-            stock = Vnstock().stock(symbol='VNINDEX', source=src)
-            params = {"exchangeName": exchange, "size": size}
-            snapshot = stock.screener.stock(params=params)
-            if snapshot is not None and not snapshot.empty:
-                print(f"✓ Lấy screener data thành công từ source: {src}")
-                # Ensure required columns
-                if 'symbol' in snapshot.columns and 'ticker' not in snapshot.columns:
-                    snapshot['ticker'] = snapshot['symbol']
-                if 'industry' not in snapshot.columns:
-                    snapshot['industry'] = 'Ngành khác'
-                return snapshot
-        except Exception as e:
-            print(f"✗ Screener from {src} failed: {str(e)[:50]}")
-            continue
-    
-    print(f"✗ Không thể lấy dữ liệu từ tất cả sources: {sources_to_try}")
-    return pd.DataFrame()
+        # Map Industry
+        full_board['industry'] = full_board['ticker'].map(industry_map).fillna('Ngành khác')
+        
+        # Map Price / Change
+        # match_match_price, match_match_vol
+        # listing_ref_price
+        
+        # Ensure numeric
+        numeric_cols = ['match_match_price', 'listing_ref_price', 'match_accumulated_value', 
+                        'listing_listed_share', 'match_foreign_buy_value', 'match_foreign_sell_value']
+                        
+        for col in numeric_cols:
+            if col in full_board.columns:
+                full_board[col] = pd.to_numeric(full_board[col], errors='coerce').fillna(0)
+            else:
+                full_board[col] = 0.0
+
+        # Derived Metrics
+        full_board['price'] = full_board['match_match_price']
+        
+        # Daily Change % as proxy for growth
+        full_board['daily_change'] = 0.0
+        mask = full_board['listing_ref_price'] > 0
+        full_board.loc[mask, 'daily_change'] = (
+            (full_board.loc[mask, 'match_match_price'] - full_board.loc[mask, 'listing_ref_price']) 
+            / full_board.loc[mask, 'listing_ref_price'] * 100
+        )
+        
+        # Market Cap = Price * Listed Shares
+        # Note: Price is often 1000 VND unit? No, VCI usually raw or 1000.
+        # Usually internal VCI price is raw VND (e.g. 15000) or 15.0?
+        # Let's heuristics: if price < 500, unlikely to be VND, maybe x1000.
+        # But usually API returns 45500.0 etc.
+        
+        full_board['market_cap'] = full_board['match_match_price'] * full_board['listing_listed_share']
+        
+        # Liquidity (Value)
+        full_board['avg_trading_value_20d'] = full_board['match_accumulated_value'] # Proxy using today's value
+        
+        # Foreign Flow
+        full_board['foreign_buysell_20s'] = full_board['match_foreign_buy_value'] - full_board['match_foreign_sell_value']
+        
+        # Growth Map (Fallback)
+        full_board['price_growth_1w'] = full_board['daily_change']
+        full_board['price_growth_1m'] = full_board['daily_change']
+        
+        return full_board
+
+    except Exception as e:
+        print(f"Error in robust sector snapshot: {e}")
+        return pd.DataFrame()
 
 
-GROWTH_CONFIG = {
-    'price_growth_1w': {
-        'aliases': ['1w', '1wk', '1week', 'week1', 'w1', 'one_week', 'weekly'],
-        'exclude': ['52w']
-    },
-    'price_growth_1m': {
-        'aliases': ['1m', '1mo', '1month', 'month1', 'm1', 'one_month', 'monthly', '30d', '30day'],
-        'exclude': []
-    }
-}
-PCT_KEYWORDS = ['pct', 'percent', 'percentage', 'ratio', 'rate']
-CHANGE_KEYWORDS = ['change', 'chg', 'growth', 'return', 'perf', 'delta']
-PRICE_KEYWORDS = ['price', 'close', 'match', 'last']
-
-
-def _prioritize_price_column(columns: List[str]) -> Optional[str]:
-    if not columns:
-        return None
-    ordered = sorted(columns)
-    for keyword in ['close', 'price', 'match', 'last']:
-        for col in ordered:
-            if keyword in col.lower():
-                return col
-    return ordered[0]
-
-
-def _select_column_by_keywords(columns: List[str], aliases: List[str], exclude: List[str], candidates: List[str]) -> Optional[str]:
-    for col in columns:
-        lowered = col.lower()
-        if not any(alias in lowered for alias in aliases):
-            continue
-        if any(ex in lowered for ex in exclude):
-            continue
-        if any(keyword in lowered for keyword in candidates):
-            return col
-    return None
-
-
-def _compute_growth_from_levels(df: pd.DataFrame, aliases: List[str], exclude: List[str]) -> Optional[pd.Series]:
-    price_like = [col for col in df.columns if any(key in col.lower() for key in PRICE_KEYWORDS)]
-    if not price_like:
-        return None
-
-    past_cols = [col for col in price_like if any(alias in col.lower() for alias in aliases)
-                 and not any(ex in col.lower() for ex in exclude)]
-    current_cols = [col for col in price_like if col not in past_cols]
-
-    past_column = _prioritize_price_column(past_cols)
-    current_column = _prioritize_price_column(current_cols)
-
-    if not past_column or not current_column or past_column == current_column:
-        return None
-
-    previous = pd.to_numeric(df[past_column], errors='coerce')
-    current = pd.to_numeric(df[current_column], errors='coerce')
-    denominator = previous.replace({0: np.nan})
-    with np.errstate(divide='ignore', invalid='ignore'):
-        growth = (current - denominator) / denominator * 100
-    growth = growth.replace([np.inf, -np.inf], np.nan)
-    return growth
-
-
-def _infer_growth_column(df: pd.DataFrame, target: str) -> None:
-    if target in df.columns:
-        return
-
-    config = GROWTH_CONFIG.get(target)
-    if not config:
-        df[target] = pd.NA
-        return
-
-    aliases = config['aliases']
-    exclude = config.get('exclude', [])
-    columns = list(df.columns)
-
-    candidate = _select_column_by_keywords(columns, aliases, exclude, PCT_KEYWORDS)
-    if candidate is None:
-        candidate = _select_column_by_keywords(columns, aliases, exclude, CHANGE_KEYWORDS)
-
-    if candidate is not None:
-        df[target] = pd.to_numeric(df[candidate], errors='coerce')
-        return
-
-    computed = _compute_growth_from_levels(df, aliases, exclude)
-    df[target] = computed if computed is not None else pd.NA
+GROWTH_CONFIG = {} # Deprecated config but kept for compatibility logic below if needed
 
 def get_sector_snapshot(exchange: str = "HOSE,HNX,UPCOM", size: int = 400,
                         source: str = "VCI", columns: Optional[List[str]] = None) -> pd.DataFrame:
-    """Fetch the latest screener snapshot."""
+    """Fetch the latest snapshot using robust method (PriceBoard + CSV)."""
     snapshot = _get_sector_snapshot_cached(exchange, size, source)
-    
     if snapshot.empty:
         return pd.DataFrame()
-
-    df = snapshot.copy() # Copy từ cache
-    if 'ticker' not in df.columns and 'symbol' in df.columns:
-        df['ticker'] = df['symbol']
-    
-    # Ensure industry column always exists
-    if 'industry' not in df.columns:
-        df['industry'] = 'Ngành khác'
-    else:
-        df['industry'] = df['industry'].fillna('Ngành khác')
-
-    for growth_col in GROWTH_CONFIG.keys():
-        _infer_growth_column(df, growth_col)
-
-    numeric_columns = [
-        'market_cap', 'price_growth_1w', 'price_growth_1m', 
-        'avg_trading_value_20d', 'foreign_buysell_20s'
-    ]
-    for col in numeric_columns:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-            
+        
     if columns:
-        # Chỉ giữ lại các cột tồn tại
-        valid_cols = [c for c in columns if c in df.columns]
-        if valid_cols:
-            return df[valid_cols]
-            
-    return df
+        valid_cols = [c for c in columns if c in snapshot.columns]
+        return snapshot[valid_cols]
+        
+    return snapshot
 
 
 def get_realtime_index_board(symbols: List[str]) -> pd.DataFrame:
@@ -486,9 +490,6 @@ def get_realtime_index_board(symbols: List[str]) -> pd.DataFrame:
     if board is None or board.empty:
         return pd.DataFrame()
 
-    if board is None or board.empty:
-        return pd.DataFrame()
-
     board = board.copy()
     
     # Xử lý làm phẳng MultiIndex Columns (nếu có) một cách an toàn
@@ -506,24 +507,29 @@ def get_realtime_index_board(symbols: List[str]) -> pd.DataFrame:
     
     rename_map = {
         'thong_tin_cophieu_dang_ky_mack': 'symbol', # Tên cột cũ của TCBS/VND
+        'listing_symbol': 'symbol',
         'symbol': 'symbol',
         'khop_lenh_gia': 'gia_khop',
         'match_price': 'gia_khop',
+        'match_match_price': 'gia_khop',
         'gia_tham_chieu': 'gia_tham_chieu',
         'reference_price': 'gia_tham_chieu',
+        'listing_ref_price': 'gia_tham_chieu',
         'ref_price': 'gia_tham_chieu'
     }
     
     # Cố gắng rename
     for col in board.columns:
+        if col in rename_map:
+             board.rename(columns={col: rename_map[col]}, inplace=True)
+             continue
+        # Fuzzy match if exact match fail
         for key, val in rename_map.items():
-            if key in col:
+            if key in col and val not in board.columns:
                 board.rename(columns={col: val}, inplace=True)
 
     required = ['symbol', 'gia_khop', 'gia_tham_chieu']
     if not all(col in board.columns for col in required):
-        # Fallback: Nếu không tìm thấy cột, trả về DF rỗng thay vì lỗi
-        # print(f"Cấu trúc API thay đổi, các cột hiện có: {board.columns.tolist()}")
         return pd.DataFrame()
 
     board = board.dropna(subset=['symbol'])

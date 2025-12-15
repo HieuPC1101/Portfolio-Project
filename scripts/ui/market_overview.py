@@ -8,15 +8,24 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+import plotly.express as px
 import warnings
 
 from data_process.data_loader import (
     get_market_indices_metrics,
+    get_sector_snapshot,
+    summarize_sector_performance,
+    summarize_market_cap_distribution,
+    get_foreign_flow_leaderboard,
+    get_liquidity_leaders,
     get_indices_history,
     get_index_history,
     get_realtime_index_board,
-    fetch_stock_data2
+    fetch_stock_data2,
+    get_return_correlation_matrix,
+    fetch_data_from_csv
 )
+from plotly.subplots import make_subplots
 from ui.visualization import plot_interactive_stock_chart
 from utils.config import ANALYSIS_START_DATE, ANALYSIS_END_DATE
 
@@ -42,6 +51,50 @@ LEGEND_GRAY_DARK = '#4a5568'
 LEGEND_GRAY_LIGHT = '#cbd5d5'
 TITLE_FONT = dict(size=15, color=FONT_COLOR, family=BOLD_FONT_FAMILY)
 TITLE_PAD = dict(b=12)
+
+SNAPSHOT_COLUMNS = [
+    'ticker',
+    'industry',
+    'market_cap',
+    'price_growth_1w',
+    'price_growth_1m',
+    'avg_trading_value_20d',
+    'foreign_buysell_20s'
+]
+
+COMPANY_INFO_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'company_info.csv')
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def load_company_industries():
+    """Load level-1 industry classification from local CSV once."""
+    company_df = fetch_data_from_csv(COMPANY_INFO_PATH)
+    if company_df.empty or 'symbol' not in company_df.columns:
+        return pd.DataFrame(columns=['symbol', 'industry_level_1'])
+
+    mapping = company_df.copy()
+    mapping['symbol'] = mapping['symbol'].astype(str).str.upper()
+
+    if 'icb_name' in mapping.columns:
+        mapping = mapping.rename(columns={'icb_name': 'industry_level_1'})
+    elif 'industry' in mapping.columns:
+        mapping = mapping.rename(columns={'industry': 'industry_level_1'})
+    else:
+        mapping['industry_level_1'] = 'Ngành khác'
+
+    mapping['industry_level_1'] = mapping['industry_level_1'].fillna('Ngành khác')
+
+    return mapping[['symbol', 'industry_level_1']]
+
+
+def get_industry_order():
+    """Return the canonical ordering of industries defined in company_info.csv."""
+    companies = load_company_industries()
+    if companies.empty or 'industry_level_1' not in companies.columns:
+        return []
+    order_series = companies['industry_level_1'].dropna().astype(str).str.strip()
+    return order_series.drop_duplicates().tolist()
+
 REALTIME_INDEX_SYMBOLS = ["VNINDEX", "VN30", "HNXIndex", "HNX30", "UpcomIndex"]
 REALTIME_LABELS = {
     "VNINDEX": "VN-Index",
@@ -52,73 +105,6 @@ REALTIME_LABELS = {
     "UPCOM": "UPCoM",
 }
 REALTIME_SYMBOL_KEYS = sorted({symbol.upper() for symbol in REALTIME_INDEX_SYMBOLS} | {symbol.upper() for symbol in REALTIME_LABELS.keys()})
-
-SNAPSHOT_COLUMNS = [
-    'ticker'
-]
-
-COMPANY_INFO_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'company_info.csv')
-
-
-@st.cache_data(ttl=1800, show_spinner=False)
-def load_overview_data():
-    """Fetch lightweight data powering the headline KPI cards and charts."""
-
-    analysis_start = pd.to_datetime(ANALYSIS_START_DATE).strftime("%Y-%m-%d")
-    analysis_end = pd.to_datetime(ANALYSIS_END_DATE).strftime("%Y-%m-%d")
-    months_span = max(1, int((pd.to_datetime(analysis_end) - pd.to_datetime(analysis_start)).days / 30))
-
-    indices_metrics = get_market_indices_metrics()
-    index_history = get_indices_history(start_date=analysis_start, end_date=analysis_end, months=months_span)
-    
-    if not indices_metrics:
-        st.warning("⚠️ Không thể tải dữ liệu chỉ số thị trường.")
-    
-    if index_history.empty:
-        st.warning("⚠️ Không thể tải lịch sử chỉ số.")
-    
-    return {
-        'indices_metrics': indices_metrics,
-        'index_history': index_history,
-    }
-
-
-
-
-
-@st.cache_data(ttl=1800, show_spinner=False)
-def get_top_movers(top_n: int = 10):
-    """Lấy top cổ phiếu tăng/giảm mạnh nhất từ VN30."""
-    from data_process.fetchers import fetch_stock_data2
-    import datetime
-    
-    # Danh sách VN30
-    vn30_symbols = ['ACB', 'BCM', 'BID', 'BVH', 'CTG', 'FPT', 'GAS', 'GVR', 'HDB', 'HPG',
-                    'MBB', 'MSN', 'MWG', 'PLX', 'POW', 'SAB', 'SHB', 'SSB', 'SSI', 'STB',
-                    'TCB', 'TPB', 'VCB', 'VHM', 'VIB', 'VIC', 'VJC', 'VNM', 'VPB', 'VRE']
-    
-    end_date = datetime.date.today()
-    start_date = end_date - datetime.timedelta(days=7)
-    
-    try:
-        data, _ = fetch_stock_data2(vn30_symbols, start_date.strftime("%Y-%m-%d"), 
-                                     end_date.strftime("%Y-%m-%d"), verbose=False)
-        if data.empty:
-            return pd.DataFrame()
-        
-        # Tính % thay đổi
-        pct_change = ((data.iloc[-1] - data.iloc[0]) / data.iloc[0] * 100).sort_values(ascending=False)
-        
-        gainers = pct_change.head(top_n)
-        losers = pct_change.tail(top_n)
-        
-        return {
-            'gainers': gainers,
-            'losers': losers
-        }
-    except Exception as e:
-        print(f"Lỗi khi lấy top movers: {e}")
-        return pd.DataFrame()
 
 # ==================== TÙY CHỈNH CSS ====================
 DASHBOARD_STYLE = """
@@ -273,611 +259,10 @@ DASHBOARD_STYLE = """
         height: 1rem;
         width: 100%;
     }
-
-    /* Light Stock List Styles */
-    .portfolio-container {
-        background: #ffffff;
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-    
-    .portfolio-header {
-        display: flex;
-        align-items: center;
-        padding: 1rem 1.2rem;
-        background: #ffffff;
-        border-bottom: 1px solid #e2e8f0;
-    }
-    
-    
-    
-    .portfolio-title {
-        color: #2d3748;
-        font-size: 1rem;
-        font-weight: 600;
-        flex-grow: 1;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-    }
-    
-    .portfolio-time {
-        color: #718096;
-        font-size: 0.8rem;
-    }
-    
-    .stock-list-header {
-        display: grid;
-        grid-template-columns: 1fr 100px 100px;
-        padding: 0.6rem 1.2rem;
-        background: #f7fafc;
-        border-bottom: 1px solid #e2e8f0;
-    }
-    
-    .stock-list-header span {
-        color: #718096;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-weight: 600;
-    }
-    
-    .stock-list-header span:nth-child(2),
-    .stock-list-header span:nth-child(3) {
-        text-align: right;
-    }
-    
-    .stock-list {
-        background: white;
-    }
-    
-    .stock-item {
-        display: grid;
-        grid-template-columns: 1fr 100px 100px;
-        align-items: center;
-        padding: 0.9rem 1.2rem;
-        border-bottom: 1px solid #edf2f7;
-        transition: background 0.2s;
-    }
-    
-    .stock-item:hover {
-        background: #f7fafc;
-    }
-    
-    .stock-item:last-child {
-        border-bottom: none;
-    }
-    
-    .stock-symbol {
-        font-weight: 700;
-        font-size: 1rem;
-        color: #2d3748;
-    }
-    
-    .stock-price {
-        text-align: right;
-    }
-    
-    .stock-price-value {
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: #2d3748;
-    }
-    
-    .stock-price-label {
-        font-size: 0.7rem;
-        color: #a0aec0;
-        margin-top: 2px;
-    }
-    
-    .stock-change {
-        text-align: right;
-    }
-    
-    .stock-change-positive {
-        font-weight: 700;
-        font-size: 0.95rem;
-        color: #22c55e;
-    }
-    
-    .stock-change-negative {
-        font-weight: 700;
-        font-size: 0.95rem;
-        color: #ef4444;
-    }
-    
-    .stock-change-label {
-        font-size: 0.7rem;
-        color: #a0aec0;
-        margin-top: 2px;
-    }
-    
-    /* Top Movers Compact Styles */
-    .movers-container {
-        background: #ffffff;
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-    
-    .movers-header {
-        display: flex;
-        align-items: center;
-        padding: 0.8rem 1rem;
-        background: #ffffff;
-        border-bottom: 1px solid #e2e8f0;
-    }
-    
-    .movers-header-icon {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 0.6rem;
-    }
-    
-    .movers-header-icon svg {
-        width: 16px;
-        height: 16px;
-        fill: white;
-    }
-    
-    .movers-title {
-        color: #2d3748;
-        font-size: 0.9rem;
-        font-weight: 600;
-        flex-grow: 1;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    .movers-list {
-        background: white;
-    }
-    
-    .mover-item {
-        display: flex;
-        align-items: center;
-        padding: 0.6rem 1rem;
-        border-bottom: 1px solid #f0f0f0;
-    }
-    
-    .mover-item:last-child {
-        border-bottom: none;
-    }
-    
-    .mover-rank {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: #f0f0f0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: #718096;
-        margin-right: 0.8rem;
-    }
-    
-    .mover-symbol {
-        font-weight: 700;
-        font-size: 0.9rem;
-        color: #2d3748;
-        width: 60px;
-    }
-    
-    .mover-bar-container {
-        flex-grow: 1;
-        height: 20px;
-        background: #f0f0f0;
-        border-radius: 10px;
-        margin: 0 0.8rem;
-        overflow: hidden;
-    }
-    
-    .mover-bar {
-        height: 100%;
-        border-radius: 10px;
-        transition: width 0.3s ease;
-    }
-    
-    .mover-bar.positive {
-        background: linear-gradient(90deg, #22c55e, #4ade80);
-    }
-    
-    .mover-bar.negative {
-        background: linear-gradient(90deg, #ef4444, #f87171);
-    }
-    
-    .mover-value {
-        font-weight: 700;
-        font-size: 0.85rem;
-        min-width: 60px;
-        text-align: right;
-    }
-    
-    .mover-value.positive {
-        color: #22c55e;
-    }
-    
-    .mover-value.negative {
-        color: #ef4444;
-    }
-        color: #22c55e;
-    }
-    
-    .stock-change-negative {
-        font-weight: 700;
-        font-size: 0.95rem;
-        color: #ef4444;
-    }
-    
-    .stock-change-label {
-        font-size: 0.7rem;
-        color: #a0aec0;
-        margin-top: 2px;
-    }
 </style>
 """
 
 CHART_GAP_DIV = "<div class='chart-gap'></div>"
-
-
-# ==================== MÔ-ĐUN 1: KPI CHỈ SỐ THỊ TRƯỜNG ====================
-def generate_market_indices_kpi(metrics):
-    """Hiển thị các chỉ số chính dạng thẻ KPI dựa trên dữ liệu thực."""
-
-    if not metrics:
-        st.info("Không có dữ liệu chỉ số để hiển thị.")
-        return
-
-    cols = st.columns(len(metrics))
-
-    for col, metric in zip(cols, metrics):
-        value = metric.get('value')
-        change_pct = metric.get('pct_change')
-        note = metric.get('note', '')
-        timestamp = metric.get('timestamp')
-
-        value_display = f"{value:,.2f}" if value is not None else "—"
-        if change_pct is None:
-            trend_class = ""
-            trend_value = "Chưa có dữ liệu"
-        else:
-            if change_pct > 0:
-                trend_class = "positive"
-            elif change_pct < 0:
-                trend_class = "negative"
-            else:
-                trend_class = "neutral"
-            trend_value = f"{change_pct:+.2f}%"
-
-        time_suffix = f" · {timestamp.strftime('%d/%m %H:%M')}" if timestamp is not None else ""
-
-        col.markdown(
-            f"""
-            <div class="kpi-card">
-                <div class="kpi-title">{metric.get('label')}</div>
-                <div class="kpi-value">{value_display}</div>
-                <div class="kpi-change {trend_class}">{trend_value} · {note}{time_suffix}</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-
-@st.cache_data(ttl=300, show_spinner=False)
-def _build_realtime_metrics():
-    board = get_realtime_index_board(REALTIME_INDEX_SYMBOLS)
-    if board is None or board.empty:
-        return []
-
-    history_cache = {}
-
-    def _safe_float(value):
-        try:
-            if pd.isna(value):
-                return None
-            return float(value)
-        except Exception:
-            return None
-
-    def _get_sorted_history(symbol_key):
-        if symbol_key not in history_cache:
-            history = get_index_history(symbol_key, months=1)
-            history_cache[symbol_key] = history.sort_values('time') if not history.empty else pd.DataFrame()
-        return history_cache[symbol_key]
-
-    metrics = []
-    for _, row in board.iterrows():
-        symbol_key = str(row['symbol']).upper()
-        price = _safe_float(row.get('gia_khop'))
-        reference = _safe_float(row.get('gia_tham_chieu'))
-        change = _safe_float(row.get('thay_doi'))
-        pct_change = _safe_float(row.get('ty_le_thay_doi'))
-        note_ts = row.get('last_updated')
-        note_text = None
-
-        if reference in (None, 0) and price is not None and change is not None:
-            reference = price - change
-
-        if price in (None, 0) and reference not in (None, 0):
-            price = reference
-            change = 0.0
-            pct_change = 0.0
-            note_text = 'Chưa có khớp · Hiển thị tham chiếu'
-        elif price in (None, 0):
-            history = _get_sorted_history(symbol_key)
-            if history.empty:
-                continue
-            last_row = history.iloc[-1]
-            prev_row = history.iloc[-2] if len(history) > 1 else last_row
-            price = float(last_row['close'])
-            reference = float(prev_row['close']) if pd.notna(prev_row['close']) else price
-            change = price - reference
-            pct_change = (change / reference * 100) if reference not in (0, None) else 0.0
-            note_text = 'Dữ liệu cuối phiên'
-            note_ts = pd.to_datetime(last_row['time']).to_pydatetime()
-        else:
-            base_reference = reference if reference not in (None, 0) else None
-            if base_reference is None and change is not None:
-                base_reference = price - change
-            if change is None and base_reference is not None:
-                change = price - base_reference
-            if pct_change is None and base_reference not in (None, 0):
-                pct_change = (change / base_reference * 100) if change is not None else 0.0
-
-        if change is None:
-            change = 0.0
-        if pct_change is None:
-            pct_change = 0.0
-        if note_text is None:
-            note_text = f"Thay đổi {change:+.2f} điểm"
-
-        metrics.append({
-            'symbol': symbol_key,
-            'label': REALTIME_LABELS.get(symbol_key, symbol_key),
-            'value': price,
-            'change': change,
-            'pct_change': pct_change,
-            'note': note_text,
-            'timestamp': note_ts
-        })
-
-    available_symbols = {metric['symbol'] for metric in metrics}
-    for symbol_key in REALTIME_SYMBOL_KEYS:
-        if symbol_key in available_symbols:
-            continue
-        history = _get_sorted_history(symbol_key)
-        if history.empty:
-            continue
-        last_row = history.iloc[-1]
-        prev_row = history.iloc[-2] if len(history) > 1 else last_row
-        last_close = float(last_row['close']) if pd.notna(last_row['close']) else None
-        prev_close = float(prev_row['close']) if pd.notna(prev_row['close']) else None
-        if last_close is None:
-            continue
-        change = last_close - (prev_close if prev_close is not None else last_close)
-        pct_change = (change / prev_close * 100) if prev_close not in (0, None) else 0.0
-        metrics.append({
-            'symbol': symbol_key,
-            'label': REALTIME_LABELS.get(symbol_key, symbol_key),
-            'value': last_close,
-            'change': change,
-            'pct_change': pct_change,
-            'note': 'Dữ liệu cuối phiên',
-            'timestamp': pd.to_datetime(last_row['time']).to_pydatetime()
-        })
-    return metrics
-
-def render_realtime_market_overview():
-    metrics = _build_realtime_metrics()
-    if not metrics:
-        st.info("Không thể tải dữ liệu realtime cho các chỉ số.")
-        return
-
-    generate_market_indices_kpi(metrics)
-
-    latest_ts = max((metric.get('timestamp') for metric in metrics if metric.get('timestamp')), default=None)
-    if latest_ts:
-        st.caption(f"Cập nhật: {latest_ts.strftime('%d/%m/%Y %H:%M:%S')}")
-
-
-# ==================== MÔ-ĐUN 2: SO SÁNH CHỈ SỐ CHÍNH ====================
-@st.cache_data(ttl=1800, show_spinner=False)
-def generate_index_comparison_chart(index_history: pd.DataFrame):
-    """Biểu đồ so sánh VN-Index, HNX và UPCoM dựa trên dữ liệu lịch sử."""
-
-    if index_history is None or index_history.empty:
-        fig = go.Figure()
-        fig.update_layout(paper_bgcolor=PAPER_BG, plot_bgcolor=PLOT_BG)
-        fig.add_annotation(text='Không có dữ liệu chỉ số', xref='paper', yref='paper', x=0.5, y=0.5)
-        return fig
-
-    pivot_df = index_history.pivot(index='time', columns='symbol', values='close').dropna(how='all')
-    pivot_df = pivot_df.fillna(method='ffill')
-    pivot_df = pivot_df.dropna(how='all')
-
-    def normalize_series(series: pd.Series) -> pd.Series:
-        first_valid_idx = series.first_valid_index()
-        if first_valid_idx is None:
-            return series
-        base_value = series.loc[first_valid_idx]
-        if base_value in (0, None):
-            return series
-        return (series / base_value - 1) * 100
-
-    pct_change_df = pivot_df.apply(normalize_series)
-
-    fig = go.Figure()
-
-    palette = {
-        'VN-Index': '#1D4ED8',
-        'HNX-Index': '#F97316',
-        'UPCoM': '#7C3AED'
-    }
-
-    for column in pct_change_df.columns:
-        fig.add_trace(
-            go.Scatter(
-                x=pct_change_df.index,
-                y=pct_change_df[column],
-                mode='lines',
-                name=column,
-                line=dict(color=palette.get(column, '#2d3748'), width=2.6),
-                hovertemplate='%{y:+.2f}%<extra></extra>'
-            )
-        )
-
-    fig.update_layout(
-        title=dict(
-            text='SO SÁNH CÁC CHỈ SỐ CHÍNH (TỶ LỆ % SO ĐẦU KỲ)',
-            font=TITLE_FONT,
-            x=0,
-            pad=TITLE_PAD
-        ),
-        paper_bgcolor=PAPER_BG,
-        plot_bgcolor=PLOT_BG,
-        font=dict(color=FONT_COLOR, size=11),
-        hovermode='x unified',
-        showlegend=True,
-        legend=dict(
-            orientation="h",
-            yanchor="top",
-            y=-0.28,
-            xanchor="center",
-            x=0.5,
-            font=dict(size=12, color=FONT_COLOR),
-            bgcolor='rgba(255, 255, 255, 0.95)',
-            bordercolor='#e2e8f0',
-            borderwidth=1,
-            itemclick='toggleothers',
-            itemsizing='constant'
-        ),
-        xaxis=dict(
-            gridcolor=GRID_COLOR,
-            showgrid=True,
-            zeroline=False
-        ),
-        yaxis=dict(
-            gridcolor=GRID_COLOR,
-            showgrid=True,
-            zeroline=True,
-            zerolinecolor=ZERO_LINE_COLOR,
-            title='Thay đổi so với đầu kỳ (%)'
-        ),
-        height=350,
-        margin=dict(l=40, r=40, t=50, b=40)
-    )
-
-
-    if len(pct_change_df) > 30:
-        anchor_idx = pct_change_df.index[int(len(pct_change_df) * 0.7)]
-        anchor_symbol = 'HNX-Index' if 'HNX-Index' in pct_change_df.columns else pct_change_df.columns[0]
-        anchor_value = pct_change_df[anchor_symbol].loc[anchor_idx]
-        fig.add_annotation(
-            x=anchor_idx,
-            y=anchor_value,
-            text="Xu hướng ngắn hạn",
-            showarrow=True,
-            arrowhead=2,
-            arrowcolor=REFERENCE_COLOR,
-            arrowwidth=1.2,
-            ax=0,
-            ay=-70,
-            font=dict(size=10, color='#1a202c'),
-            bgcolor='rgba(255, 255, 255, 0.7)',
-            bordercolor=REFERENCE_COLOR,
-            borderwidth=1
-        )
-
-    return fig
-
-
-# ==================== MÔ-ĐUN 3: TOP MOVERS====================
-def render_top_gainers_list(gainers_series):
-    if gainers_series is None or gainers_series.empty:
-        st.info("Không có dữ liệu top tăng giá.")
-        return
-    
-    # Sắp xếp từ cao xuống thấp
-    sorted_series = gainers_series.sort_values(ascending=False)
-    max_val = sorted_series.max() if sorted_series.max() > 0 else 1
-    
-    stock_items = []
-    for rank, (symbol, pct) in enumerate(sorted_series.items(), 1):
-        bar_width = (pct / max_val * 100) if max_val > 0 else 0
-        
-        stock_items.append(f'''<div class="mover-item">
-            <div class="mover-rank">{rank}</div>
-            <div class="mover-symbol">{symbol}</div>
-            <div class="mover-bar-container">
-                <div class="mover-bar positive" style="width: {bar_width:.1f}%;"></div>
-            </div>
-            <div class="mover-value positive">+{pct:.2f}%</div>
-        </div>''')
-    
-    full_html = f'''
-    <div class="movers-container">
-        <div class="movers-header">
-            <div class="movers-header-icon" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
-                <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z" fill="white"/></svg>
-            </div>
-            <span class="movers-title">Top Tăng Giá Tuần (VN30)</span>
-        </div>
-        <div class="movers-list">
-            {''.join(stock_items)}
-        </div>
-    </div>
-    '''
-    st.markdown(full_html, unsafe_allow_html=True)
-
-
-def render_top_losers_list(losers_series):
-    """Hiển thị top cổ phiếu giảm dạng list với progress bar."""
-    if losers_series is None or losers_series.empty:
-        st.info("Không có dữ liệu top giảm giá.")
-        return
-    
-    # Sắp xếp từ âm nhiều nhất đến ít âm
-    sorted_series = losers_series.sort_values(ascending=True)
-    abs_values = sorted_series.abs()
-    max_val = abs_values.max() if abs_values.max() > 0 else 1
-    
-    stock_items = []
-    for rank, (symbol, pct) in enumerate(sorted_series.items(), 1):
-        abs_pct = abs(pct)
-        # Bar width tỷ lệ trực tiếp với giá trị (max = 100%)
-        bar_width = (abs_pct / max_val * 100) if max_val > 0 else 0
-            
-        stock_items.append(f'''<div class="mover-item">
-            <div class="mover-rank">{rank}</div>
-            <div class="mover-symbol">{symbol}</div>
-            <div class="mover-bar-container">
-                <div class="mover-bar negative" style="width: {bar_width:.1f}%;"></div>
-            </div>
-            <div class="mover-value negative">{pct:.2f}%</div>
-        </div>''')
-    
-    full_html = f'''
-    <div class="movers-container">
-        <div class="movers-header">
-            <div class="movers-header-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
-                <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z" fill="white"/></svg>
-            </div>
-            <span class="movers-title">Top Giảm Giá Tuần</span>
-        </div>
-        <div class="movers-list">
-            {''.join(stock_items)}
-        </div>
-    </div>
-    '''
-    st.markdown(full_html, unsafe_allow_html=True)
 
 
 # ==================== MÔ-ĐUN 4: DANH MỤC ĐẦU TƯ HIỆN TẠI ====================
@@ -990,11 +375,747 @@ def render_current_portfolio():
         plot_interactive_stock_chart(stock_data, selected_stocks)
 
 
-# ==================== KHU VỰC HIỂN THỊ CHÍNH ====================
+@st.cache_data(ttl=1800, show_spinner=False)
+def load_overview_data():
+    """Fetch lightweight data powering the headline KPI cards and charts."""
+
+    analysis_start = pd.to_datetime(ANALYSIS_START_DATE).strftime("%Y-%m-%d")
+    analysis_end = pd.to_datetime(ANALYSIS_END_DATE).strftime("%Y-%m-%d")
+    months_span = max(1, int((pd.to_datetime(analysis_end) - pd.to_datetime(analysis_start)).days / 30))
+
+    return {
+        'indices_metrics': get_market_indices_metrics(),
+        'index_history': get_indices_history(start_date=analysis_start, end_date=analysis_end, months=months_span),
+    }
+
+
+# ==================== MÔ-ĐUN 1: KPI CHỈ SỐ THỊ TRƯỜNG ====================
+def generate_market_indices_kpi(metrics):
+    """Hiển thị các chỉ số chính dạng thẻ KPI dựa trên dữ liệu thực."""
+
+    if not metrics:
+        st.info("Không có dữ liệu chỉ số để hiển thị.")
+        return
+
+    cols = st.columns(len(metrics))
+
+    for col, metric in zip(cols, metrics):
+        value = metric.get('value')
+        change_pct = metric.get('pct_change')
+        note = metric.get('note', '')
+        timestamp = metric.get('timestamp')
+
+        value_display = f"{value:,.2f}" if value is not None else "—"
+        if change_pct is None:
+            trend_class = ""
+            trend_value = "Chưa có dữ liệu"
+        else:
+            if change_pct > 0:
+                trend_class = "positive"
+            elif change_pct < 0:
+                trend_class = "negative"
+            else:
+                trend_class = "neutral"
+            trend_value = f"{change_pct:+.2f}%"
+
+        time_suffix = f" · {timestamp.strftime('%d/%m %H:%M')}" if timestamp is not None else ""
+
+        col.markdown(
+            f"""
+            <div class="kpi-card">
+                <div class="kpi-title">{metric.get('label')}</div>
+                <div class="kpi-value">{value_display}</div>
+                <div class="kpi-change {trend_class}">{trend_value}{note}{time_suffix}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+
+def _build_realtime_metrics():
+    board = get_realtime_index_board(REALTIME_INDEX_SYMBOLS)
+    if board is None or board.empty:
+        return []
+
+    history_cache = {}
+
+    def _safe_float(value):
+        try:
+            if pd.isna(value):
+                return None
+            return float(value)
+        except Exception:
+            return None
+
+    def _get_sorted_history(symbol_key):
+        if symbol_key not in history_cache:
+            history = get_index_history(symbol_key, months=1)
+            history_cache[symbol_key] = history.sort_values('time') if not history.empty else pd.DataFrame()
+        return history_cache[symbol_key]
+
+    metrics = []
+    for _, row in board.iterrows():
+        symbol_key = str(row['symbol']).upper()
+        price = _safe_float(row.get('gia_khop'))
+        reference = _safe_float(row.get('gia_tham_chieu'))
+        change = _safe_float(row.get('thay_doi'))
+        pct_change = _safe_float(row.get('ty_le_thay_doi'))
+        note_ts = row.get('last_updated')
+        note_text = None
+
+        if reference in (None, 0) and price is not None and change is not None:
+            reference = price - change
+
+        if price in (None, 0) and reference not in (None, 0):
+            price = reference
+            change = 0.0
+            pct_change = 0.0
+            note_text = 'Chưa có khớp · Hiển thị tham chiếu'
+        elif price in (None, 0):
+            history = _get_sorted_history(symbol_key)
+            if history.empty:
+                continue
+            last_row = history.iloc[-1]
+            prev_row = history.iloc[-2] if len(history) > 1 else last_row
+            price = float(last_row['close'])
+            reference = float(prev_row['close']) if pd.notna(prev_row['close']) else price
+            change = price - reference
+            pct_change = (change / reference * 100) if reference not in (0, None) else 0.0
+            note_text = 'Dữ liệu cuối phiên'
+            note_ts = pd.to_datetime(last_row['time']).to_pydatetime()
+        else:
+            base_reference = reference if reference not in (None, 0) else None
+            if base_reference is None and change is not None:
+                base_reference = price - change
+            if change is None and base_reference is not None:
+                change = price - base_reference
+            if pct_change is None and base_reference not in (None, 0):
+                pct_change = (change / base_reference * 100) if change is not None else 0.0
+
+        if change is None:
+            change = 0.0
+        if pct_change is None:
+            pct_change = 0.0
+        if note_text is None:
+            note_text = f"Thay đổi {change:+.2f} điểm"
+
+        metrics.append({
+            'symbol': symbol_key,
+            'label': REALTIME_LABELS.get(symbol_key, symbol_key),
+            'value': price,
+            'change': change,
+            'pct_change': pct_change,
+            'note': note_text,
+            'timestamp': note_ts
+        })
+
+    available_symbols = {metric['symbol'] for metric in metrics}
+    for symbol_key in REALTIME_SYMBOL_KEYS:
+        if symbol_key in available_symbols:
+            continue
+        history = _get_sorted_history(symbol_key)
+        if history.empty:
+            continue
+        last_row = history.iloc[-1]
+        prev_row = history.iloc[-2] if len(history) > 1 else last_row
+        last_close = float(last_row['close']) if pd.notna(last_row['close']) else None
+        prev_close = float(prev_row['close']) if pd.notna(prev_row['close']) else None
+        if last_close is None:
+            continue
+        change = last_close - (prev_close if prev_close is not None else last_close)
+        pct_change = (change / prev_close * 100) if prev_close not in (0, None) else 0.0
+        metrics.append({
+            'symbol': symbol_key,
+            'label': REALTIME_LABELS.get(symbol_key, symbol_key),
+            'value': last_close,
+            'change': change,
+            'pct_change': pct_change,
+            'note': 'Dữ liệu cuối phiên',
+            'timestamp': pd.to_datetime(last_row['time']).to_pydatetime()
+        })
+    return metrics
+
+
+def render_realtime_market_overview():
+    metrics = _build_realtime_metrics()
+    if not metrics:
+        st.info("Không thể tải dữ liệu realtime cho các chỉ số.")
+        return
+
+    generate_market_indices_kpi(metrics)
+
+    latest_ts = max((metric.get('timestamp') for metric in metrics if metric.get('timestamp')), default=None)
+    if latest_ts:
+        st.caption(f"Cập nhật: {latest_ts.strftime('%d/%m/%Y %H:%M:%S')}")
+
+
+# ==================== MÔ-ĐUN 2: SO SÁNH CHỈ SỐ CHÍNH ====================
+def generate_index_comparison_chart(index_history: pd.DataFrame):
+    """Biểu đồ so sánh VN-Index, HNX và UPCoM dựa trên dữ liệu lịch sử."""
+
+    if index_history is None or index_history.empty:
+        fig = go.Figure()
+        fig.update_layout(paper_bgcolor=PAPER_BG, plot_bgcolor=PLOT_BG)
+        fig.add_annotation(text='Không có dữ liệu chỉ số', xref='paper', yref='paper', x=0.5, y=0.5)
+        return fig
+
+    pivot_df = index_history.pivot(index='time', columns='symbol', values='close').dropna(how='all')
+    pivot_df = pivot_df.fillna(method='ffill')
+    pivot_df = pivot_df.dropna(how='all')
+
+    def normalize_series(series: pd.Series) -> pd.Series:
+        first_valid_idx = series.first_valid_index()
+        if first_valid_idx is None:
+            return series
+        base_value = series.loc[first_valid_idx]
+        if base_value in (0, None):
+            return series
+        return (series / base_value - 1) * 100
+
+    pct_change_df = pivot_df.apply(normalize_series)
+
+    fig = go.Figure()
+
+    palette = {
+        'VN-Index': '#1D4ED8',
+        'HNX-Index': '#F97316',
+        'UPCoM': '#7C3AED'
+    }
+
+    for column in pct_change_df.columns:
+        fig.add_trace(
+            go.Scatter(
+                x=pct_change_df.index,
+                y=pct_change_df[column],
+                mode='lines',
+                name=column,
+                line=dict(color=palette.get(column, '#2d3748'), width=2.6),
+                hovertemplate='%{y:+.2f}%<extra></extra>'
+            )
+        )
+
+    fig.update_layout(
+        title=dict(
+            text='SO SÁNH CÁC CHỈ SỐ CHÍNH (TỶ LỆ % SO ĐẦU KỲ)',
+            font=TITLE_FONT,
+            x=0,
+            pad=TITLE_PAD
+        ),
+        paper_bgcolor=PAPER_BG,
+        plot_bgcolor=PLOT_BG,
+        font=dict(color=FONT_COLOR, size=11),
+        hovermode='x unified',
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.28,
+            xanchor="center",
+            x=0.5,
+            font=dict(size=12, color=FONT_COLOR),
+            bgcolor='rgba(255, 255, 255, 0.95)',
+            bordercolor='#e2e8f0',
+            borderwidth=1,
+            itemclick='toggleothers',
+            itemsizing='constant'
+        ),
+        xaxis=dict(
+            gridcolor=GRID_COLOR,
+            showgrid=True,
+            zeroline=False
+        ),
+        yaxis=dict(
+            gridcolor=GRID_COLOR,
+            showgrid=True,
+            zeroline=True,
+            zerolinecolor=ZERO_LINE_COLOR,
+            title='Thay đổi so với đầu kỳ (%)'
+        ),
+        height=350,
+        margin=dict(l=40, r=40, t=50, b=40)
+    )
+
+    if len(pct_change_df) > 30:
+        anchor_idx = pct_change_df.index[int(len(pct_change_df) * 0.7)]
+        anchor_symbol = 'HNX-Index' if 'HNX-Index' in pct_change_df.columns else pct_change_df.columns[0]
+        anchor_value = pct_change_df[anchor_symbol].loc[anchor_idx]
+        fig.add_annotation(
+            x=anchor_idx,
+            y=anchor_value,
+            text="Xu hướng ngắn hạn",
+            showarrow=True,
+            arrowhead=2,
+            arrowcolor=REFERENCE_COLOR,
+            arrowwidth=1.2,
+            ax=0,
+            ay=-70,
+            font=dict(size=10, color='#1a202c'),
+            bgcolor='rgba(255, 255, 255, 0.7)',
+            bordercolor=REFERENCE_COLOR,
+            borderwidth=1
+        )
+
+    return fig
+
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def load_sector_snapshot_cached():
+    """Cache-reuse the sector snapshot with only essential columns."""
+    snapshot = get_sector_snapshot(exchange='HOSE', size=600)
+    
+    if snapshot.empty:
+        return snapshot
+
+    # Filter columns if they exist
+    cols_to_keep = [c for c in SNAPSHOT_COLUMNS if c in snapshot.columns]
+    if cols_to_keep:
+        snapshot = snapshot[cols_to_keep]
+
+    companies = load_company_industries()
+    if not companies.empty and 'ticker' in snapshot.columns:
+        working = snapshot.copy()
+        working['ticker'] = working['ticker'].astype(str).str.upper()
+        merged = working.merge(companies, left_on='ticker', right_on='symbol', how='left')
+        merged['industry_level_1'] = merged['industry_level_1'].fillna(merged.get('industry', 'Ngành khác'))
+        merged['industry'] = merged['industry_level_1']
+        merged = merged.drop(columns=['symbol'], errors='ignore')
+        return merged
+
+    return snapshot
+
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def load_detail_data():
+    """Load heavier, sector-dependent datasets for secondary visuals."""
+
+    sector_snapshot = load_sector_snapshot_cached()
+    return {
+        'sector_snapshot': sector_snapshot,
+        'sector_perf': summarize_sector_performance(sector_snapshot, top_n=None),
+        'market_cap': summarize_market_cap_distribution(sector_snapshot, top_n=8),
+        'foreign_flow': get_foreign_flow_leaderboard(sector_snapshot, top_n=6),
+        'liquidity': get_liquidity_leaders(sector_snapshot, top_n=40),
+        'correlation': get_return_correlation_matrix(),
+    }
+
+
+# ==================== MÔ-ĐUN 4: HIỆU SUẤT NGÀNH ====================
+def generate_sector_performance(sector_perf: pd.DataFrame):
+    """Biểu đồ hiệu suất ngành dựa trên dữ liệu vnstock."""
+
+    if sector_perf is None or sector_perf.empty:
+        fig = go.Figure()
+        fig.update_layout(paper_bgcolor=PAPER_BG, plot_bgcolor=PLOT_BG)
+        fig.add_annotation(text='Chưa có dữ liệu ngành', xref='paper', yref='paper', x=0.5, y=0.5)
+        return fig
+
+    ordered = sector_perf.copy()
+    ordered['industry'] = ordered.get('industry', pd.Series(index=ordered.index, dtype=str))
+    ordered['industry'] = ordered['industry'].astype(str).str.strip()
+
+    industry_order = get_industry_order()
+    trimmed_order = []
+    if industry_order:
+        trimmed_order = [name.strip() for name in industry_order if isinstance(name, str) and name.strip()]
+        ordered = ordered[ordered['industry'].isin(trimmed_order)].copy()
+        if ordered.empty:
+            # Fallback if strict mapping fails
+            ordered = sector_perf.copy()
+        else:
+            ordered = ordered.set_index('industry')
+            ordered = ordered.reindex(trimmed_order)
+            ordered = ordered.dropna(subset=['avg_growth_1m', 'avg_growth_1w'], how='all').reset_index()
+            ordered = ordered.rename(columns={'index': 'industry'})
+
+    ordered['industry'] = ordered['industry'].astype(str)
+
+    avg_growth_1m_series = pd.to_numeric(ordered.get('avg_growth_1m'), errors='coerce')
+    avg_growth_1w_series = pd.to_numeric(ordered.get('avg_growth_1w'), errors='coerce')
+    ordered['avg_growth_1m'] = avg_growth_1m_series
+    ordered['avg_growth_1w'] = avg_growth_1w_series
+
+    market_avg_1m = avg_growth_1m_series.mean(skipna=True)
+    market_avg_1w = avg_growth_1w_series.mean(skipna=True)
+    market_avg_1m = float(market_avg_1m) if pd.notna(market_avg_1m) else 0.0
+    market_avg_1w = float(market_avg_1w) if pd.notna(market_avg_1w) else 0.0
+
+    delta_growth_1m_source = ordered['delta_growth_1m'] if 'delta_growth_1m' in ordered.columns else (avg_growth_1m_series - market_avg_1m)
+    delta_growth_1w_source = ordered['delta_growth_1w'] if 'delta_growth_1w' in ordered.columns else (avg_growth_1w_series - market_avg_1w)
+    ordered['delta_growth_1m'] = pd.to_numeric(delta_growth_1m_source, errors='coerce')
+    ordered['delta_growth_1w'] = pd.to_numeric(delta_growth_1w_source, errors='coerce')
+    
+    # Fill NA delta
+    ordered['delta_growth_1m'] = ordered['delta_growth_1m'].fillna(0)
+    ordered['delta_growth_1w'] = ordered['delta_growth_1w'].fillna(0)
+
+    # Sort by 1W since 1M might be 0
+    ordered = ordered.sort_values('delta_growth_1w', ascending=False)
+
+    delta_1m = ordered['delta_growth_1m']
+    delta_1w = ordered['delta_growth_1w']
+
+    def _dual_palette(values):
+        strong = []
+        light = []
+        for value in values:
+            if value >= 0:
+                strong.append(POSITIVE_COLOR_DARK)
+                light.append(POSITIVE_COLOR_LIGHT)
+            else:
+                strong.append(NEGATIVE_COLOR_DARK)
+                light.append(NEGATIVE_COLOR_LIGHT)
+        return strong, light
+
+    colors_1m_strong, colors_1m_light = _dual_palette(delta_1m)
+    colors_1w_strong, colors_1w_light = _dual_palette(delta_1w)
+    colors_1m = colors_1m_strong
+    colors_1w = colors_1w_light
+
+    labels_1m = [f"{value:+.1f}%" if pd.notna(value) and value != 0 else '' for value in delta_1m]
+    labels_1w = [f"{value:+.1f}%" if pd.notna(value) else '' for value in delta_1w]
+
+    combined_delta = pd.concat([delta_1m, delta_1w], axis=0)
+    combined_abs_max = combined_delta.abs().max() if not combined_delta.empty else None
+    max_abs_delta = float(combined_abs_max) if combined_abs_max is not None and not pd.isna(combined_abs_max) else 0.0
+    padding = max(1.0, max_abs_delta * 0.12)
+    axis_min = -max_abs_delta - padding
+    axis_max = max_abs_delta + padding
+
+    custom_1m = np.column_stack((ordered['avg_growth_1m'], np.full(len(ordered), market_avg_1m)))
+    custom_1w = np.column_stack((ordered['avg_growth_1w'], np.full(len(ordered), market_avg_1w)))
+
+    fig = go.Figure()
+    # 1M Bar (might be empty/zero for now)
+    fig.add_trace(
+        go.Bar(
+            y=ordered['industry'],
+            x=delta_1m,
+            name='1M so với thị trường',
+            orientation='h',
+            marker=dict(
+                color=colors_1m,
+                line=dict(color='rgba(255, 255, 255, 0.4)', width=0.8)
+            ),
+            text=labels_1m,
+            textposition='outside',
+            textfont=dict(size=14, color=FONT_COLOR, family=BOLD_FONT_FAMILY),
+            cliponaxis=False,
+            customdata=custom_1m,
+            hovertemplate='<b>%{y}</b><br>1M: %{customdata[0]:+.2f}% | TT: %{customdata[1]:+.2f}%<br>Chênh lệch: %{x:+.2f} điểm<extra></extra>',
+            showlegend=False
+        )
+    )
+
+    fig.add_trace(
+        go.Bar(
+            y=ordered['industry'],
+            x=delta_1w,
+            name='Daily (1W placeholder) so với thị trường',
+            orientation='h',
+            marker=dict(
+                color=colors_1w,
+                line=dict(color='rgba(255, 255, 255, 0.6)', width=0.8)
+            ),
+            text=labels_1w,
+            textposition='outside',
+            textfont=dict(size=14, color=FONT_COLOR, family=BOLD_FONT_FAMILY),
+            cliponaxis=False,
+            customdata=custom_1w,
+            hovertemplate='<b>%{y}</b><br>Daily/1W: %{customdata[0]:+.2f}% | TT: %{customdata[1]:+.2f}%<br>Chênh lệch: %{x:+.2f} điểm<extra></extra>',
+            showlegend=False
+        )
+    )
+
+    fig.add_vline(x=0, line_width=2.8, line_dash='dash', line_color=ZERO_LINE_COLOR)
+
+    fig.update_layout(
+        title=dict(
+            text='HIỆU SUẤT NGÀNH: DAILY SO VỚI THỊ TRƯỜNG',
+            font=TITLE_FONT,
+            x=0,
+            pad=TITLE_PAD
+        ),
+        paper_bgcolor=PAPER_BG,
+        plot_bgcolor=PLOT_BG,
+        font=dict(color=FONT_COLOR, size=13, family=BOLD_FONT_FAMILY),
+        barmode='group',
+        bargap=0.35,
+        xaxis=dict(
+            gridcolor=GRID_COLOR,
+            showgrid=True,
+            zeroline=False,
+            title=dict(text='<b>Chênh lệch so với trung bình thị trường (điểm %)</b>'),
+            ticksuffix='%',
+            range=[axis_min, axis_max],
+            tickfont=dict(size=13, color=FONT_COLOR, family=BOLD_FONT_FAMILY)
+        ),
+        yaxis=dict(
+            showgrid=False,
+            title=dict(text='<b>Ngành</b>'),
+            autorange='reversed',
+            tickfont=dict(size=13, color=FONT_COLOR, family=BOLD_FONT_FAMILY)
+        ),
+        height=430,
+        margin=dict(l=140, r=40, t=70, b=100)
+    )
+
+    return fig
+
+
+# ==================== MÔ-ĐUN 5: VỐN HÓA THEO NGÀNH ====================
+def generate_market_cap_treemap(market_cap_df: pd.DataFrame):
+    """Treemap tỷ trọng vốn hóa theo ngành từ dữ liệu thực."""
+
+    if market_cap_df is None or market_cap_df.empty:
+        return go.Figure()
+
+    top_sectors = market_cap_df
+    palette = ['#48bb78', '#f6ad55', '#63b3ed', '#fc8181', '#dd6b20', '#9f7aea', '#38b2ac', '#ed8936']
+    colors = [palette[i % len(palette)] for i in range(len(top_sectors))]
+
+    fig = go.Figure(
+        go.Treemap(
+            labels=top_sectors['industry'],
+            parents=[''] * len(top_sectors),
+            values=top_sectors['market_cap'],
+            marker=dict(colors=colors, line=dict(color='#f5f7fb', width=2)),
+            texttemplate='<b>%{label}</b><br>%{value:.0f} tỷ',
+            textfont=dict(size=13, color='#1a202c', family='Inter, "Be VietNam Pro", "Segoe UI", sans-serif'),
+            hovertemplate='<b>%{label}</b><br>Vốn hóa: %{value:,.0f} tỷ<extra></extra>'
+        )
+    )
+
+    fig.update_layout(
+        title=dict(
+            text='TỶ TRỌNG DOANH NGHIỆP THEO NGÀNH',
+            font=TITLE_FONT,
+            x=0,
+            pad=TITLE_PAD
+        ),
+        paper_bgcolor=PAPER_BG,
+        plot_bgcolor=PLOT_BG,
+        font=dict(color=FONT_COLOR, size=11),
+        height=350,
+        margin=dict(l=10, r=10, t=50, b=10)
+    )
+
+    return fig
+
+
+# ==================== MÔ-ĐUN 6: DÒNG TIỀN KHỐI NGOẠI ====================
+def generate_net_foreign_buying(foreign_flow_df: pd.DataFrame):
+    """Hiển thị Top mua/bán ròng khối ngoại dạng 2 cột đối xứng."""
+
+    if foreign_flow_df is None or foreign_flow_df.empty:
+        fig = go.Figure()
+        fig.update_layout(paper_bgcolor=PAPER_BG, plot_bgcolor=PLOT_BG)
+        fig.add_annotation(text='Không có dữ liệu giao dịch khối ngoại', xref='paper', yref='paper', x=0.5, y=0.5)
+        return fig
+
+    df = foreign_flow_df.copy()
+    buys = df[df['foreign_buysell_20s'] > 0].nlargest(5, 'foreign_buysell_20s')
+    sells = df[df['foreign_buysell_20s'] < 0].nsmallest(5, 'foreign_buysell_20s')
+
+    fig = make_subplots(
+        rows=1,
+        cols=2,
+        subplot_titles=("Top Mua", "Top Bán"),
+        horizontal_spacing=0.12
+    )
+
+    if not buys.empty:
+        buy_custom = np.column_stack((buys['industry'], buys['foreign_buysell_20s'])).tolist()
+        fig.add_trace(
+            go.Bar(
+                x=buys['foreign_buysell_20s'],
+                y=buys['ticker'],
+                orientation='h',
+                marker_color=POSITIVE_COLOR,
+                text=[f"{val:,.0f}" for val in buys['foreign_buysell_20s']],
+                textposition='outside',
+                hovertemplate='%{y} · %{customdata[0]}<br>Mua ròng: %{customdata[1]:,.0f} tỷ<extra></extra>',
+                customdata=buy_custom,
+                name='Top Mua'
+            ),
+            row=1,
+            col=1
+        )
+
+    if not sells.empty:
+        sell_values = np.abs(sells['foreign_buysell_20s'])
+        sell_custom = np.column_stack((sells['industry'], sell_values)).tolist()
+        fig.add_trace(
+            go.Bar(
+                x=sell_values,
+                y=sells['ticker'],
+                orientation='h',
+                marker_color=NEGATIVE_COLOR,
+                text=[f"{val:,.0f}" for val in sell_values],
+                textposition='outside',
+                hovertemplate='%{y} · %{customdata[0]}<br>Bán ròng: %{customdata[1]:,.0f} tỷ<extra></extra>',
+                customdata=sell_custom,
+                name='Top Bán'
+            ),
+            row=1,
+            col=2
+        )
+
+    fig.update_layout(
+        title=dict(
+            text='GIAO DỊCH KHỐI NGOẠI (REAL-TIME)',
+            font=TITLE_FONT,
+            x=0,
+            pad=TITLE_PAD
+        ),
+        paper_bgcolor=PAPER_BG,
+        plot_bgcolor=PLOT_BG,
+        font=dict(color=FONT_COLOR, size=11),
+        showlegend=False,
+        height=350,
+        margin=dict(l=40, r=40, t=70, b=40)
+    )
+    
+    # Update axes titles
+    fig.update_xaxes(row=1, col=1, title_text='Giá trị mua ròng (VND)')
+    fig.update_xaxes(row=1, col=2, title_text='Giá trị bán ròng (VND)')
+
+    return fig
+
+
+# ==================== MÔ-ĐUN 7: TƯƠNG QUAN LẠM PHÁT (LIQUIDITY/GROWTH) ====================
+def generate_inflation_correlation(liquidity_df: pd.DataFrame):
+    """Biểu đồ scatter thể hiện mối tương quan giữa tăng trưởng giá và thanh khoản."""
+
+    if liquidity_df is None or liquidity_df.empty:
+        fig = go.Figure()
+        fig.update_layout(paper_bgcolor=PAPER_BG, plot_bgcolor=PLOT_BG)
+        fig.add_annotation(text='Không có dữ liệu thanh khoản', xref='paper', yref='paper', x=0.5, y=0.5)
+        return fig
+
+    df = liquidity_df.copy()
+    numeric_cols = ['avg_trading_value_20d', 'price_growth_1m', 'market_cap']
+    # Map price_growth_1w to 1m for visualization if 1m is missing/zero
+    if 'price_growth_1w' in df.columns:
+         df['price_growth_1m'] = df['price_growth_1w']
+
+    for column in numeric_cols:
+        df[column] = pd.to_numeric(df.get(column), errors='coerce')
+
+    df = df.dropna(subset=['avg_trading_value_20d', 'price_growth_1m'])
+    if df.empty:
+        return go.Figure()
+
+    df['market_cap'] = df['market_cap'].fillna(0)
+    size_base = df['market_cap'].replace({0: np.nan}).max()
+    if pd.isna(size_base) or size_base == 0:
+        size_base = 1
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=df['avg_trading_value_20d'],
+        y=df['price_growth_1m'],
+        mode='markers',
+        marker=dict(
+            size=np.clip((df['market_cap'] / size_base) * 30, 8, 30),
+            color=[POSITIVE_COLOR if val >= 0 else NEGATIVE_COLOR for val in df['price_growth_1m']],
+            line=dict(color='#ffffff', width=0.5)
+        ),
+        text=df['ticker'],
+        hovertemplate='%{text} · %{customdata}<br>Tăng trưởng: %{y:.2f}%<br>Thanh khoản: %{x:,.1f} tỷ<extra></extra>',
+        customdata=df['industry']
+    ))
+
+    fig.update_layout(
+        title=dict(
+            text='TĂNG TRƯỞNG (DAILY) VS THANH KHOẢN',
+            font=TITLE_FONT,
+            x=0,
+            pad=TITLE_PAD
+        ),
+        paper_bgcolor=PAPER_BG,
+        plot_bgcolor=PLOT_BG,
+        font=dict(color=FONT_COLOR, size=11),
+        xaxis=dict(
+            gridcolor=GRID_COLOR,
+            showgrid=True,
+            zeroline=False,
+            title='Thanh khoản (VND)'
+        ),
+        yaxis=dict(
+            gridcolor=GRID_COLOR,
+            showgrid=True,
+            zeroline=False,
+            title='Tăng trưởng (%)'
+        ),
+        height=350,
+        margin=dict(l=40, r=40, t=50, b=40)
+    )
+    
+    return fig
+
+
+# ==================== MÔ-ĐUN 8: MA TRẬN TƯƠNG QUAN ====================
+def generate_correlation_matrix(correlation_df: pd.DataFrame):
+    """Hiển thị ma trận tương quan lợi suất thực tế."""
+
+    if correlation_df is None or correlation_df.empty:
+        fig = go.Figure()
+        fig.update_layout(paper_bgcolor=PAPER_BG, plot_bgcolor=PLOT_BG)
+        fig.add_annotation(text='Không đủ dữ liệu để tính tương quan', xref='paper', yref='paper', x=0.5, y=0.5)
+        return fig
+
+    numeric_corr = correlation_df.apply(pd.to_numeric, errors='coerce')
+    corr_values = numeric_corr.to_numpy(dtype=float)
+
+    fig = go.Figure(data=go.Heatmap(
+        z=corr_values,
+        x=numeric_corr.columns,
+        y=numeric_corr.index,
+        colorscale=[
+            [0, '#ebf4ff'],
+            [0.5, '#90cdf4'],
+            [1, '#2b6cb0']
+        ],
+        text=np.round(corr_values, 2),
+        texttemplate='%{text:.1f}',
+        textfont=dict(size=13, color='#1a202c'),
+        hovertemplate='%{x} so với %{y}<br>Hệ số: %{z:.2f}<extra></extra>',
+        colorbar=dict(
+            thickness=15,
+            len=0.7,
+            bgcolor=PAPER_BG,
+            tickfont=dict(color=FONT_COLOR),
+            title=dict(text='Hệ số', side='right', font=dict(color=FONT_COLOR))
+        )
+    ))
+    
+    fig.update_layout(
+        title=dict(
+            text='MA TRẬN TƯƠNG QUAN',
+            font=TITLE_FONT,
+            x=0,
+            pad=TITLE_PAD
+        ),
+        paper_bgcolor=PAPER_BG,
+        plot_bgcolor=PLOT_BG,
+        font=dict(color=FONT_COLOR, size=11),
+        xaxis=dict(
+            side='bottom',
+            showgrid=False
+        ),
+        yaxis=dict(
+            showgrid=False,
+            autorange='reversed'
+        ),
+        height=350,
+        margin=dict(l=120, r=40, t=50, b=80)
+    )
+    
+    return fig
+
 def render_bang_dieu_hanh():
     """Hiển thị bảng điều hành chính cho tab Tổng quan Thị trường & Ngành."""
     st.markdown(DASHBOARD_STYLE, unsafe_allow_html=True)
-
     st.markdown('<div class="dashboard-header">PHÂN TÍCH THỊ TRƯỜNG & NGÀNH</div>', unsafe_allow_html=True)
     st.markdown('<div class="dashboard-subtitle">Dữ liệu tổng hợp & cập nhật theo thời gian thực</div>', unsafe_allow_html=True)
 
@@ -1006,38 +1127,57 @@ def render_bang_dieu_hanh():
 
     st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
 
-    # Chỉ hiển thị biểu đồ lịch sử chỉ số và top movers
-    st.plotly_chart(
-        generate_index_comparison_chart(overview_data.get('index_history')), width='stretch'
-    )
-    
-    st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
-    
-    # Hiển thị Top Movers dạng list
-    left_col, right_col = st.columns(2)
-    
-    with st.spinner("Đang tải dữ liệu VN30..."):
-        top_movers = get_top_movers(top_n=10)
-    
-    if top_movers and isinstance(top_movers, dict):
-        with left_col:
-            if 'gainers' in top_movers and not top_movers['gainers'].empty:
-                render_top_gainers_list(top_movers['gainers'])
-            else:
-                st.info("Không thể tải dữ liệu top tăng giá.")
+    left_col, right_col = st.columns((1.6, 1))
+
+    with left_col:
+        if overview_data.get('index_history') is not None:
+             st.plotly_chart(
+                generate_index_comparison_chart(overview_data.get('index_history')), use_container_width=True
+            )
+        else:
+             st.info("Chưa có dữ liệu lịch sử chỉ số.")
+             
+        st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
+        sector_perf_placeholder = st.empty()
+        st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
+        correlation_placeholder = st.empty()
+
+    with right_col:
+        market_cap_placeholder = st.empty()
+        st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
+        foreign_flow_placeholder = st.empty()
+        st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
+        liquidity_placeholder = st.empty()
+
+    # Load detail data
+    with st.spinner("Đang tải dữ liệu chi tiết..."):
+        detail_data = load_detail_data()
+
+    if detail_data:
+        if detail_data.get('sector_perf') is not None and not detail_data['sector_perf'].empty:
+             sector_perf_placeholder.plotly_chart(generate_sector_performance(detail_data['sector_perf']), use_container_width=True)
+        else:
+             sector_perf_placeholder.info("Chưa có dữ liệu ngành.")
+
+        if detail_data.get('market_cap') is not None and not detail_data['market_cap'].empty:
+             market_cap_placeholder.plotly_chart(generate_market_cap_treemap(detail_data['market_cap']), use_container_width=True)
+        else:
+             market_cap_placeholder.info("Chưa có dữ liệu vốn hóa.")
         
-        with right_col:
-            if 'losers' in top_movers and not top_movers['losers'].empty:
-                render_top_losers_list(top_movers['losers'])
-            else:
-                st.info("Không thể tải dữ liệu top giảm giá.")
-    else:
-        left_col.info("Không thể tải dữ liệu VN30.")
-        right_col.info("Không thể tải dữ liệu VN30.")
-    
+        if detail_data.get('foreign_flow') is not None and not detail_data['foreign_flow'].empty:
+             foreign_flow_placeholder.plotly_chart(generate_net_foreign_buying(detail_data['foreign_flow']), use_container_width=True)
+        else:
+             foreign_flow_placeholder.info("Chưa có dữ liệu khối ngoại.")
+
+        if detail_data.get('liquidity') is not None and not detail_data['liquidity'].empty:
+             liquidity_placeholder.plotly_chart(generate_inflation_correlation(detail_data['liquidity']), use_container_width=True)
+        else:
+             liquidity_placeholder.info("Chưa có dữ liệu thanh khoản.")
+
+        if detail_data.get('correlation') is not None and not detail_data['correlation'].empty:
+             correlation_placeholder.plotly_chart(generate_correlation_matrix(detail_data['correlation']), use_container_width=True)
+        
     st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
-    
-    # Hiển thị danh mục đầu tư hiện tại ở cuối
     render_current_portfolio()
 
 
