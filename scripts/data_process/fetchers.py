@@ -339,29 +339,10 @@ def _get_sector_snapshot_cached(exchange: str, size: int, source: str) -> pd.Dat
         # 2. Map Industry from Local CSV
         industry_map = _load_company_info_mapping()
         
-        # 3. Batch Fetch Price Board (Chunks of 20-50 to avoid timeout?)
-        # VCI Price Board can handle ~100 symbols ok. 
-        # But fetching ALL ~1600 might be slow. 
-        # Strategy: Limit to top liquid stocks if possible, OR just fetch batches.
-        # For 'snapshot' we realistically only strictly need top N by cap/liquidity.
-        # But we don't know Cap yet.
-        # Let's simple fetch top VN30/HNX30/UPCOM for speed, OR try a larger batch.
-        
-        # Let's try fetching board for ALL symbols effectively? 
-        # Actually, get_realtime_index_board logic handles batches if we reused it, 
-        # but here we want custom columns.
-        
-        # SIMPLIFICATION: To ensure performance, let's prioritize stocks present in our mapping file
-        # because those are "known" companies.
-        
         candidates = [s for s in all_symbols if s in industry_map]
         if not candidates:
              candidates = all_symbols[:size] # Fallback
-        
-        # Limit to reasonable number if too huge (VCI might block > 1000)
-        # We'll take first 600 candidates (likely most liquid/common)
         candidates = candidates[:600]
-        
         print(f"Fetching snapshot for {len(candidates)} symbols...")
         
         # Batch fetching
@@ -429,12 +410,6 @@ def _get_sector_snapshot_cached(exchange: str, size: int, source: str) -> pd.Dat
             / full_board.loc[mask, 'listing_ref_price'] * 100
         )
         
-        # Market Cap = Price * Listed Shares
-        # Note: Price is often 1000 VND unit? No, VCI usually raw or 1000.
-        # Usually internal VCI price is raw VND (e.g. 15000) or 15.0?
-        # Let's heuristics: if price < 500, unlikely to be VND, maybe x1000.
-        # But usually API returns 45500.0 etc.
-        
         full_board['market_cap'] = full_board['match_match_price'] * full_board['listing_listed_share']
         
         # Liquidity (Value)
@@ -501,10 +476,6 @@ def get_realtime_index_board(symbols: List[str]) -> pd.DataFrame:
             new_cols.append(clean_col)
         board.columns = new_cols
 
-    # Map tên cột phổ biến từ API về tên chuẩn
-    # API thường trả về: a (symbol), b (ceiling), c (floor), ... hoặc tên đầy đủ tùy version
-    # Ở đây giả định API trả về tên có chứa từ khóa
-    
     rename_map = {
         'thong_tin_cophieu_dang_ky_mack': 'symbol', # Tên cột cũ của TCBS/VND
         'listing_symbol': 'symbol',

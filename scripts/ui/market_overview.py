@@ -1174,9 +1174,6 @@ def render_bang_dieu_hanh():
         else:
              liquidity_placeholder.info("Chưa có dữ liệu thanh khoản.")
 
-        if detail_data.get('correlation') is not None and not detail_data['correlation'].empty:
-             correlation_placeholder.plotly_chart(generate_correlation_matrix(detail_data['correlation']), use_container_width=True)
-        
     st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
     render_current_portfolio()
 
@@ -1187,9 +1184,5 @@ def main():
 
 
 if __name__ == "__main__":
-    st.set_page_config(
-        page_title="Bảng điều hành tài chính",
-        layout="wide",
-        initial_sidebar_state="collapsed"
-    )
+
     main()

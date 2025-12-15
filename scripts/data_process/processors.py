@@ -101,8 +101,6 @@ def summarize_sector_performance(snapshot: pd.DataFrame, top_n: Optional[int] = 
 
     working = snapshot.copy()
     
-    # Standardize column points for aggregation
-    # We use 'price_growth_1w' as the primary short-term proxy (mapped from daily_change in fetcher)
     if 'price_growth_1w' not in working.columns and 'daily_change' in working.columns:
          working['price_growth_1w'] = working['daily_change']
 
