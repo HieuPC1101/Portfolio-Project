@@ -1,3 +1,0 @@
-1. python scripts\data_collect.py --mode now: mode lấy luôn
-
-2. python scripts\data_collect.py --mode schedule: mode hàng ngày
