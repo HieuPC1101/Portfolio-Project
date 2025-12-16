@@ -293,7 +293,7 @@ def render_current_portfolio():
         with col2:
             if st.button(" Đi đến Chọn Cổ Phiếu", use_container_width=True, type="primary"):
                 update_current_tab("Tự chọn mã cổ phiếu")
-                st.rerun()
+        
         return
     
     
@@ -390,6 +390,7 @@ def load_overview_data():
 
 
 # ==================== MÔ-ĐUN 1: KPI CHỈ SỐ THỊ TRƯỜNG ====================
+@st.cache_data(ttl=1800, show_spinner=False)
 def generate_market_indices_kpi(metrics):
     """Hiển thị các chỉ số chính dạng thẻ KPI dựa trên dữ liệu thực."""
 
@@ -430,13 +431,13 @@ def generate_market_indices_kpi(metrics):
             """,
             unsafe_allow_html=True,
         )
-
-
 def _build_realtime_metrics():
+    # Attempt to fetch realtime board
     board = get_realtime_index_board(REALTIME_INDEX_SYMBOLS)
-    if board is None or board.empty:
-        return []
-
+    
+    # Init empty list for fallback logic
+    metrics = []
+    
     history_cache = {}
 
     def _safe_float(value):
@@ -449,90 +450,104 @@ def _build_realtime_metrics():
 
     def _get_sorted_history(symbol_key):
         if symbol_key not in history_cache:
+            # Optimize: 1 month is plenty for prev close
             history = get_index_history(symbol_key, months=1)
             history_cache[symbol_key] = history.sort_values('time') if not history.empty else pd.DataFrame()
         return history_cache[symbol_key]
+    
+    # If board exists, map it
+    if board is not None and not board.empty:
+        for _, row in board.iterrows():
+            symbol_key = str(row['symbol']).upper()
+            price = _safe_float(row.get('gia_khop'))
+            reference = _safe_float(row.get('gia_tham_chieu'))
+            change = _safe_float(row.get('thay_doi'))
+            pct_change = _safe_float(row.get('ty_le_thay_doi'))
+            note_ts = row.get('last_updated')
+            note_text = None
 
-    metrics = []
-    for _, row in board.iterrows():
-        symbol_key = str(row['symbol']).upper()
-        price = _safe_float(row.get('gia_khop'))
-        reference = _safe_float(row.get('gia_tham_chieu'))
-        change = _safe_float(row.get('thay_doi'))
-        pct_change = _safe_float(row.get('ty_le_thay_doi'))
-        note_ts = row.get('last_updated')
-        note_text = None
+            # Logic to handle missing price but having reference (pre-market?)
+            if reference in (None, 0) and price is not None and change is not None:
+                reference = price - change
 
-        if reference in (None, 0) and price is not None and change is not None:
-            reference = price - change
+            if price in (None, 0) and reference not in (None, 0):
+                # Fallback to ref if price is zero (rare but happens)
+                price = reference
+                change = 0.0
+                pct_change = 0.0
+                note_text = 'Chưa có khớp · Hiển thị tham chiếu'
+            elif price in (None, 0):
+                # Deep fallback to history if row exists but empty stats
+                history = _get_sorted_history(symbol_key)
+                if history.empty:
+                    continue
+                last_row = history.iloc[-1]
+                prev_row = history.iloc[-2] if len(history) > 1 else last_row
+                price = float(last_row['close'])
+                reference = float(prev_row['close']) if pd.notna(prev_row['close']) else price
+                change = price - reference
+                pct_change = (change / reference * 100) if reference not in (0, None) else 0.0
+                note_text = 'Dữ liệu cuối phiên'
+                note_ts = pd.to_datetime(last_row['time']).to_pydatetime()
+            else:
+                base_reference = reference if reference not in (None, 0) else None
+                if base_reference is None and change is not None:
+                    base_reference = price - change
+                if change is None and base_reference is not None:
+                    change = price - base_reference
+                if pct_change is None and base_reference not in (None, 0):
+                    pct_change = (change / base_reference * 100) if change is not None else 0.0
 
-        if price in (None, 0) and reference not in (None, 0):
-            price = reference
-            change = 0.0
-            pct_change = 0.0
-            note_text = 'Chưa có khớp · Hiển thị tham chiếu'
-        elif price in (None, 0):
-            history = _get_sorted_history(symbol_key)
-            if history.empty:
-                continue
-            last_row = history.iloc[-1]
-            prev_row = history.iloc[-2] if len(history) > 1 else last_row
-            price = float(last_row['close'])
-            reference = float(prev_row['close']) if pd.notna(prev_row['close']) else price
-            change = price - reference
-            pct_change = (change / reference * 100) if reference not in (0, None) else 0.0
-            note_text = 'Dữ liệu cuối phiên'
-            note_ts = pd.to_datetime(last_row['time']).to_pydatetime()
-        else:
-            base_reference = reference if reference not in (None, 0) else None
-            if base_reference is None and change is not None:
-                base_reference = price - change
-            if change is None and base_reference is not None:
-                change = price - base_reference
-            if pct_change is None and base_reference not in (None, 0):
-                pct_change = (change / base_reference * 100) if change is not None else 0.0
+            if change is None: change = 0.0
+            if pct_change is None: pct_change = 0.0
+            if note_text is None: note_text = f"Thay đổi {change:+.2f} điểm"
 
-        if change is None:
-            change = 0.0
-        if pct_change is None:
-            pct_change = 0.0
-        if note_text is None:
-            note_text = f"Thay đổi {change:+.2f} điểm"
+            metrics.append({
+                'symbol': symbol_key,
+                'label': REALTIME_LABELS.get(symbol_key, symbol_key),
+                'value': price,
+                'change': change,
+                'pct_change': pct_change,
+                'note': note_text,
+                'timestamp': note_ts
+            })
 
-        metrics.append({
-            'symbol': symbol_key,
-            'label': REALTIME_LABELS.get(symbol_key, symbol_key),
-            'value': price,
-            'change': change,
-            'pct_change': pct_change,
-            'note': note_text,
-            'timestamp': note_ts
-        })
-
+    # Fill in missing symbols using History (Fallback for Timeout/Failure)
     available_symbols = {metric['symbol'] for metric in metrics}
+    
     for symbol_key in REALTIME_SYMBOL_KEYS:
         if symbol_key in available_symbols:
             continue
+            
+        # Manually fetch history for missing
         history = _get_sorted_history(symbol_key)
         if history.empty:
             continue
+            
         last_row = history.iloc[-1]
         prev_row = history.iloc[-2] if len(history) > 1 else last_row
+        
         last_close = float(last_row['close']) if pd.notna(last_row['close']) else None
         prev_close = float(prev_row['close']) if pd.notna(prev_row['close']) else None
+        
         if last_close is None:
             continue
+            
         change = last_close - (prev_close if prev_close is not None else last_close)
         pct_change = (change / prev_close * 100) if prev_close not in (0, None) else 0.0
+        
+        timestamp = pd.to_datetime(last_row['time']).to_pydatetime()
+        
         metrics.append({
             'symbol': symbol_key,
             'label': REALTIME_LABELS.get(symbol_key, symbol_key),
             'value': last_close,
-            'change': change,
+             'change': change,
             'pct_change': pct_change,
             'note': 'Dữ liệu cuối phiên',
-            'timestamp': pd.to_datetime(last_row['time']).to_pydatetime()
+            'timestamp': timestamp
         })
+        
     return metrics
 
 
@@ -1054,65 +1069,6 @@ def generate_inflation_correlation(liquidity_df: pd.DataFrame):
     return fig
 
 
-# ==================== MÔ-ĐUN 8: MA TRẬN TƯƠNG QUAN ====================
-def generate_correlation_matrix(correlation_df: pd.DataFrame):
-    """Hiển thị ma trận tương quan lợi suất thực tế."""
-
-    if correlation_df is None or correlation_df.empty:
-        fig = go.Figure()
-        fig.update_layout(paper_bgcolor=PAPER_BG, plot_bgcolor=PLOT_BG)
-        fig.add_annotation(text='Không đủ dữ liệu để tính tương quan', xref='paper', yref='paper', x=0.5, y=0.5)
-        return fig
-
-    numeric_corr = correlation_df.apply(pd.to_numeric, errors='coerce')
-    corr_values = numeric_corr.to_numpy(dtype=float)
-
-    fig = go.Figure(data=go.Heatmap(
-        z=corr_values,
-        x=numeric_corr.columns,
-        y=numeric_corr.index,
-        colorscale=[
-            [0, '#ebf4ff'],
-            [0.5, '#90cdf4'],
-            [1, '#2b6cb0']
-        ],
-        text=np.round(corr_values, 2),
-        texttemplate='%{text:.1f}',
-        textfont=dict(size=13, color='#1a202c'),
-        hovertemplate='%{x} so với %{y}<br>Hệ số: %{z:.2f}<extra></extra>',
-        colorbar=dict(
-            thickness=15,
-            len=0.7,
-            bgcolor=PAPER_BG,
-            tickfont=dict(color=FONT_COLOR),
-            title=dict(text='Hệ số', side='right', font=dict(color=FONT_COLOR))
-        )
-    ))
-    
-    fig.update_layout(
-        title=dict(
-            text='MA TRẬN TƯƠNG QUAN',
-            font=TITLE_FONT,
-            x=0,
-            pad=TITLE_PAD
-        ),
-        paper_bgcolor=PAPER_BG,
-        plot_bgcolor=PLOT_BG,
-        font=dict(color=FONT_COLOR, size=11),
-        xaxis=dict(
-            side='bottom',
-            showgrid=False
-        ),
-        yaxis=dict(
-            showgrid=False,
-            autorange='reversed'
-        ),
-        height=350,
-        margin=dict(l=120, r=40, t=50, b=80)
-    )
-    
-    return fig
-
 def render_bang_dieu_hanh():
     """Hiển thị bảng điều hành chính cho tab Tổng quan Thị trường & Ngành."""
     st.markdown(DASHBOARD_STYLE, unsafe_allow_html=True)
@@ -1174,8 +1130,6 @@ def render_bang_dieu_hanh():
         else:
              liquidity_placeholder.info("Chưa có dữ liệu thanh khoản.")
 
-    st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
-    render_current_portfolio()
 
 
 def main():

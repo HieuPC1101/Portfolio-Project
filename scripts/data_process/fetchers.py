@@ -449,25 +449,20 @@ def get_realtime_index_board(symbols: List[str]) -> pd.DataFrame:
     """Fetch real-time index board data using the price_board API."""
     if not symbols:
         return pd.DataFrame()
+    try:
+        stock = Vnstock().stock(symbol='VNINDEX', source='VCI') 
+        board = stock.trading.price_board(symbols)
+    except Exception as e:
+        print(f"Error fetching VCI board: {e}")
+        board = None
 
-    sources = ['MSN', 'VCI']
-    board = None
-    
-    for source in sources:
-        try:
-            stock = Vnstock().stock(symbol='VNINDEX', source=source) 
-            board = stock.trading.price_board(symbols)
-            if board is not None and not board.empty:
-                break
-        except Exception:
-            continue
     
     if board is None or board.empty:
         return pd.DataFrame()
 
     board = board.copy()
     
-    # Xử lý làm phẳng MultiIndex Columns (nếu có) một cách an toàn
+    # Xử lý làm phẳng MultiIndex Columns (nếu có)
     if isinstance(board.columns, pd.MultiIndex):
         new_cols = []
         for col in board.columns.values:
