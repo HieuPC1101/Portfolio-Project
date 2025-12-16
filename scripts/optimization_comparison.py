@@ -122,10 +122,10 @@ def create_comparison_table(results_dict):
             'Return/Risk': metrics['return_risk_ratio'],
             'Chỉ số đa dạng hóa': metrics['diversification_index'],
             'Tỷ lệ sử dụng vốn (%)': metrics['capital_utilization'],
-            'Số mã CP': metrics['num_stocks'],
-            'Tổng số cổ phiếu đầu tư': int(metrics['total_shares']),
-            'Vốn sử dụng (VND)': metrics['total_invested'],
-            'Vốn còn lại (VND)': metrics['leftover']
+            'Số mã CP': int(metrics['num_stocks']) if metrics['num_stocks'] else 0,
+            'Tổng số cổ phiếu đầu tư': int(metrics['total_shares']) if metrics['total_shares'] else 0,
+            'Vốn sử dụng (VND)': float(metrics['total_invested']) if metrics['total_invested'] else 0.0,
+            'Vốn còn lại (VND)': float(metrics['leftover']) if metrics['leftover'] else 0.0
         })
     
     return pd.DataFrame(comparison_data)
@@ -222,7 +222,7 @@ def plot_risk_return_comparison(results_dict):
         height=500
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def plot_sharpe_comparison(results_dict):
@@ -260,7 +260,7 @@ def plot_sharpe_comparison(results_dict):
         height=400
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def plot_allocation_comparison(results_dict):
@@ -328,7 +328,7 @@ def plot_allocation_comparison(results_dict):
         )
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def plot_diversification_comparison(results_dict):
@@ -388,7 +388,7 @@ def plot_diversification_comparison(results_dict):
         showlegend=False
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def plot_radar_comparison(results_dict):
@@ -484,7 +484,7 @@ def plot_radar_comparison(results_dict):
         height=500
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def display_detailed_allocation(results_dict):
@@ -511,11 +511,12 @@ def display_detailed_allocation(results_dict):
             allocation_data[model_name] = ['-'] * len(all_tickers)
         else:
             allocation = result.get('Số mã cổ phiếu cần mua', {})
-            allocation_data[model_name] = [allocation.get(ticker, '-') for ticker in all_tickers]
+            # Convert tất cả về string để tránh lỗi Arrow serialization
+            allocation_data[model_name] = [str(allocation.get(ticker, '-')) for ticker in all_tickers]
     
     df_allocation = pd.DataFrame(allocation_data)
     
-    st.dataframe(df_allocation, use_container_width=True, height=400)
+    st.dataframe(df_allocation, width='stretch', height=400)
 
 
 def display_weight_comparison(results_dict):
@@ -547,7 +548,7 @@ def display_weight_comparison(results_dict):
     
     df_weights = pd.DataFrame(weight_data)
     
-    st.dataframe(df_weights, use_container_width=True, height=400)
+    st.dataframe(df_weights, width='stretch', height=400)
 
 
 def provide_investment_recommendation(results_dict):
@@ -663,7 +664,7 @@ def provide_investment_recommendation(results_dict):
         """)
         
         df_scores = pd.DataFrame(score_details)
-        st.dataframe(df_scores, use_container_width=True, height=300)
+        st.dataframe(df_scores, width='stretch', height=300)
         
         st.caption("💡 Cột 'Score' là điểm chuẩn hóa (0-100), cột 'raw' là giá trị gốc")
     
@@ -784,7 +785,7 @@ def render_optimization_comparison_tab(results_dict):
         
         # Hiển thị bảng với highlight
         styled_df = highlight_best_values(comparison_df)
-        st.dataframe(styled_df, use_container_width=True, height=400)
+        st.dataframe(styled_df, width='stretch', height=400)
         
         st.markdown("""
         **📌 Chú thích:**

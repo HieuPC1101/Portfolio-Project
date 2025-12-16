@@ -55,7 +55,5 @@ __all__ = [
     'get_liquidity_leaders',
     'get_sector_heatmap_matrix',
     'calculate_metrics',
-    'get_return_correlation_matrix',
-    'ANALYSIS_START_DATE',
-    'ANALYSIS_END_DATE',
+    'get_return_correlation_matrix'
 ]

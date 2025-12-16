@@ -678,7 +678,7 @@ def render_pagination_controls(total_pages):
         prev_disabled = st.session_state.news_current_page <= 1
         next_disabled = st.session_state.news_current_page >= total_pages
 
-        if prev_col.button("⬅️", use_container_width=True, disabled=prev_disabled, key="news_prev_btn"):
+        if prev_col.button("⬅️", width='stretch', disabled=prev_disabled, key="news_prev_btn"):
             st.session_state.news_current_page -= 1
             st.rerun()
 
@@ -687,7 +687,7 @@ def render_pagination_controls(total_pages):
             unsafe_allow_html=True
         )
 
-        if next_col.button("➡️", use_container_width=True, disabled=next_disabled, key="news_next_btn"):
+        if next_col.button("➡️", width='stretch', disabled=next_disabled, key="news_next_btn"):
             st.session_state.news_current_page += 1
             st.rerun()
 

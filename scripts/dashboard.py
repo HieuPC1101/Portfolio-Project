@@ -129,7 +129,7 @@ def run_models(data):
 
     # Nút chạy tất cả mô hình
     st.sidebar.markdown("---")
-    if st.sidebar.button("🚀 Chạy Tất cả Mô hình", type="primary", use_container_width=True):
+    if st.sidebar.button(" Chạy Tất cả Mô hình", type="primary", width='stretch'):
         from scripts.auto_optimization import run_all_models
         
         with st.spinner("⏳ Đang chạy tất cả các mô hình tối ưu hóa..."):
@@ -451,32 +451,32 @@ default_option = get_current_tab()
 
 # Tạo các button bố cục dọc thay vì radio
 option = default_option
-if st.sidebar.button("📊 Tổng quan Thị trường & Ngành", use_container_width=True, type="primary" if default_option == "Tổng quan Thị trường & Ngành" else "secondary"):
+if st.sidebar.button("📊 Tổng quan Thị trường & Ngành", width='stretch', type="primary" if default_option == "Tổng quan Thị trường & Ngành" else "secondary"):
     option = "Tổng quan Thị trường & Ngành"
     update_current_tab(option)
     st.rerun()
 
-if st.sidebar.button("📝 Tự chọn mã cổ phiếu", use_container_width=True, type="primary" if default_option == "Tự chọn mã cổ phiếu" else "secondary"):
+if st.sidebar.button("📝 Tự chọn mã cổ phiếu", width='stretch', type="primary" if default_option == "Tự chọn mã cổ phiếu" else "secondary"):
     option = "Tự chọn mã cổ phiếu"
     update_current_tab(option)
     st.rerun()
 
-if st.sidebar.button("🤖 Hệ thống đề xuất mã cổ phiếu tự động", use_container_width=True, type="primary" if default_option == "Hệ thống đề xuất mã cổ phiếu tự động" else "secondary"):
+if st.sidebar.button("🤖 Hệ thống đề xuất mã cổ phiếu tự động", width='stretch', type="primary" if default_option == "Hệ thống đề xuất mã cổ phiếu tự động" else "secondary"):
     option = "Hệ thống đề xuất mã cổ phiếu tự động"
     update_current_tab(option)
     st.rerun()
 
-if st.sidebar.button("📊 Tổng hợp Kết quả Tối ưu hóa", use_container_width=True, type="primary" if default_option == "Tổng hợp Kết quả Tối ưu hóa" else "secondary"):
+if st.sidebar.button("📊 Tổng hợp Kết quả Tối ưu hóa", width='stretch', type="primary" if default_option == "Tổng hợp Kết quả Tối ưu hóa" else "secondary"):
     option = "Tổng hợp Kết quả Tối ưu hóa"
     update_current_tab(option)
     st.rerun()
 
-if st.sidebar.button("📰 Tin tức Thị trường & Phân tích", use_container_width=True, type="primary" if default_option == "Tin tức Thị trường & Phân tích" else "secondary"):
+if st.sidebar.button("📰 Tin tức Thị trường & Phân tích", width='stretch', type="primary" if default_option == "Tin tức Thị trường & Phân tích" else "secondary"):
     option = "Tin tức Thị trường & Phân tích"
     update_current_tab(option)
     st.rerun()
 
-if st.sidebar.button("💬 Trợ lý AI", use_container_width=True, type="primary" if default_option == "Trợ lý AI" else "secondary"):
+if st.sidebar.button("💬 Trợ lý AI", width='stretch', type="primary" if default_option == "Trợ lý AI" else "secondary"):
     option = "Trợ lý AI"
     update_current_tab(option)
     st.rerun()
@@ -504,24 +504,24 @@ elif option == "Tổng hợp Kết quả Tối ưu hóa":
     
     # Hiển thị thông tin mode trong sidebar
     st.sidebar.title("Thông tin")
-    st.sidebar.info(f"📌 Hiển thị kết quả từ:\n**{mode_display}**")
+    st.sidebar.info(f" Hiển thị kết quả từ:\n**{mode_display}**")
     
     # Cho phép chuyển đổi mode
     st.sidebar.markdown("---")
     if mode == 'manual':
-        if st.sidebar.button("🔄 Xem kết quả Đề xuất tự động", use_container_width=True):
+        if st.sidebar.button("🔄 Xem kết quả Đề xuất tự động", width='stretch'):
             st.session_state.previous_tab = "Hệ thống đề xuất mã cổ phiếu tự động"
             st.rerun()
     else:
-        if st.sidebar.button("🔄 Xem kết quả Tự chọn", use_container_width=True):
+        if st.sidebar.button("🔄 Xem kết quả Tự chọn", width='stretch'):
             st.session_state.previous_tab = "Tự chọn mã cổ phiếu"
             st.rerun()
     
     # Nút xóa kết quả
     st.sidebar.markdown("---")
-    if st.sidebar.button("🗑️ Xóa tất cả kết quả", help="Xóa tất cả kết quả tối ưu hóa đã lưu", use_container_width=True):
+    if st.sidebar.button(" Xóa tất cả kết quả", help="Xóa tất cả kết quả tối ưu hóa đã lưu", width='stretch'):
         clear_optimization_results(mode)
-        st.sidebar.success("✅ Đã xóa tất cả kết quả!")
+        st.sidebar.success(" Đã xóa tất cả kết quả!")
         st.rerun()
     
     # Lấy kết quả tối ưu hóa

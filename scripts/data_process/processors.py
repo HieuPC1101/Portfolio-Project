@@ -27,7 +27,7 @@ def _safe_pct_change(current: float, previous: float) -> float:
 
 
 def get_indices_history(symbols: Iterable[str] = DEFAULT_INDEX_SYMBOLS, months: int = 6,
-                        source: str = "VCI", start_date: Optional[str] = None,
+                        source: str = "MSN", start_date: Optional[str] = None,
                         end_date: Optional[str] = None) -> pd.DataFrame:
     """Return long-format historical quotes for a list of indices."""
     frames = []
@@ -50,7 +50,7 @@ def get_indices_history(symbols: Iterable[str] = DEFAULT_INDEX_SYMBOLS, months: 
 
 
 def get_market_indices_metrics(symbols: Iterable[str] = DEFAULT_INDEX_SYMBOLS,
-                               source: str = "VCI") -> List[dict]:
+                               source: str = "MSN") -> List[dict]:
     """Prepare KPI cards for headline indices."""
     metrics: List[dict] = []
     for symbol in symbols:
@@ -99,15 +99,21 @@ def summarize_sector_performance(snapshot: pd.DataFrame, top_n: Optional[int] = 
             'delta_growth_1w', 'delta_growth_1m', 'market_avg_1w', 'market_avg_1m'
         ])
 
+    working = snapshot.copy()
+    
+    if 'price_growth_1w' not in working.columns and 'daily_change' in working.columns:
+         working['price_growth_1w'] = working['daily_change']
+
+    if 'price_growth_1m' not in working.columns and 'daily_change' in working.columns:
+         working['price_growth_1m'] = working['daily_change']
+
     required_columns = {
-        'price_growth_1w': pd.NA,
-        'price_growth_1m': pd.NA,
-        'avg_trading_value_20d': pd.NA,
-        'market_cap': pd.NA,
+        'price_growth_1w': 0.0,
+        'price_growth_1m': 0.0,
+        'avg_trading_value_20d': 0.0,
+        'market_cap': 0.0,
     }
 
-    # Guard against upstream collectors missing the derived growth columns.
-    working = snapshot.copy()
     for column, default_value in required_columns.items():
         if column not in working.columns:
             working[column] = default_value
@@ -116,6 +122,7 @@ def summarize_sector_performance(snapshot: pd.DataFrame, top_n: Optional[int] = 
     for column in numeric_growth_cols:
         working[column] = pd.to_numeric(working[column], errors='coerce')
 
+    # Calculate Market Avg
     market_avg_1w = working['price_growth_1w'].mean(skipna=True)
     market_avg_1m = working['price_growth_1m'].mean(skipna=True)
     market_avg_1w = float(market_avg_1w) if pd.notna(market_avg_1w) else 0.0
@@ -141,8 +148,9 @@ def summarize_sector_performance(snapshot: pd.DataFrame, top_n: Optional[int] = 
     group['delta_growth_1m'] = group['avg_growth_1m'] - market_avg_1m
     group['market_avg_1w'] = market_avg_1w
     group['market_avg_1m'] = market_avg_1m
-
-    group = group.sort_values('avg_growth_1m', ascending=True)
+    
+    # Sort by 'avg_growth_1w' (Daily) descending to show winners
+    group = group.sort_values('avg_growth_1w', ascending=False)
 
     if top_n is None:
         return group
@@ -171,10 +179,16 @@ def get_foreign_flow_leaderboard(snapshot: pd.DataFrame, top_n: int = 6) -> pd.D
     df = snapshot[['ticker', 'industry', 'foreign_buysell_20s', 'avg_trading_value_20d']].copy()
     df['foreign_buysell_20s'] = pd.to_numeric(df['foreign_buysell_20s'], errors='coerce').fillna(0)
     df['avg_trading_value_20d'] = pd.to_numeric(df['avg_trading_value_20d'], errors='coerce').fillna(0)
+    
+    # Sort Descending (Highest Net Buy -> Highest Net Sell)
     df = df.sort_values('foreign_buysell_20s', ascending=False)
+    
+    # Only keep non-zero
+    df = df[df['foreign_buysell_20s'] != 0]
 
     inflow = df.head(max(top_n, 1))
-    outflow = df.tail(max(top_n, 1)).sort_values('foreign_buysell_20s')
+    outflow = df.tail(max(top_n, 1)).sort_values('foreign_buysell_20s') # Keep negative values at bottom
+    
     return pd.concat([inflow, outflow], ignore_index=True)
 
 
@@ -182,14 +196,21 @@ def get_liquidity_leaders(snapshot: pd.DataFrame, top_n: int = 30) -> pd.DataFra
     """Return the most liquid tickers for scatter plots."""
     if snapshot is None or snapshot.empty:
         return pd.DataFrame(columns=['ticker', 'industry', 'avg_trading_value_20d', 'price_growth_1m', 'market_cap'])
+    
+    # Map for chart consistency
+    working = snapshot.copy()
+    if 'price_growth_1w' not in working.columns and 'daily_change' in working.columns:
+         working['price_growth_1w'] = working['daily_change']
 
-    cols = ['ticker', 'industry', 'avg_trading_value_20d', 'price_growth_1m', 'market_cap']
-    available_cols = [col for col in cols if col in snapshot.columns]
-    data = snapshot[available_cols].copy()
+    cols = ['ticker', 'industry', 'avg_trading_value_20d', 'price_growth_1w', 'market_cap']
+    available_cols = [col for col in cols if col in working.columns]
+    data = working[available_cols].copy()
+    
     data['avg_trading_value_20d'] = pd.to_numeric(data.get('avg_trading_value_20d'), errors='coerce')
-    data['price_growth_1m'] = pd.to_numeric(data.get('price_growth_1m'), errors='coerce')
+    data['price_growth_1w'] = pd.to_numeric(data.get('price_growth_1w'), errors='coerce') # Daily
     data['market_cap'] = pd.to_numeric(data.get('market_cap'), errors='coerce')
-    data = data.dropna(subset=['avg_trading_value_20d', 'price_growth_1m'])
+    
+    data = data.dropna(subset=['avg_trading_value_20d'])
     data = data.sort_values('avg_trading_value_20d', ascending=False).head(max(top_n, 1))
     return data
 
@@ -202,14 +223,13 @@ def get_sector_heatmap_matrix(snapshot: pd.DataFrame, top_n: int = 6) -> pd.Data
 
     melted = performance.melt(
         id_vars='industry',
-        value_vars=['avg_growth_1w', 'avg_growth_1m', 'avg_liquidity'],
+        value_vars=['avg_growth_1w', 'avg_liquidity'], # Dropped 1M (redundant with Daily)
         var_name='metric',
         value_name='value'
     )
     metric_labels = {
-        'avg_growth_1w': 'Tăng trưởng 1W (%)',
-        'avg_growth_1m': 'Tăng trưởng 1M (%)',
-        'avg_liquidity': 'Thanh khoản TB 20 phiên (tỷ)'
+        'avg_growth_1w': 'Tăng trưởng (Daily %)',
+        'avg_liquidity': 'Thanh khoản (VND)'
     }
     melted['metric'] = melted['metric'].map(lambda key: metric_labels.get(key, key))
     return melted
