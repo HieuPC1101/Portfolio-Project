@@ -307,7 +307,7 @@ def render_current_portfolio():
         
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if st.button(" Đi đến Chọn Cổ Phiếu", use_container_width=True, type="primary"):
+            if st.button(" Đi đến Chọn Cổ Phiếu", width='stretch', type="primary"):
                 update_current_tab("Tự chọn mã cổ phiếu")
         return
     
@@ -1096,6 +1096,7 @@ def generate_inflation_correlation(liquidity_df: pd.DataFrame):
 
 
 def render_bang_dieu_hanh():
+    
     """Hiển thị bảng điều hành chính cho tab Tổng quan Thị trường & Ngành."""
     st.markdown(DASHBOARD_STYLE, unsafe_allow_html=True)
     st.markdown('<div class="dashboard-header">PHÂN TÍCH THỊ TRƯỜNG & NGÀNH</div>', unsafe_allow_html=True)
@@ -1114,45 +1115,42 @@ def render_bang_dieu_hanh():
     with left_col:
         if overview_data.get('index_history') is not None:
              st.plotly_chart(
-                generate_index_comparison_chart(overview_data.get('index_history')), use_container_width=True
+                generate_index_comparison_chart(overview_data.get('index_history')), width='stretch'
             )
         else:
              st.info("Chưa có dữ liệu lịch sử chỉ số.")
              
-        st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
-        sector_perf_placeholder = st.empty()
-        st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
-        correlation_placeholder = st.empty()
-
+       
     with right_col:
         market_cap_placeholder = st.empty()
-        st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
-        foreign_flow_placeholder = st.empty()
-        st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
-        liquidity_placeholder = st.empty()
-
+    st.markdown(CHART_GAP_DIV, unsafe_allow_html=True)
+    col1,col2, col3 = st.columns(3)
+    sector_perf_placeholder = col1.empty()
+    liquidity_placeholder = col2.empty()
+    foreign_flow_placeholder = col3.empty()
+    
     # Load detail data
     with st.spinner("Đang tải dữ liệu chi tiết..."):
         detail_data = load_detail_data()
 
     if detail_data:
         if detail_data.get('sector_perf') is not None and not detail_data['sector_perf'].empty:
-             sector_perf_placeholder.plotly_chart(generate_sector_performance(detail_data['sector_perf']), use_container_width=True)
+             sector_perf_placeholder.plotly_chart(generate_sector_performance(detail_data['sector_perf']), width='stretch')
         else:
              sector_perf_placeholder.info("Chưa có dữ liệu ngành.")
 
         if detail_data.get('market_cap') is not None and not detail_data['market_cap'].empty:
-             market_cap_placeholder.plotly_chart(generate_market_cap_treemap(detail_data['market_cap']), use_container_width=True)
+             market_cap_placeholder.plotly_chart(generate_market_cap_treemap(detail_data['market_cap']), width='stretch')
         else:
              market_cap_placeholder.info("Chưa có dữ liệu vốn hóa.")
         
         if detail_data.get('foreign_flow') is not None and not detail_data['foreign_flow'].empty:
-             foreign_flow_placeholder.plotly_chart(generate_net_foreign_buying(detail_data['foreign_flow']), use_container_width=True)
+             foreign_flow_placeholder.plotly_chart(generate_net_foreign_buying(detail_data['foreign_flow']), width='stretch')
         else:
              foreign_flow_placeholder.info("Chưa có dữ liệu khối ngoại.")
 
         if detail_data.get('liquidity') is not None and not detail_data['liquidity'].empty:
-             liquidity_placeholder.plotly_chart(generate_inflation_correlation(detail_data['liquidity']), use_container_width=True)
+             liquidity_placeholder.plotly_chart(generate_inflation_correlation(detail_data['liquidity']), width='stretch')
         else:
              liquidity_placeholder.info("Chưa có dữ liệu thanh khoản.")
 
