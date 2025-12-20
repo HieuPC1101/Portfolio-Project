@@ -8,6 +8,21 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import logging
+
+# Import utility functions
+from utils.portfolio_utils import (
+    normalize_metric,
+    validate_result,
+    calculate_max_drawdown_safe
+)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Import UI styling
+from utils.ui_styling import get_custom_css, create_metric_card, create_section_header
 
 
 def calculate_portfolio_metrics(result):
@@ -58,28 +73,13 @@ def calculate_portfolio_metrics(result):
     metrics['cvar'] = result.get('Rủi ro CVaR', None)
     metrics['cdar'] = result.get('Rủi ro CDaR', None)
     
-    # Maximum Drawdown (MDD)
-    # Tính từ returns data nếu có
-    if 'ret_arr' in result and result['ret_arr'] is not None:
-        try:
-            returns = result['ret_arr']
-            cumulative = (1 + returns).cumprod()
-            peak = np.maximum.accumulate(cumulative)
-            drawdown = (cumulative - peak) / peak
-            metrics['max_drawdown'] = drawdown.min() * 100  # Convert to percentage
-        except:
-            # Nếu không tính được, dùng CDaR làm tham chiếu hoặc estimate
-            if metrics['cdar'] is not None:
-                metrics['max_drawdown'] = metrics['cdar'] * 100
-            else:
-                # Estimate: MDD thường gấp 2-3 lần volatility trong worst case
-                metrics['max_drawdown'] = -metrics['volatility'] * 2.5
-    else:
-        # Nếu không có dữ liệu returns, estimate từ volatility và CDaR
-        if metrics['cdar'] is not None:
-            metrics['max_drawdown'] = metrics['cdar'] * 100
-        else:
-            metrics['max_drawdown'] = -metrics['volatility'] * 2.5
+    # Maximum Drawdown (MDD) - Sử dụng utility function với fallback an toàn
+    returns_data = result.get('ret_arr')
+    metrics['max_drawdown'] = calculate_max_drawdown_safe(
+        returns_data=returns_data,
+        cdar=metrics['cdar'],
+        volatility=metrics['volatility']
+    )
     
     # Mức độ đa dạng hóa (Herfindahl Index)
     weights = result.get('Trọng số danh mục', {})
@@ -94,30 +94,77 @@ def calculate_portfolio_metrics(result):
     return metrics
 
 
-def create_comparison_table(results_dict):
+def precompute_all_metrics(results_dict):
     """
-    Tạo bảng so sánh các mô hình tối ưu hóa.
+    Pre-compute metrics cho tất cả mô hình một lần duy nhất.
+    Tránh tính toán lặp lại khi render nhiều biểu đồ.
     
     Args:
         results_dict (dict): Dictionary chứa kết quả của các mô hình
                            {'Tên mô hình': result_dict}
     
     Returns:
-        pd.DataFrame: Bảng so sánh
+        dict: {model_name: metrics_dict}
+    
+    Example:
+        >>> results = {'Model A': {...}, 'Model B': {...}}
+        >>> metrics_cache = precompute_all_metrics(results)
+        >>> # Sử dụng cache thay vì tính lại
+        >>> model_a_metrics = metrics_cache['Model A']
     """
-    comparison_data = []
+    metrics_cache = {}
     
     for model_name, result in results_dict.items():
         if result is None:
+            logger.warning(f"Result for {model_name} is None, skipping")
             continue
-            
-        metrics = calculate_portfolio_metrics(result)
+        
+        # Validate result trước khi tính metrics
+        if not validate_result(result):
+            logger.warning(f"Result for {model_name} failed validation, skipping")
+            continue
+        
+        try:
+            metrics = calculate_portfolio_metrics(result)
+            metrics_cache[model_name] = metrics
+            logger.info(f"Pre-computed metrics for {model_name}")
+        except Exception as e:
+            logger.error(f"Failed to compute metrics for {model_name}: {e}")
+            continue
+    
+    logger.info(f"Pre-computed metrics for {len(metrics_cache)}/{len(results_dict)} models")
+    return metrics_cache
+
+
+def create_comparison_table(results_dict, metrics_cache=None):
+    """
+    Tạo bảng so sánh các mô hình tối ưu hóa.
+    
+    Args:
+        results_dict (dict): Dictionary chứa kết quả của các mô hình
+                           {'Tên mô hình': result_dict}
+        metrics_cache (dict, optional): Pre-computed metrics cache
+    
+    Returns:
+        pd.DataFrame: Bảng so sánh
+    """
+    # Nếu không có cache, tính mới
+    if metrics_cache is None:
+        metrics_cache = precompute_all_metrics(results_dict)
+    
+    comparison_data = []
+    
+    for model_name, result in results_dict.items():
+        if result is None or model_name not in metrics_cache:
+            continue
+        
+        # Sử dụng metrics từ cache
+        metrics = metrics_cache[model_name]
         
         comparison_data.append({
             'Mô hình': model_name,
             'Lợi nhuận KV (%)': metrics['expected_return'],
             'Rủi ro - Std (%)': metrics['volatility'],
-            'Max Drawdown (%)': metrics['max_drawdown'],
             'Tỷ lệ Sharpe': metrics['sharpe_ratio'],
             'Return/Risk': metrics['return_risk_ratio'],
             'Chỉ số đa dạng hóa': metrics['diversification_index'],
@@ -147,7 +194,6 @@ def highlight_best_values(df):
     format_dict = {
         'Lợi nhuận KV (%)': '{:.2f}',
         'Rủi ro - Std (%)': '{:.2f}',
-        'Max Drawdown (%)': '{:.2f}',
         'Tỷ lệ Sharpe': '{:.4f}',
         'Return/Risk': '{:.4f}',
         'Chỉ số đa dạng hóa': '{:.4f}',
@@ -176,7 +222,7 @@ def highlight_best_values(df):
             styled = styled.apply(highlight_max, subset=[col])
     
     # Highlight MIN cho rủi ro (thấp = tốt)
-    min_cols = ['Rủi ro - Std (%)', 'Max Drawdown (%)']
+    min_cols = ['Rủi ro - Std (%)']
     for col in min_cols:
         if col in df.columns:
             styled = styled.apply(highlight_min, subset=[col])
@@ -184,20 +230,25 @@ def highlight_best_values(df):
     return styled
 
 
-def plot_risk_return_comparison(results_dict):
+def plot_risk_return_comparison(results_dict, metrics_cache=None):
     """
     Vẽ biểu đồ so sánh rủi ro - lợi nhuận của các mô hình.
     
     Args:
         results_dict (dict): Dictionary chứa kết quả của các mô hình
+        metrics_cache (dict, optional): Pre-computed metrics cache
     """
+    # Nếu không có cache, tính mới
+    if metrics_cache is None:
+        metrics_cache = precompute_all_metrics(results_dict)
+    
     fig = go.Figure()
     
-    for model_name, result in results_dict.items():
-        if result is None:
+    for model_name in results_dict.keys():
+        if model_name not in metrics_cache:
             continue
         
-        metrics = calculate_portfolio_metrics(result)
+        metrics = metrics_cache[model_name]
         
         fig.add_trace(go.Scatter(
             x=[metrics['volatility']],
@@ -225,21 +276,26 @@ def plot_risk_return_comparison(results_dict):
     st.plotly_chart(fig, width='stretch')
 
 
-def plot_sharpe_comparison(results_dict):
+def plot_sharpe_comparison(results_dict, metrics_cache=None):
     """
     Vẽ biểu đồ cột so sánh tỷ lệ Sharpe của các mô hình.
     
     Args:
         results_dict (dict): Dictionary chứa kết quả của các mô hình
+        metrics_cache (dict, optional): Pre-computed metrics cache
     """
+    # Nếu không có cache, tính mới
+    if metrics_cache is None:
+        metrics_cache = precompute_all_metrics(results_dict)
+    
     model_names = []
     sharpe_ratios = []
     
-    for model_name, result in results_dict.items():
-        if result is None:
+    for model_name in results_dict.keys():
+        if model_name not in metrics_cache:
             continue
         
-        metrics = calculate_portfolio_metrics(result)
+        metrics = metrics_cache[model_name]
         model_names.append(model_name)
         sharpe_ratios.append(metrics['sharpe_ratio'])
     
@@ -331,22 +387,27 @@ def plot_allocation_comparison(results_dict):
     st.plotly_chart(fig, width='stretch')
 
 
-def plot_diversification_comparison(results_dict):
+def plot_diversification_comparison(results_dict, metrics_cache=None):
     """
     Vẽ biểu đồ so sánh mức độ đa dạng hóa của các mô hình.
     
     Args:
         results_dict (dict): Dictionary chứa kết quả của các mô hình
+        metrics_cache (dict, optional): Pre-computed metrics cache
     """
+    # Nếu không có cache, tính mới
+    if metrics_cache is None:
+        metrics_cache = precompute_all_metrics(results_dict)
+    
     model_names = []
     diversification_scores = []
     num_stocks = []
     
-    for model_name, result in results_dict.items():
-        if result is None:
+    for model_name in results_dict.keys():
+        if model_name not in metrics_cache:
             continue
         
-        metrics = calculate_portfolio_metrics(result)
+        metrics = metrics_cache[model_name]
         model_names.append(model_name)
         diversification_scores.append(metrics['diversification_index'])
         num_stocks.append(metrics['num_stocks'])
@@ -391,28 +452,29 @@ def plot_diversification_comparison(results_dict):
     st.plotly_chart(fig, width='stretch')
 
 
-def plot_radar_comparison(results_dict):
+def plot_radar_comparison(results_dict, metrics_cache=None):
     """
     Vẽ biểu đồ radar so sánh toàn diện các mô hình.
     
     Args:
         results_dict (dict): Dictionary chứa kết quả của các mô hình
+        metrics_cache (dict, optional): Pre-computed metrics cache
     """
     if len(results_dict) == 0:
         return
     
+    # Nếu không có cache, tính mới
+    if metrics_cache is None:
+        metrics_cache = precompute_all_metrics(results_dict)
+    
+    if not metrics_cache:
+        return
+    
     fig = go.Figure()
     
-    # Chuẩn hóa các chỉ số về thang 0-100
-    all_metrics = []
-    for model_name, result in results_dict.items():
-        if result is None:
-            continue
-        metrics = calculate_portfolio_metrics(result)
-        all_metrics.append(metrics)
+    # Lấy tất cả metrics từ cache
+    all_metrics = list(metrics_cache.values())
     
-    if not all_metrics:
-        return
     
     # Tìm min/max để chuẩn hóa
     max_return = max(m['expected_return'] for m in all_metrics)
@@ -426,42 +488,16 @@ def plot_radar_comparison(results_dict):
     max_capital = max(m['capital_utilization'] for m in all_metrics)
     min_capital = min(m['capital_utilization'] for m in all_metrics)
     
-    def normalize(value, min_val, max_val, reverse=False):
-        """Chuẩn hóa giá trị về thang 0-100 với padding"""
-        if max_val == min_val:
-            return 50
-        
-        # Thêm padding 10% để các giá trị gần nhau không bị nén quá nhiều
-        range_val = max_val - min_val
-        padding = range_val * 0.1
-        baseline_min = min_val - padding
-        baseline_max = max_val + padding
-        
-        # Scale với baseline mới
-        if baseline_max == baseline_min:
-            return 50
-        
-        normalized = ((value - baseline_min) / (baseline_max - baseline_min)) * 100
-        
-        # Reverse nếu giá trị thấp = tốt (như volatility)
-        if reverse:
-            normalized = 100 - normalized
-        
-        # Clamp giá trị trong khoảng 0-100
-        return max(0, min(100, normalized))
-    
-    for model_name, result in results_dict.items():
-        if result is None:
-            continue
-        
-        metrics = calculate_portfolio_metrics(result)
+    # Sử dụng utility function normalize_metric với padding
+    for model_name in metrics_cache.keys():
+        metrics = metrics_cache[model_name]
         
         # Chuẩn hóa với padding (volatility reverse vì thấp = tốt)
-        norm_return = normalize(metrics['expected_return'], min_return, max_return, reverse=False)
-        norm_volatility = normalize(metrics['volatility'], min_volatility, max_volatility, reverse=True)
-        norm_sharpe = normalize(metrics['sharpe_ratio'], min_sharpe, max_sharpe, reverse=False)
-        norm_div = normalize(metrics['diversification_index'], min_div, max_div, reverse=False)
-        norm_capital = normalize(metrics['capital_utilization'], min_capital, max_capital, reverse=False)
+        norm_return = normalize_metric(metrics['expected_return'], min_return, max_return, reverse=False, padding=0.1)
+        norm_volatility = normalize_metric(metrics['volatility'], min_volatility, max_volatility, reverse=True, padding=0.1)
+        norm_sharpe = normalize_metric(metrics['sharpe_ratio'], min_sharpe, max_sharpe, reverse=False, padding=0.1)
+        norm_div = normalize_metric(metrics['diversification_index'], min_div, max_div, reverse=False, padding=0.1)
+        norm_capital = normalize_metric(metrics['capital_utilization'], min_capital, max_capital, reverse=False, padding=0.1)
         
         fig.add_trace(go.Scatterpolar(
             r=[norm_return, norm_volatility, norm_sharpe, norm_div, norm_capital],
@@ -551,33 +587,37 @@ def display_weight_comparison(results_dict):
     st.dataframe(df_weights, width='stretch', height=400)
 
 
-def provide_investment_recommendation(results_dict):
+def provide_investment_recommendation(results_dict, metrics_cache=None):
     """
     Đưa ra khuyến nghị đầu tư với hệ thống chấm điểm chuẩn hóa (0-100).
     
     Args:
         results_dict (dict): Dictionary chứa kết quả của các mô hình
+        metrics_cache (dict, optional): Pre-computed metrics cache
     """
-    st.subheader("💡 Khuyến nghị Lựa chọn Phương án Đầu tư")
+    st.markdown(create_section_header("Hệ thống Khuyến nghị Đầu tư", "💡"), unsafe_allow_html=True)
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 15px; border-radius: 10px; margin: 15px 0;">
+        <p style="margin: 0; color: #1a73e8; font-weight: 600;">
+            🎯 Phân tích dựa trên hệ thống chấm điểm ai chuẩn hóa, kết hợp nhiều tiêu chí quan trọng để đưa ra khuyến nghị tốt nhất.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     if not results_dict or all(r is None for r in results_dict.values()):
         st.warning("Chưa có kết quả tối ưu hóa để đưa ra khuyến nghị.")
         return
     
-    # 1. Thu thập dữ liệu thô từ tất cả mô hình
-    all_metrics = []
-    valid_models = []
+    # Nếu không có cache, tính mới
+    if metrics_cache is None:
+        metrics_cache = precompute_all_metrics(results_dict)
     
-    for model_name, result in results_dict.items():
-        if result is None:
-            continue
-        metrics = calculate_portfolio_metrics(result)
-        all_metrics.append(metrics)
-        valid_models.append(model_name)
-    
-    if not all_metrics:
+    if not metrics_cache:
         st.warning("Không có mô hình hợp lệ để đánh giá.")
         return
+    
+    # 1. Lấy tất cả metrics từ cache
+    all_metrics = list(metrics_cache.values())
     
     # 2. Xác định Min/Max cho chuẩn hóa
     min_return = min(m['expected_return'] for m in all_metrics)
@@ -591,31 +631,19 @@ def provide_investment_recommendation(results_dict):
     min_capital = min(m['capital_utilization'] for m in all_metrics)
     max_capital = max(m['capital_utilization'] for m in all_metrics)
     
-    # 3. Hàm chuẩn hóa
-    def normalize_score(value, min_val, max_val, reverse=False):
-        """Chuẩn hóa về thang 0-100"""
-        if max_val == min_val:
-            return 50.0
-        if reverse:
-            return ((max_val - value) / (max_val - min_val)) * 100
-        return ((value - min_val) / (max_val - min_val)) * 100
-    
-    # 4. Tính điểm cho từng mô hình
+    # 2. Tính điểm cho từng mô hình
     scores = {}
     score_details = []  # Để hiển thị bảng chi tiết
     
-    for model_name, result in results_dict.items():
-        if result is None:
-            continue
+    for model_name in metrics_cache.keys():
+        metrics = metrics_cache[model_name]
         
-        metrics = calculate_portfolio_metrics(result)
-        
-        # Chuẩn hóa từng thành phần (0-100)
-        norm_sharpe = normalize_score(metrics['sharpe_ratio'], min_sharpe, max_sharpe)
-        norm_return = normalize_score(metrics['expected_return'], min_return, max_return)
-        norm_volatility = normalize_score(metrics['volatility'], min_volatility, max_volatility, reverse=True)
-        norm_div = normalize_score(metrics['diversification_index'], min_div, max_div)
-        norm_capital = normalize_score(metrics['capital_utilization'], min_capital, max_capital)
+        # Chuẩn hóa từng thành phần (0-100) - Sử dụng utility function
+        norm_sharpe = normalize_metric(metrics['sharpe_ratio'], min_sharpe, max_sharpe, reverse=False, padding=0)
+        norm_return = normalize_metric(metrics['expected_return'], min_return, max_return, reverse=False, padding=0)
+        norm_volatility = normalize_metric(metrics['volatility'], min_volatility, max_volatility, reverse=True, padding=0)
+        norm_div = normalize_metric(metrics['diversification_index'], min_div, max_div, reverse=False, padding=0)
+        norm_capital = normalize_metric(metrics['capital_utilization'], min_capital, max_capital, reverse=False, padding=0)
         
         # 5. Tính Điểm Tổng hợp (Weighted Score)
         total_score = (
@@ -671,9 +699,19 @@ def provide_investment_recommendation(results_dict):
     # Sắp xếp theo điểm tổng hợp
     sorted_models = sorted(scores.items(), key=lambda x: x[1]['total_score'], reverse=True)
     
-    # Hiển thị top 3 khuyến nghị
+    # Hiển thị top 3 khuyến nghị với styled header
     st.markdown("### 🏆 Top 3 Phương án Được Khuyến nghị")
-    st.info("💡 **Công thức tính điểm (Thang 0-100)**: Sharpe (40%) + Lợi nhuận (30%) + Đa dạng hóa (20%) + Hiệu quả vốn (10%)")
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); 
+                padding: 12px 20px; 
+                border-radius: 8px; 
+                border-left: 4px solid #00acc1;
+                margin-bottom: 20px;">
+        <p style="margin: 0; color: #006064; font-size: 14px;">
+            💡 <strong>Công thức tính điểm (Thang 0-100):</strong> Sharpe (40%) + Lợi nhuận (30%) + Đa dạng hóa (20%) + Hiệu quả vốn (10%)
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     for rank, (model_name, score_data) in enumerate(sorted_models[:3], 1):
         medal = "🥇" if rank == 1 else "🥈" if rank == 2 else "🥉"
@@ -693,6 +731,7 @@ def provide_investment_recommendation(results_dict):
             
             with col3:
                 st.metric("Đa dạng hóa", f"{score_data['diversification']:.4f}")
+                st.metric("Sử dụng vốn", f"{score_data['capital_util']:.1f}%")
             
             # Đưa ra nhận xét
             if rank == 1:
@@ -770,7 +809,48 @@ def render_optimization_comparison_tab(results_dict):
         st.warning("Không có kết quả tối ưu hóa nào để hiển thị.")
         return
     
-    st.success(f"✅ Đã tải {len(valid_results)} kết quả tối ưu hóa")
+    
+    # Inject custom CSS for better styling
+    st.markdown(get_custom_css(), unsafe_allow_html=True)
+    
+    # Pre-compute tất cả metrics một lần duy nhất (Performance Optimization)
+    logger.info("Pre-computing metrics for all models...")
+    metrics_cache = precompute_all_metrics(valid_results)
+    logger.info(f"Successfully cached metrics for {len(metrics_cache)} models")
+    
+    # Summary metrics cards with gradients
+    st.markdown("### 📈 Tổng quan Nhanh")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown(
+            create_metric_card("Số mô hình", len(valid_results), "purple"),
+            unsafe_allow_html=True
+        )
+    
+    with col2:
+        all_metrics = list(metrics_cache.values())
+        avg_return = sum(m['expected_return'] for m in all_metrics) / len(all_metrics) if all_metrics else 0
+        st.markdown(
+            create_metric_card("Lợi nhuận TB", f"{avg_return:.1f}%", "pink"),
+            unsafe_allow_html=True
+        )
+    
+    with col3:
+        avg_sharpe = sum(m['sharpe_ratio'] for m in all_metrics) / len(all_metrics) if all_metrics else 0
+        st.markdown(
+            create_metric_card("Sharpe TB", f"{avg_sharpe:.3f}", "blue"),
+            unsafe_allow_html=True
+        )
+    
+    with col4:
+        avg_stocks = sum(m['num_stocks'] for m in all_metrics) / len(all_metrics) if all_metrics else 0
+        st.markdown(
+            create_metric_card("Số mã TB", f"{avg_stocks:.1f}", "green"),
+            unsafe_allow_html=True
+        )
+    
+    st.markdown("<br>", unsafe_allow_html=True)
     
     # Tab con cho các phần khác nhau
     tab1, tab2, tab3 = st.tabs([
@@ -781,7 +861,7 @@ def render_optimization_comparison_tab(results_dict):
     
     with tab1:
         st.markdown("### 📋 Bảng So sánh Các Chỉ số Chính")
-        comparison_df = create_comparison_table(valid_results)
+        comparison_df = create_comparison_table(valid_results, metrics_cache)
         
         # Hiển thị bảng với highlight
         styled_df = highlight_best_values(comparison_df)
@@ -792,7 +872,6 @@ def render_optimization_comparison_tab(results_dict):
         - <span style="background-color: #90EE90; font-weight: bold; padding: 2px 6px;">Màu xanh đậm</span>: Giá trị tốt nhất trong cột
         - **Lợi nhuận KV**: Lợi nhuận kỳ vọng hàng năm (càng cao càng tốt)
         - **Rủi ro - Std**: Độ lệch chuẩn - biến động giá (càng thấp càng an toàn)
-        - **Max Drawdown**: Sụt giảm tối đa từ đỉnh (càng thấp càng tốt)
         - **Tỷ lệ Sharpe**: Hiệu suất điều chỉnh rủi ro (càng cao càng tốt)
         - **Return/Risk**: Tỷ lệ lợi nhuận/rủi ro trực tiếp (càng cao càng tốt)
         - **Chỉ số đa dạng hóa**: 0-1, với 1 là đa dạng hoàn hảo (càng cao càng phân tán)
@@ -812,23 +891,28 @@ def render_optimization_comparison_tab(results_dict):
         
         # Biểu đồ Radar tổng quan
         st.markdown("#### Biểu đồ Radar")
-        plot_radar_comparison(valid_results)
+        plot_radar_comparison(valid_results, metrics_cache)
         
         st.markdown("---")
         
         # Rủi ro - Lợi nhuận
         st.markdown("#### 📈 Rủi ro - Lợi nhuận")
-        plot_risk_return_comparison(valid_results)
+        plot_risk_return_comparison(valid_results, metrics_cache)
+        
+        st.markdown("---")
+        st.markdown("◼️### 📊 So sánh Chi tiết theo Chỉ số")
         
         col1, col2 = st.columns(2)
         
         with col1:
-            # Tỷ lệ Sharpe
-            plot_sharpe_comparison(valid_results)
+            st.markdown("**⚡ Tỷ lệ Sharpe**")
+            st.caption("Hiệu suất điều chỉnh rủi ro (càng cao càng tốt)")
+            plot_sharpe_comparison(valid_results, metrics_cache)
         
         with col2:
-            # Đa dạng hóa
-            plot_diversification_comparison(valid_results)
+            st.markdown("**🎯 Mức độ Đa dạng hóa**")
+            st.caption("Chỉ số đa dạng hóa & số lượng mã cổ phiếu")
+            plot_diversification_comparison(valid_results, metrics_cache)
         
         # Phân bổ trọng số
         st.markdown("---")
@@ -837,7 +921,8 @@ def render_optimization_comparison_tab(results_dict):
         
         # Chi tiết phân bổ
         st.markdown("---")
-        with st.expander("Xem Chi tiết Trọng số & Số lượng Cổ phiếu"):
+        with st.expander("🔍 Xem Chi tiết Trọng số & Số lượng Cổ phiếu", expanded=False):
+            st.info("📌 Bảng chi tiết phân bổ cổ phiếu cho từng mô hình")
             col_a, col_b = st.columns(2)
             with col_a:
                 display_weight_comparison(valid_results)
@@ -846,4 +931,4 @@ def render_optimization_comparison_tab(results_dict):
     
     with tab3:
         # Khuyến nghị
-        provide_investment_recommendation(valid_results)
+        provide_investment_recommendation(valid_results, metrics_cache)

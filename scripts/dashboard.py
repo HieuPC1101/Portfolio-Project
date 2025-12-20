@@ -204,7 +204,8 @@ def run_models(data):
                             result["all_weights"],
                             tickers,
                             result["max_sharpe_idx"],
-                            list(result["Trọng số danh mục"].values())
+                            list(result["Trọng số danh mục"].values()),
+                            result["Trọng số danh mục"]  # Truyền dict để đảm bảo thứ tự đúng
                         )
                     
                     # Vẽ biểu đồ Max Sharpe với đường CAL
@@ -218,7 +219,8 @@ def run_models(data):
                             tickers,
                             result["Lợi nhuận kỳ vọng"],
                             result["Rủi ro (Độ lệch chuẩn)"],
-                            result.get("risk_free_rate", 0.04)
+                            result.get("risk_free_rate", 0.04),
+                            result["Trọng số danh mục"]  # Truyền trọng số tối ưu thực sự
                         )
                     
                     # Vẽ biểu đồ Min Volatility với scatter plot

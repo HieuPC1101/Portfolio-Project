@@ -724,7 +724,7 @@ def plot_candlestick_chart(ohlc_data, ticker):
             st.metric("Signal", "N/A")
 
 
-def plot_efficient_frontier(ret_arr, vol_arr, sharpe_arr, all_weights, tickers, max_sharpe_idx, optimal_weights):
+def plot_efficient_frontier(ret_arr, vol_arr, sharpe_arr, all_weights, tickers, max_sharpe_idx, optimal_weights, optimal_weights_dict=None):
     """
     Vẽ biểu đồ đường biên hiệu quả.
     
@@ -733,9 +733,10 @@ def plot_efficient_frontier(ret_arr, vol_arr, sharpe_arr, all_weights, tickers, 
         vol_arr (np.array): Mảng độ lệch chuẩn (rủi ro)
         sharpe_arr (np.array): Mảng tỷ lệ Sharpe
         all_weights (np.array): Ma trận trọng số tất cả các danh mục
-    tickers (list): Danh sách mã cổ phiếu
+        tickers (list): Danh sách mã cổ phiếu
         max_sharpe_idx (int): Index của danh mục tối ưu
-        optimal_weights (np.array): Trọng số tối ưu
+        optimal_weights (np.array): Trọng số tối ưu (deprecated, dùng optimal_weights_dict)
+        optimal_weights_dict (dict): Trọng số tối ưu dạng dictionary (recommended)
     """
     # Chuẩn bị thông tin hover
     hover_texts = [
@@ -755,17 +756,43 @@ def plot_efficient_frontier(ret_arr, vol_arr, sharpe_arr, all_weights, tickers, 
         title='Đường biên hiệu quả Markowitz'
     )
 
+    # Sử dụng weights từ dict nếu có, nếu không fallback về array
+    if optimal_weights_dict is not None:
+        weights_array = np.array([optimal_weights_dict.get(ticker, 0.0) for ticker in tickers])
+    else:
+        weights_array = np.array(optimal_weights)
+    
     # Đánh dấu danh mục tối ưu
     fig.add_scatter(
         x=[vol_arr[max_sharpe_idx]],
         y=[ret_arr[max_sharpe_idx]],
         mode='markers',
-        marker=dict(color='red', size=10),
+        marker=dict(color='red', size=12, symbol='star'),
         name='Danh mục tối ưu',
-        hovertext=[", ".join([f"{tickers[j]}: {optimal_weights[j] * 100:.2f}%" for j in range(len(tickers))])]
+        hovertext=[
+            f"<b>Danh mục Max Sharpe</b><br>" + 
+            ", ".join([f"{tickers[j]}: {weights_array[j] * 100:.2f}%" for j in range(len(tickers))]) +
+            f"<br>Return: {ret_arr[max_sharpe_idx]:.2%}<br>Risk: {vol_arr[max_sharpe_idx]:.2%}<br>Sharpe: {sharpe_arr[max_sharpe_idx]:.2f}"
+        ]
     )
     
-    st.plotly_chart(fig)
+    # Cập nhật layout với legend ở vị trí tốt hơn
+    fig.update_layout(
+        showlegend=True,
+        legend=dict(
+            x=0.99,
+            y=0.5,
+            xanchor='right',
+            yanchor='middle',
+            bgcolor='rgba(255, 255, 255, 0.9)',
+            bordercolor='gray',
+            borderwidth=1
+        ),
+        hovermode='closest',
+        height=600
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
     
     # Hiển thị tooltip giải thích bên dưới biểu đồ (có thể ẩn/hiện)
     with st.expander("Giải thích Đường Biên Hiệu Quả Markowitz"):
@@ -777,14 +804,14 @@ def plot_efficient_frontier(ret_arr, vol_arr, sharpe_arr, all_weights, tickers, 
         **Ý nghĩa:**
         - **Các điểm trên đường biên:** Danh mục hiệu quả
         - **Các điểm bên trong:** Danh mục kém hiệu quả  
-        - **Điểm đỏ:** Danh mục có Sharpe Ratio tối đa
+        - **Điểm đỏ (sao):** Danh mục có Sharpe Ratio tối đa
         
         **Nguyên lý:**  
         Đa dạng hóa đầu tư giúp giảm rủi ro mà vẫn duy trì hoặc tăng lợi nhuận kỳ vọng.
         """)
 
 
-def plot_max_sharpe_with_cal(ret_arr, vol_arr, sharpe_arr, all_weights, tickers, optimal_return, optimal_volatility, risk_free_rate=0.04):
+def plot_max_sharpe_with_cal(ret_arr, vol_arr, sharpe_arr, all_weights, tickers, optimal_return, optimal_volatility, risk_free_rate=0.04, optimal_weights_dict=None):
     """
     Vẽ biểu đồ Max Sharpe Ratio với đường CAL (Capital Allocation Line).
     
@@ -793,10 +820,11 @@ def plot_max_sharpe_with_cal(ret_arr, vol_arr, sharpe_arr, all_weights, tickers,
         vol_arr (np.array): Mảng độ lệch chuẩn (rủi ro) của các danh mục
         sharpe_arr (np.array): Mảng tỷ lệ Sharpe của các danh mục
         all_weights (np.array): Ma trận trọng số tất cả các danh mục
-    tickers (list): Danh sách mã cổ phiếu
+        tickers (list): Danh sách mã cổ phiếu
         optimal_return (float): Lợi nhuận của danh mục Max Sharpe
         optimal_volatility (float): Rủi ro của danh mục Max Sharpe
         risk_free_rate (float): Lãi suất phi rủi ro (mặc định 4%/năm)
+        optimal_weights_dict (dict): Trọng số tối ưu thực sự từ thuật toán (optional)
     """
     # Chuẩn bị thông tin hover
     hover_texts = [
@@ -818,7 +846,14 @@ def plot_max_sharpe_with_cal(ret_arr, vol_arr, sharpe_arr, all_weights, tickers,
     )
 
     # Đánh dấu danh mục Max Sharpe (màu đỏ)
-    optimal_weights = all_weights[np.argmax(sharpe_arr)]
+    # Sử dụng trọng số tối ưu thực sự nếu được cung cấp
+    if optimal_weights_dict is not None:
+        # Chuyển dictionary weights thành array theo đúng thứ tự tickers
+        optimal_weights = np.array([optimal_weights_dict.get(ticker, 0.0) for ticker in tickers])
+    else:
+        # Fallback: lấy danh mục tốt nhất từ random portfolios (cách cũ)
+        optimal_weights = all_weights[np.argmax(sharpe_arr)]
+    
     fig.add_scatter(
         x=[optimal_volatility],
         y=[optimal_return],
@@ -866,18 +901,18 @@ def plot_max_sharpe_with_cal(ret_arr, vol_arr, sharpe_arr, all_weights, tickers,
         hovertext=[f"<b>Risk-Free Rate</b><br>Lợi nhuận: {risk_free_rate:.2%}<br>Rủi ro: 0%"]
     )
 
-    # Cập nhật layout - Di chuyển legend sang bên trái
+    # Cập nhật layout - Di chuyển legend sang bên phải
     fig.update_layout(
         xaxis_title='Rủi ro (Độ lệch chuẩn)',
         yaxis_title='Lợi nhuận kỳ vọng',
         hovermode='closest',
         showlegend=True,
         legend=dict(
-            x=0.01,  # Vị trí bên trái
-            y=0.99,  # Vị trí trên cùng
-            xanchor='left',
-            yanchor='top',
-            bgcolor='rgba(255, 255, 255, 0.8)',
+            x=0.99,  # Vị trí bên phải
+            y=0.5,   # Vị trí giữa màn hình (tránh che data)
+            xanchor='right',
+            yanchor='middle',
+            bgcolor='rgba(255, 255, 255, 0.9)',
             bordercolor='gray',
             borderwidth=1
         ),
@@ -970,25 +1005,25 @@ def plot_min_volatility_scatter(ret_arr, vol_arr, sharpe_arr, all_weights, ticke
                    f"<br>Return: {max_sharpe_return:.2%}<br>Risk: {max_sharpe_volatility:.2%}<br>Sharpe: {(max_sharpe_return - risk_free_rate) / max_sharpe_volatility:.2f}"]
     )
 
-    # Cập nhật layout - Di chuyển legend sang khoảng trống
+    # Cập nhật layout - Di chuyển legend sang vị trí tối ưu
     fig.update_layout(
         xaxis_title='Rủi ro (Độ lệch chuẩn)',
         yaxis_title='Lợi nhuận kỳ vọng',
         hovermode='closest',
         showlegend=True,
         legend=dict(
-            x=0.65,  # Vị trí bên phải
-            y=0.15,  # Vị trí dưới cùng (khoảng trống)
-            xanchor='left',
-            yanchor='bottom',
-            bgcolor='rgba(255, 255, 255, 0.8)',
+            x=0.99,  # Vị trí bên phải
+            y=0.99,  # Vị trí trên cùng
+            xanchor='right',
+            yanchor='top',
+            bgcolor='rgba(255, 255, 255, 0.9)',
             bordercolor='gray',
             borderwidth=1
         ),
         height=600
     )
     
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
     
     # Thêm chú thích về ý nghĩa của Min Volatility
     with st.expander("Giải thích về Mô hình Min Volatility"):
@@ -1300,12 +1335,13 @@ def plot_min_cvar_analysis(result):
         title={
             'text': 'Phân Bổ Trọng Số Danh Mục Min CVaR',
             'x': 0.5,
-            'xanchor': 'center'
+            'xanchor': 'center',
+            'font': {'size': 18, 'color': '#2d3748'}
         },
-    xaxis_title='Mã cổ phiếu',
+        xaxis_title='Mã cổ phiếu',
         yaxis_title='Trọng số (%)',
         showlegend=False,
-        height=500,
+        height=600,
         hovermode='x',
         plot_bgcolor='white',
         yaxis=dict(
@@ -1314,7 +1350,7 @@ def plot_min_cvar_analysis(result):
         )
     )
     
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
     
     # Thông tin bổ sung về mô hình
     st.subheader("Thông Tin Mô Hình Min CVaR")
@@ -1516,10 +1552,13 @@ def plot_min_cdar_analysis(min_cdar_result, max_sharpe_result, returns_data):
             template='plotly_white',
             legend=dict(
                 orientation="h",
-                yanchor="bottom",
-                y=1.02,
-                xanchor="right",
-                x=1
+                yanchor="top",
+                y=-0.08,
+                xanchor="center",
+                x=0.5,
+                bgcolor='rgba(255, 255, 255, 0.9)',
+                bordercolor='gray',
+                borderwidth=1
             )
         )
         
@@ -1532,13 +1571,13 @@ def plot_min_cdar_analysis(min_cdar_result, max_sharpe_result, returns_data):
             text="Biểu đồ này cho thấy danh mục Min CDaR có mức sụt giảm nông hơn và phục hồi nhanh hơn,<br>" +
                  "mặc dù danh mục Max Sharpe có thể tăng trưởng nhanh hơn trong điều kiện thuận lợi.",
             xref="paper", yref="paper",
-            x=0.5, y=-0.15,
+            x=0.5, y=-0.18,
             showarrow=False,
             font=dict(size=11, color="gray"),
             align="center"
         )
         
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
         
         # Tính toán và hiển thị các chỉ số so sánh
         st.subheader("So sánh Chỉ số Drawdown")
@@ -1654,7 +1693,7 @@ def plot_hrp_dendrogram(data, weights):
             'text': "Biểu đồ Phân Cấp Tài Sản - Cấu Trúc Tương Quan",
             'x': 0.5,
             'xanchor': 'center',
-            'font': {'size': 18, 'color': '#1f77b4'}
+            'font': {'size': 20, 'color': '#2d3748', 'family': 'Inter, sans-serif'}
         },
         xaxis={
             'showticklabels': True,
@@ -1671,13 +1710,13 @@ def plot_hrp_dendrogram(data, weights):
             'gridcolor': 'lightgray'
         },
         plot_bgcolor='white',
-        height=500,
+        height=600,
         hovermode='closest',
         showlegend=False,
         margin=dict(b=150)
     )
     
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
     
     # Thêm giải thích ý nghĩa
     with st.expander("Ý nghĩa của Biểu đồ Dendrogram"):

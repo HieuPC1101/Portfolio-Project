@@ -342,20 +342,36 @@ def _get_sector_snapshot_cached(exchange: str, size: int, source: str) -> pd.Dat
         candidates = [s for s in all_symbols if s in industry_map]
         if not candidates:
              candidates = all_symbols[:size] # Fallback
-        candidates = candidates[:600]
+        candidates = candidates[:size]  # Limit to requested size
         print(f"Fetching snapshot for {len(candidates)} symbols...")
         
-        # Batch fetching
+        # Parallel batch fetching using ThreadPoolExecutor
         chunk_size = 100
-        frames = []
-        for i in range(0, len(candidates), chunk_size):
-            chunk = candidates[i : i + chunk_size]
+        chunks = [candidates[i:i+chunk_size] for i in range(0, len(candidates), chunk_size)]
+        
+        def fetch_chunk(chunk_symbols):
+            """Worker function to fetch a single chunk of symbols."""
             try:
-                board = stock.trading.price_board(chunk)
-                if board is not None and not board.empty:
-                     frames.append(board)
-            except Exception:
-                continue
+                stock_worker = Vnstock().stock(symbol='VNINDEX', source='VCI')
+                board = stock_worker.trading.price_board(chunk_symbols)
+                return board if board is not None and not board.empty else None
+            except Exception as e:
+                print(f"Error fetching chunk: {e}")
+                return None
+        
+        frames = []
+        max_workers = min(3, len(chunks))  # Limit to 3 workers to avoid rate limiting
+        
+        if max_workers > 0:
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                # Submit all chunks for parallel processing
+                future_to_chunk = {executor.submit(fetch_chunk, chunk): chunk for chunk in chunks}
+                
+                # Collect results as they complete
+                for future in as_completed(future_to_chunk):
+                    result = future.result()
+                    if result is not None:
+                        frames.append(result)
                 
         if not frames:
              return pd.DataFrame()

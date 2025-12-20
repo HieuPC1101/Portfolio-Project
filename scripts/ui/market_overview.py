@@ -183,8 +183,9 @@ DASHBOARD_STYLE = """
     }
 
     .kpi-change {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 600;
+        line-height: 1.4;
     }
 
     .kpi-change.positive {
@@ -197,6 +198,18 @@ DASHBOARD_STYLE = """
 
     .kpi-change.neutral {
         color: #d69e2e;
+    }
+
+    .kpi-timestamp {
+        font-size: 0.75rem;
+        color: #a0aec0;
+        margin-top: 0.4rem;
+        font-weight: 500;
+    }
+
+    /* Ẩn nút Refresh của Streamlit */
+    button[kind="header"] {
+        display: none !important;
     }
 
     /* Hộp chứa biểu đồ */
@@ -436,12 +449,20 @@ def generate_market_indices_kpi(metrics):
 
         time_suffix = f" · {timestamp.strftime('%d/%m %H:%M')}" if timestamp is not None else ""
 
+        # Format timestamp and note separately for better readability
+        timestamp_html = ""
+        if timestamp is not None:
+            timestamp_html = f'<div class="kpi-timestamp">{timestamp.strftime("%d/%m %H:%M")}</div>'
+        elif note:
+            timestamp_html = f'<div class="kpi-timestamp">{note}</div>'
+
         col.markdown(
             f"""
             <div class="kpi-card">
                 <div class="kpi-title">{metric.get('label')}</div>
                 <div class="kpi-value">{value_display}</div>
-                <div class="kpi-change {trend_class}">{trend_value}{note}{time_suffix}</div>
+                <div class="kpi-change {trend_class}">{trend_value}</div>
+                {timestamp_html}
             </div>
             """,
             unsafe_allow_html=True,
@@ -690,10 +711,10 @@ def generate_index_comparison_chart(index_history: pd.DataFrame):
     return fig
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=3600, show_spinner=False)
 def load_sector_snapshot_cached():
     """Cache-reuse the sector snapshot with only essential columns."""
-    snapshot = get_sector_snapshot(exchange='HOSE', size=600)
+    snapshot = get_sector_snapshot(exchange='HOSE', size=250)
     
     if snapshot.empty:
         return snapshot
@@ -716,7 +737,7 @@ def load_sector_snapshot_cached():
     return snapshot
 
 
-@st.cache_data(ttl=1800, show_spinner=False)
+@st.cache_data(ttl=3600, show_spinner=False)
 def load_detail_data():
     """Load heavier, sector-dependent datasets for secondary visuals."""
 
