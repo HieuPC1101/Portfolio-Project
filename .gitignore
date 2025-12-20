@@ -1,1 +1,116 @@
+# ========== Secret & Config Files ==========
 scripts/utils/secret_config.py
+*.env
+.env
+.env.local
+config_local.py
+
+# ========== Python Cache ==========
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# ========== Virtual Environment ==========
+.venv/
+venv/
+ENV/
+env/
+.virtualenv
+
+# ========== Distribution / Packaging ==========
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ========== PyInstaller ==========
+*.manifest
+*.spec
+
+# ========== Unit test / Coverage ==========
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# ========== Jupyter Notebook ==========
+.ipynb_checkpoints
+*.ipynb
+
+# ========== Streamlit ==========
+.streamlit/secrets.toml
+.streamlit/config.toml
+
+# ========== IDEs ==========
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ========== OS Files ==========
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ========== Logs ==========
+*.log
+logs/
+*.log.*
+
+# ========== Data Files (optional - uncomment if needed) ==========
+# data/*.csv
+# data/*.xlsx
+# data/*.json
+
+# ========== Temporary Files ==========
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# ========== Project Specific ==========
+# Cache/temporary data
+.cache/
+tmp/
+temp/

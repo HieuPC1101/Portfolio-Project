@@ -750,6 +750,53 @@ def provide_investment_recommendation(results_dict, metrics_cache=None):
             
             if strengths:
                 st.info(f"**Điểm mạnh:** {', '.join(strengths)}")
+            
+            # THÊM: Bảng danh mục đầu tư
+            st.markdown("---")
+            st.markdown("#### 📋 Danh mục đầu tư được đề xuất")
+            
+            # Lấy thông tin từ result
+            result = results_dict.get(model_name)
+            if result:
+                # Tạo DataFrame cho bảng danh mục
+                weights = result.get('Trọng số danh mục', {})
+                shares = result.get('Số mã cổ phiếu cần mua', {})
+                prices = result.get('Giá mã cổ phiếu', {})
+                
+                portfolio_data = []
+                for ticker in sorted(weights.keys()):
+                    weight = weights.get(ticker, 0)
+                    num_shares = shares.get(ticker, 0)
+                    price = prices.get(ticker, 0)
+                    invested = num_shares * price
+                    
+                    portfolio_data.append({
+                        'Mã CP': ticker,
+                        'Trọng số (%)': f"{weight * 100:.2f}",
+                        'Số CP mua': int(num_shares),
+                        'Giá (VND)': f"{price:,.0f}",
+                        'Vốn đầu tư (VND)': f"{invested:,.0f}"
+                    })
+                
+                df_portfolio = pd.DataFrame(portfolio_data)
+                
+                # Tính tổng
+                total_invested = sum(shares.get(t, 0) * prices.get(t, 0) for t in weights.keys())
+                leftover = result.get('Số tiền còn lại', 0)
+                total_capital = total_invested + leftover
+                
+                # Hiển thị bảng
+                st.dataframe(df_portfolio, use_container_width=True, hide_index=True)
+                
+                # Hiển thị tổng kết
+                col_a, col_b, col_c = st.columns(3)
+                with col_a:
+                    st.metric("💰 Tổng vốn đầu tư", f"{total_invested:,.0f} VND")
+                with col_b:
+                    st.metric("💵 Số tiền còn lại", f"{leftover:,.0f} VND")
+                with col_c:
+                    st.metric("📊 Tổng vốn", f"{total_capital:,.0f} VND")
+
     
     # Hướng dẫn lựa chọn
     st.markdown("---")
