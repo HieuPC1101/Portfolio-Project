@@ -12,7 +12,7 @@ import streamlit as st
 import datetime
 import sys
 import os
-
+import re
 st.set_page_config(
     page_title="Dashboard Tối ưu hóa Danh mục Đầu tư",
     layout="wide",
@@ -576,7 +576,9 @@ elif option == "Tự chọn mã cổ phiếu":
 
     # Bộ lọc theo mã chứng khoán (symbol)
     selected_symbols = st.sidebar.multiselect('Chọn mã chứng khoán', filtered_df['symbol'])
-
+    bulk_input = st.sidebar.text_area("Nhập nhanh danh sách mã (cách nhau bởi dấu phẩy)", placeholder="VNM, FPT, HPG")
+    selected_symbols = re.findall(r'\w+', bulk_input.upper())
+    st.sidebar.markdown("Hoặc")
     # Lưu các mã chứng khoán đã chọn vào session state khi nhấn nút "Thêm mã"
     if st.sidebar.button("Thêm mã vào danh sách"):
         for symbol in selected_symbols:
